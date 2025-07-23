@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import property1 from '@/assets/property-1.jpg';
 import property2 from '@/assets/property-2.jpg';
 import property3 from '@/assets/property-3.jpg';
+import CurrencySwitch, { Currency } from '@/components/CurrencySwitch';
+import { convertPrice } from '@/utils/currency';
 
 const PropertiesSection = () => {
+  const [currency, setCurrency] = useState<Currency>('USD');
   const properties = [
     {
       id: 1,
@@ -46,10 +50,17 @@ const PropertiesSection = () => {
           <h2 className="section-heading text-primary mb-8">
             Featured Properties
           </h2>
-          <p className="font-body text-lg font-light text-muted-foreground max-w-2xl mx-auto">
+          <p className="font-body text-lg font-light text-muted-foreground max-w-2xl mx-auto mb-8">
             Discover exceptional properties in the most prestigious neighborhoods 
             throughout the Washington DC metropolitan area.
           </p>
+          
+          <div className="flex justify-center">
+            <CurrencySwitch 
+              currency={currency} 
+              onCurrencyChange={setCurrency}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -87,7 +98,7 @@ const PropertiesSection = () => {
                 
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-serif text-2xl font-light text-primary">
-                    {property.price}
+                    {convertPrice(property.price, currency)}
                   </span>
                 </div>
 
@@ -111,7 +122,7 @@ const PropertiesSection = () => {
 
         <div className="text-center mt-12">
           <a
-            href="#"
+            href="/properties"
             className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide"
           >
             View All Properties
