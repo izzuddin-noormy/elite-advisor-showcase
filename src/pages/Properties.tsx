@@ -1,14 +1,17 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import CurrencySwitch, { Currency } from '@/components/CurrencySwitch';
 import { convertPrice } from '@/utils/currency';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 import property1 from '@/assets/property-1.jpg';
 import property2 from '@/assets/property-2.jpg';
 import property3 from '@/assets/property-3.jpg';
 
 const Properties = () => {
   const [currency, setCurrency] = useState<Currency>('USD');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const properties = [
     {
@@ -85,6 +88,17 @@ const Properties = () => {
     }
   ];
 
+  const filteredProperties = useMemo(() => {
+    if (!searchQuery.trim()) return properties;
+    
+    return properties.filter(property => 
+      property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      property.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      property.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      property.status.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [properties, searchQuery]);
+
   return (
     <div className="min-h-screen">
       <Navigation />
@@ -111,6 +125,22 @@ const Properties = () => {
               />
             </div>
           </div>
+
+          {/* ChatGPT-style Search Box */}
+          <div className="max-w-2xl mx-auto mt-8">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <Input
+                type="text"
+                placeholder="Search properties by location, title, or features..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 text-lg font-body font-light bg-card border-border/50 rounded-xl shadow-luxury focus:shadow-lg focus:border-primary/20 transition-all duration-300 placeholder:text-muted-foreground/60"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -118,7 +148,7 @@ const Properties = () => {
       <section className="pb-20 bg-background">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((property) => (
+            {filteredProperties.map((property) => (
               <div
                 key={property.id}
                 className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer"
