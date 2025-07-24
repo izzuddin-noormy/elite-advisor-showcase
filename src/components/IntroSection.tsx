@@ -19,7 +19,8 @@ const IntroSection = () => {
               <p className="font-body text-base md:text-lg font-light leading-relaxed text-muted-foreground">
                 My approach is built on understanding your unique needs and delivering results that exceed 
                 expectations. Whether you're acquiring your dream home or maximizing the value of your 
-                investment, you can count on white-glove service every step of the way.
+                investment, you can count on white-glove service every step of the way. The Agency I represented Propnex 
+                has more than two decades of relationship built in the industry with an astounding performance and trust.
               </p>
             </div>
 
