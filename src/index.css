@@ -46,6 +46,9 @@
 
     --radius: 0.5rem;
 
+    /* Section overlays */
+    --section-overlay: rgba(0, 0, 0, 0.50);
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;

@@ -15,7 +15,7 @@ const HeroSection = () => {
       </video>
       
       {/* Dark overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/40"></div>
+      <div className="absolute inset-0" style={{ backgroundColor: 'var(--section-overlay)' }}></div>
 
       {/* Content */}
       <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
