@@ -1,15 +1,21 @@
-import heroImage from '@/assets/hero-kitchen.jpg';
-
 const HeroSection = () => {
   return (
     <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroImage})` }}
+      {/* Background Video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
       >
-        <div className="absolute inset-0 bg-black/30"></div>
-      </div>
+        <source src="/videos/hero-bg.mp4" type="video/mp4" />
+        {/* Fallback for browsers that don't support video */}
+        Your browser does not support the video tag.
+      </video>
+      
+      {/* Dark overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/40"></div>
 
       {/* Content */}
       <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
