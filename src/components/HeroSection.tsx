@@ -7,7 +7,6 @@ const HeroSection = () => {
       {/* Background Video */}
       <video
         autoPlay
-        muted
         loop
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
