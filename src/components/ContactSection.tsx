@@ -131,30 +131,31 @@ const ContactSection = () => {
                   <div>
                     <h4 className="font-body text-sm font-medium text-foreground mb-2">Office</h4>
                     <p className="font-body text-muted-foreground font-light">
-                      2100 M Street NW, Suite 300<br />
-                      Washington, DC 20037
+                      A-G-03 Marc Service Residence<br />
+                      No 3, Jalan Pinang<br />
+                      50450 Federal Territory of Kuala Lumpur<br />
+                      Malaysia
                     </p>
                   </div>
                   
                   <div>
                     <h4 className="font-body text-sm font-medium text-foreground mb-2">Phone</h4>
                     <p className="font-body text-muted-foreground font-light">
-                      (202) 555-0123
+                      +(60) 16-828-0399
                     </p>
                   </div>
                   
                   <div>
                     <h4 className="font-body text-sm font-medium text-foreground mb-2">Email</h4>
                     <p className="font-body text-muted-foreground font-light">
-                      alexandra@eliteadvisor.com
+                      musichen@propnex.com.my
                     </p>
                   </div>
                   
                   <div>
                     <h4 className="font-body text-sm font-medium text-foreground mb-2">Service Areas</h4>
                     <p className="font-body text-muted-foreground font-light">
-                      Washington, DC • Bethesda • Georgetown<br />
-                      McLean • Great Falls • Potomac
+                      Malaysia • Singapore • China
                     </p>
                   </div>
                 </div>
