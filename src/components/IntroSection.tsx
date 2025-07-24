@@ -11,8 +11,8 @@ const IntroSection = () => {
             <div className="prose prose-lg mx-auto">
               <p className="font-body text-lg md:text-xl font-light leading-relaxed text-muted-foreground mb-8">
                 With over a decade of experience in the luxury real estate market, I specialize in providing 
-                discerning clients with unparalleled service in the Washington DC metropolitan area. From 
-                exclusive Georgetown estates to contemporary Bethesda homes, I bring expertise, discretion, 
+                discerning clients with unparalleled service in the Kuala Lumpur metropolitan area. From 
+                exclusive KLCC homes to contemporary country homes, I bring expertise, discretion, 
                 and a commitment to excellence to every transaction.
               </p>
               
@@ -25,21 +25,21 @@ const IntroSection = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
               <div className="text-center">
-                <div className="text-4xl font-serif font-light text-gold mb-4">$2.8B+</div>
+                <div className="text-4xl font-serif font-light text-gold mb-4">$3.2B+</div>
                 <p className="font-body text-sm font-light tracking-wide text-muted-foreground uppercase">
-                  Career Sales Volume
+                  Propnex Agency Revenue in 2024
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-serif font-light text-gold mb-4">500+</div>
+                <div className="text-4xl font-serif font-light text-gold mb-4">6.4K+</div>
                 <p className="font-body text-sm font-light tracking-wide text-muted-foreground uppercase">
-                  Luxury Homes Sold
+                  Luxury Homes Sold in 2024
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-serif font-light text-gold mb-4">15</div>
+                <div className="text-4xl font-serif font-light text-gold mb-4">25</div>
                 <p className="font-body text-sm font-light tracking-wide text-muted-foreground uppercase">
-                  Years Experience
+                  Years of Experience in Singapore & Malaysia 
                 </p>
               </div>
             </div>
