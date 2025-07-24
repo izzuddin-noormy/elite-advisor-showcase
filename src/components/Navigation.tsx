@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitch from '@/components/LanguageSwitch';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,11 +17,11 @@ const Navigation = () => {
   }, []);
 
   const navItems = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '#about' },
-    { name: 'Properties', href: '/properties' },
-    { name: 'Insights', href: '#insights' },
-    { name: 'Contact', href: '#contact' },
+    { name: t('nav.home'), href: '/' },
+    { name: t('nav.about'), href: '#about' },
+    { name: t('nav.properties'), href: '/properties' },
+    { name: t('nav.insights'), href: '#insights' },
+    { name: t('nav.contact'), href: '#contact' },
   ];
 
   return (
@@ -51,13 +54,14 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* Contact Button */}
-          <div className="hidden md:block">
+          {/* Language Switch & Contact Button */}
+          <div className="hidden md:flex items-center space-x-4">
+            <LanguageSwitch />
             <a
               href="#contact"
               className="inline-flex items-center px-6 py-2 border border-gold text-gold hover:bg-gold hover:text-primary transition-all duration-300 font-body text-sm font-light tracking-wide"
             >
-              Schedule Consultation
+              {t('nav.scheduleConsultation')}
             </a>
           </div>
 

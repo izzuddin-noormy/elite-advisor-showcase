@@ -1,0 +1,76 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "properties": "Properties",
+    "insights": "Insights",
+    "contact": "Contact",
+    "scheduleConsultation": "Schedule Consultation"
+  },
+  "hero": {
+    "title": "Discover Your Dream Home in China's Premium Markets",
+    "subtitle": "Expert guidance through luxury real estate in Beijing, Shanghai, and emerging investment opportunities across China.",
+    "exploreButton": "Explore Properties",
+    "consultationButton": "Schedule Consultation"
+  },
+  "intro": {
+    "title": "Redefining Luxury Real Estate Excellence",
+    "description1": "With over a decade of experience in China's dynamic property markets, I specialize in connecting discerning clients with exceptional homes and investment opportunities.",
+    "description2": "From historic hutongs in Beijing to modern penthouses in Shanghai, every property tells a story of luxury, culture, and strategic investment potential.",
+    "stats": {
+      "revenue": "Agency Revenue",
+      "homes": "Luxury Homes Sold",
+      "experience": "Years Experience"
+    }
+  },
+  "properties": {
+    "title": "Featured Properties",
+    "subtitle": "Discover exceptional properties across China's most prestigious locations",
+    "searchPlaceholder": "Luxury isn't a price — it's a feeling. Describe yours and we will find your perfect space.",
+    "viewDetails": "View Details",
+    "viewAll": "View All Properties",
+    "beds": "beds",
+    "baths": "baths",
+    "sqft": "sqft",
+    "status": {
+      "forSale": "For Sale",
+      "sold": "Sold",
+      "pending": "Pending"
+    }
+  },
+  "insights": {
+    "title": "Market Insights",
+    "subtitle": "Stay informed with the latest trends and analysis from China's luxury real estate markets",
+    "readMore": "Read More",
+    "viewAll": "View All Insights",
+    "categories": {
+      "market": "Market Analysis",
+      "investment": "Investment",
+      "luxury": "Luxury Market"
+    }
+  },
+  "contact": {
+    "title": "Let's Find Your Perfect Property",
+    "subtitle": "Ready to explore luxury real estate opportunities? I'm here to guide you through every step of your journey.",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "message": "Message",
+      "submit": "Send Message"
+    },
+    "info": {
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address"
+    }
+  },
+  "footer": {
+    "tagline": "Luxury real estate expertise across China's premier markets",
+    "quickLinks": "Quick Links",
+    "contact": "Contact",
+    "copyright": "© 2024 Mu Sichen. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  }
+}

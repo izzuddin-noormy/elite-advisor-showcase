@@ -1,0 +1,76 @@
+{
+  "nav": {
+    "home": "首页",
+    "about": "关于",
+    "properties": "房产",
+    "insights": "洞察",
+    "contact": "联系",
+    "scheduleConsultation": "预约咨询"
+  },
+  "hero": {
+    "title": "发现您在中国优质市场的梦想家园",
+    "subtitle": "专业指导您在北京、上海及中国新兴投资机会中的豪华房地产投资。",
+    "exploreButton": "浏览房产",
+    "consultationButton": "预约咨询"
+  },
+  "intro": {
+    "title": "重新定义豪华房地产卓越标准",
+    "description1": "凭借在中国动态房地产市场十多年的经验，我专门为挑剔的客户提供卓越的住宅和投资机会。",
+    "description2": "从北京的历史胡同到上海的现代顶层公寓，每一处房产都讲述着奢华、文化和战略投资潜力的故事。",
+    "stats": {
+      "revenue": "机构营收",
+      "homes": "豪华住宅销售",
+      "experience": "年经验"
+    }
+  },
+  "properties": {
+    "title": "精选房产",
+    "subtitle": "探索中国最prestigious地段的卓越房产",
+    "searchPlaceholder": "奢华不是价格——而是一种感觉。描述您的需求，我们将为您找到完美的空间。",
+    "viewDetails": "查看详情",
+    "viewAll": "查看所有房产",
+    "beds": "卧室",
+    "baths": "浴室",
+    "sqft": "平方英尺",
+    "status": {
+      "forSale": "待售",
+      "sold": "已售",
+      "pending": "待定"
+    }
+  },
+  "insights": {
+    "title": "市场洞察",
+    "subtitle": "了解中国豪华房地产市场的最新趋势和分析",
+    "readMore": "阅读更多",
+    "viewAll": "查看所有洞察",
+    "categories": {
+      "market": "市场分析",
+      "investment": "投资",
+      "luxury": "豪华市场"
+    }
+  },
+  "contact": {
+    "title": "让我们找到您的完美房产",
+    "subtitle": "准备探索豪华房地产投资机会？我在这里指导您走过每一步。",
+    "form": {
+      "name": "全名",
+      "email": "电子邮箱",
+      "phone": "电话号码",
+      "message": "信息",
+      "submit": "发送信息"
+    },
+    "info": {
+      "phone": "电话",
+      "email": "邮箱",
+      "address": "地址"
+    }
+  },
+  "footer": {
+    "tagline": "中国优质市场的豪华房地产专业知识",
+    "quickLinks": "快速链接",
+    "contact": "联系方式",
+    "copyright": "© 2024 Mu Sichen. 版权所有。",
+    "privacy": "隐私政策",
+    "terms": "服务条款"
+  }
+}
