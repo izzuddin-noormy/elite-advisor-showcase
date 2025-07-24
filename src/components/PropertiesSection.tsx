@@ -52,7 +52,7 @@ const PropertiesSection = () => {
           </h2>
           <p className="font-body text-lg font-light text-muted-foreground max-w-2xl mx-auto mb-8">
             Discover exceptional properties in the most prestigious neighborhoods 
-            throughout the Washington DC metropolitan area.
+            throughout the Kuala Lumpur metropolitan area.
           </p>
           
           <div className="flex justify-center">
