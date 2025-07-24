@@ -34,8 +34,8 @@ const Navigation = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="font-serif text-2xl font-medium tracking-tight">
-            <span className="text-primary">Elite</span>
-            <span className="text-gold ml-1">Advisor</span>
+            <span className="text-primary">Mu</span>
+            <span className="text-gold ml-1">Sichen</span>
           </div>
 
           {/* Navigation Links */}
