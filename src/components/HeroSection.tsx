@@ -6,6 +6,7 @@ const HeroSection = () => {
     <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
       {/* Background Video */}
       <video
+        muted
         autoPlay
         loop
         playsInline
