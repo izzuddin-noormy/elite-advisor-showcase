@@ -1,4 +1,7 @@
+import { useLanguage } from '@/contexts/LanguageContext';
+
 const Footer = () => {
+  const { t } = useLanguage();
   return (
     <footer className="bg-primary text-primary-foreground py-12">
       <div className="container mx-auto px-6">
@@ -10,30 +13,30 @@ const Footer = () => {
               <span className="text-gold ml-1">Sichen</span>
             </div>
             <p className="font-body text-sm font-light text-primary-foreground/80 leading-relaxed">
-              Providing exceptional luxury real estate services throughout the Kuala Lumpur metropolitan area.
+              {t('footer.tagline')}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
             <h3 className="font-body text-sm font-medium text-primary-foreground mb-4 tracking-wide">
-              Quick Links
+              {t('footer.quickLinks')}
             </h3>
             <nav className="space-y-2">
               <a href="#home" className="block font-body text-sm font-light text-primary-foreground/80 hover:text-gold transition-colors duration-300">
-                Home
+                {t('nav.home')}
               </a>
               <a href="#about" className="block font-body text-sm font-light text-primary-foreground/80 hover:text-gold transition-colors duration-300">
-                About
+                {t('nav.about')}
               </a>
               <a href="#properties" className="block font-body text-sm font-light text-primary-foreground/80 hover:text-gold transition-colors duration-300">
-                Properties
+                {t('nav.properties')}
               </a>
               <a href="#insights" className="block font-body text-sm font-light text-primary-foreground/80 hover:text-gold transition-colors duration-300">
-                Insights
+                {t('nav.insights')}
               </a>
               <a href="#contact" className="block font-body text-sm font-light text-primary-foreground/80 hover:text-gold transition-colors duration-300">
-                Contact
+                {t('nav.contact')}
               </a>
             </nav>
           </div>
@@ -41,7 +44,7 @@ const Footer = () => {
           {/* Contact Info */}
           <div>
             <h3 className="font-body text-sm font-medium text-primary-foreground mb-4 tracking-wide">
-              Contact
+              {t('footer.contact')}
             </h3>
             <div className="space-y-2">
               <p className="font-body text-sm font-light text-primary-foreground/80">
@@ -62,14 +65,14 @@ const Footer = () => {
 
         <div className="border-t border-primary-foreground/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="font-body text-xs font-light text-primary-foreground/60">
-            © 2025 Mu Sichen, Real Estate Negotiator & Advisor. All rights reserved.
+            {t('footer.copyright')}
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="font-body text-xs font-light text-primary-foreground/60 hover:text-gold transition-colors duration-300">
-              Privacy Policy
+              {t('footer.privacy')}
             </a>
             <a href="#" className="font-body text-xs font-light text-primary-foreground/60 hover:text-gold transition-colors duration-300">
-              Terms of Service
+              {t('footer.terms')}
             </a>
           </div>
         </div>

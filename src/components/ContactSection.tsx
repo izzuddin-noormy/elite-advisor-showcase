@@ -3,8 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ContactSection = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,8 +20,8 @@ const ContactSection = () => {
     
     // Simulate form submission
     toast({
-      title: "Message Sent",
-      description: "Thank you for your inquiry. I'll respond within 24 hours.",
+      title: t('contact.toast.title'),
+      description: t('contact.toast.description'),
     });
     
     setFormData({ name: '', email: '', phone: '', message: '' });
@@ -38,11 +40,10 @@ const ContactSection = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="section-heading text-primary mb-8">
-              Let's Discuss Your Real Estate Goals
+              {t('contact.title')}
             </h2>
             <p className="font-body text-lg font-light text-muted-foreground max-w-2xl mx-auto">
-              Whether you're buying, selling, or investing, I'm here to provide the expertise 
-              and personalized service you deserve.
+              {t('contact.subtitle')}
             </p>
           </div>
 
@@ -53,7 +54,7 @@ const ContactSection = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-body font-light text-foreground mb-2">
-                      Full Name
+                      {t('contact.form.name')}
                     </label>
                     <Input
                       id="name"
@@ -67,7 +68,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-body font-light text-foreground mb-2">
-                      Email Address
+                      {t('contact.form.email')}
                     </label>
                     <Input
                       id="email"
@@ -83,7 +84,7 @@ const ContactSection = () => {
                 
                 <div>
                   <label htmlFor="phone" className="block text-sm font-body font-light text-foreground mb-2">
-                    Phone Number
+                    {t('contact.form.phone')}
                   </label>
                   <Input
                     id="phone"
@@ -97,7 +98,7 @@ const ContactSection = () => {
                 
                 <div>
                   <label htmlFor="message" className="block text-sm font-body font-light text-foreground mb-2">
-                    Message
+                    {t('contact.form.message')}
                   </label>
                   <Textarea
                     id="message"
@@ -107,7 +108,7 @@ const ContactSection = () => {
                     rows={5}
                     required
                     className="border-border focus:border-gold focus:ring-gold resize-none"
-                    placeholder="Tell me about your real estate needs..."
+                    placeholder={t('contact.form.messagePlaceholder')}
                   />
                 </div>
                 
@@ -115,7 +116,7 @@ const ContactSection = () => {
                   type="submit"
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-body font-light tracking-wide py-3"
                 >
-                  Send Message
+                  {t('contact.form.submit')}
                 </Button>
               </form>
             </div>
@@ -124,12 +125,12 @@ const ContactSection = () => {
             <div className="space-y-8">
               <div>
                 <h3 className="font-serif text-2xl font-medium text-primary mb-6">
-                  Contact Information
+                  {t('contact.info.title')}
                 </h3>
                 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="font-body text-sm font-medium text-foreground mb-2">Office</h4>
+                    <h4 className="font-body text-sm font-medium text-foreground mb-2">{t('contact.info.office')}</h4>
                     <p className="font-body text-muted-foreground font-light">
                       A-G-03 Marc Service Residence<br />
                       No 3, Jalan Pinang<br />
@@ -139,21 +140,21 @@ const ContactSection = () => {
                   </div>
                   
                   <div>
-                    <h4 className="font-body text-sm font-medium text-foreground mb-2">Phone</h4>
+                    <h4 className="font-body text-sm font-medium text-foreground mb-2">{t('contact.info.phone')}</h4>
                     <p className="font-body text-muted-foreground font-light">
                       +(60) 16-828-0399
                     </p>
                   </div>
                   
                   <div>
-                    <h4 className="font-body text-sm font-medium text-foreground mb-2">Email</h4>
+                    <h4 className="font-body text-sm font-medium text-foreground mb-2">{t('contact.info.email')}</h4>
                     <p className="font-body text-muted-foreground font-light">
                       musichen@propnex.com.my
                     </p>
                   </div>
                   
                   <div>
-                    <h4 className="font-body text-sm font-medium text-foreground mb-2">Service Areas</h4>
+                    <h4 className="font-body text-sm font-medium text-foreground mb-2">{t('contact.info.serviceAreas')}</h4>
                     <p className="font-body text-muted-foreground font-light">
                       Malaysia • Singapore • China
                     </p>
@@ -163,13 +164,13 @@ const ContactSection = () => {
 
               <div>
                 <h4 className="font-body text-sm font-medium text-foreground mb-4">
-                  Schedule a Consultation
+                  {t('contact.info.scheduleConsultation')}
                 </h4>
                 <Button
                   variant="outline"
                   className="border-gold text-gold hover:bg-gold hover:text-primary font-body font-light tracking-wide"
                 >
-                  Book Appointment
+                  {t('contact.info.bookAppointment')}
                 </Button>
               </div>
             </div>

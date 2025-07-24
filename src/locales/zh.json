@@ -8,24 +8,29 @@
     "scheduleConsultation": "预约咨询"
   },
   "hero": {
-    "title": "发现您在中国优质市场的梦想家园",
-    "subtitle": "专业指导您在北京、上海及中国新兴投资机会中的豪华房地产投资。",
-    "exploreButton": "浏览房产",
-    "consultationButton": "预约咨询"
+    "welcomeTo": "欢迎来到",
+    "name": "Mu Sichen",
+    "tagline": "房地产谈判专家及顾问 | 马来西亚吉隆坡",
+    "viewProperties": "查看房产",
+    "scheduleConsultation": "预约咨询",
+    "videoNotSupported": "您的浏览器不支持视频标签。"
   },
   "intro": {
-    "title": "重新定义豪华房地产卓越标准",
-    "description1": "凭借在中国动态房地产市场十多年的经验，我专门为挑剔的客户提供卓越的住宅和投资机会。",
-    "description2": "从北京的历史胡同到上海的现代顶层公寓，每一处房产都讲述着奢华、文化和战略投资潜力的故事。",
+    "title": "卓越服务，非凡成果",
+    "description1": "凭借在豪华房地产市场十多年的经验，我专门为吉隆坡大都市区的挑剔客户提供无与伦比的服务。从独家KLCC住宅到现代乡村别墅，我为每一笔交易带来专业知识、谨慎态度和卓越承诺。",
+    "description2": "我的方法建立在理解您的独特需求并提供超越期望的结果基础上。无论您是在购买梦想家园还是最大化您的投资价值，您都可以在每一步中依赖白手套服务。我所代表的机构PropNex在行业中建立了二十多年的关系，拥有惊人的业绩和信任。",
     "stats": {
-      "revenue": "机构营收",
-      "homes": "豪华住宅销售",
-      "experience": "年经验"
+      "revenue": "$3.2B+",
+      "revenueLabel": "PropNex机构2024年营收",
+      "homes": "6.4K+",
+      "homesLabel": "2024年豪华住宅销售",
+      "experience": "25",
+      "experienceLabel": "在新加坡和马来西亚的经验年数"
     }
   },
   "properties": {
     "title": "精选房产",
-    "subtitle": "探索中国最prestigious地段的卓越房产",
+    "subtitle": "探索吉隆坡大都市区最prestigious社区的卓越房产。",
     "searchPlaceholder": "奢华不是价格——而是一种感觉。描述您的需求，我们将为您找到完美的空间。",
     "viewDetails": "查看详情",
     "viewAll": "查看所有房产",
@@ -33,44 +38,59 @@
     "baths": "浴室",
     "sqft": "平方英尺",
     "status": {
-      "forSale": "待售",
+      "available": "可售",
+      "underContract": "合同中",
       "sold": "已售",
       "pending": "待定"
     }
   },
   "insights": {
     "title": "市场洞察",
-    "subtitle": "了解中国豪华房地产市场的最新趋势和分析",
+    "subtitle": "通过豪华房地产领域的专家分析、市场趋势和战略洞察保持信息更新。",
     "readMore": "阅读更多",
     "viewAll": "查看所有洞察",
     "categories": {
-      "market": "市场分析",
-      "investment": "投资",
-      "luxury": "豪华市场"
+      "marketAnalysis": "市场分析",
+      "strategy": "策略",
+      "investment": "投资"
     }
   },
   "contact": {
-    "title": "让我们找到您的完美房产",
-    "subtitle": "准备探索豪华房地产投资机会？我在这里指导您走过每一步。",
+    "title": "让我们讨论您的房地产目标",
+    "subtitle": "无论您是购买、出售还是投资，我都会为您提供应得的专业知识和个性化服务。",
     "form": {
       "name": "全名",
       "email": "电子邮箱",
       "phone": "电话号码",
       "message": "信息",
+      "messagePlaceholder": "告诉我您的房地产需求...",
       "submit": "发送信息"
     },
     "info": {
+      "title": "联系信息",
+      "office": "办公室",
       "phone": "电话",
       "email": "邮箱",
-      "address": "地址"
+      "serviceAreas": "服务区域",
+      "scheduleConsultation": "预约咨询",
+      "bookAppointment": "预约"
+    },
+    "toast": {
+      "title": "信息已发送",
+      "description": "感谢您的咨询。我将在24小时内回复。"
     }
   },
   "footer": {
-    "tagline": "中国优质市场的豪华房地产专业知识",
+    "tagline": "在吉隆坡大都市区提供卓越的豪华房地产服务。",
     "quickLinks": "快速链接",
     "contact": "联系方式",
-    "copyright": "© 2024 Mu Sichen. 版权所有。",
+    "copyright": "© 2025 Mu Sichen，房地产谈判专家及顾问。版权所有。",
     "privacy": "隐私政策",
     "terms": "服务条款"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "糟糕！找不到页面",
+    "returnHome": "返回首页"
   }
 }

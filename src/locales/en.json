@@ -8,69 +8,89 @@
     "scheduleConsultation": "Schedule Consultation"
   },
   "hero": {
-    "title": "Discover Your Dream Home in China's Premium Markets",
-    "subtitle": "Expert guidance through luxury real estate in Beijing, Shanghai, and emerging investment opportunities across China.",
-    "exploreButton": "Explore Properties",
-    "consultationButton": "Schedule Consultation"
+    "welcomeTo": "Welcome to",
+    "name": "Mu Sichen",
+    "tagline": "Real Estate Negotiator & Advisor | Kuala Lumpur, Malaysia",
+    "viewProperties": "View Properties",
+    "scheduleConsultation": "Schedule Consultation",
+    "videoNotSupported": "Your browser does not support the video tag."
   },
   "intro": {
-    "title": "Redefining Luxury Real Estate Excellence",
-    "description1": "With over a decade of experience in China's dynamic property markets, I specialize in connecting discerning clients with exceptional homes and investment opportunities.",
-    "description2": "From historic hutongs in Beijing to modern penthouses in Shanghai, every property tells a story of luxury, culture, and strategic investment potential.",
+    "title": "Exceptional Service, Extraordinary Results",
+    "description1": "With over a decade of experience in the luxury real estate market, I specialize in providing discerning clients with unparalleled service in the Kuala Lumpur metropolitan area. From exclusive KLCC homes to contemporary country homes, I bring expertise, discretion, and a commitment to excellence to every transaction.",
+    "description2": "My approach is built on understanding your unique needs and delivering results that exceed expectations. Whether you're acquiring your dream home or maximizing the value of your investment, you can count on white-glove service every step of the way. The Agency I represented Propnex has more than two decades of relationship built in the industry with an astounding performance and trust.",
     "stats": {
-      "revenue": "Agency Revenue",
-      "homes": "Luxury Homes Sold",
-      "experience": "Years Experience"
+      "revenue": "$3.2B+",
+      "revenueLabel": "Propnex Agency Revenue in 2024",
+      "homes": "6.4K+",
+      "homesLabel": "Luxury Homes Sold in 2024",
+      "experience": "25",
+      "experienceLabel": "Years of Experience in Singapore & Malaysia"
     }
   },
   "properties": {
     "title": "Featured Properties",
-    "subtitle": "Discover exceptional properties across China's most prestigious locations",
+    "subtitle": "Discover exceptional properties in the most prestigious neighborhoods throughout the Kuala Lumpur metropolitan area.",
     "searchPlaceholder": "Luxury isn't a price — it's a feeling. Describe yours and we will find your perfect space.",
     "viewDetails": "View Details",
     "viewAll": "View All Properties",
-    "beds": "beds",
-    "baths": "baths",
-    "sqft": "sqft",
+    "beds": "Beds",
+    "baths": "Baths",
+    "sqft": "sq ft",
     "status": {
-      "forSale": "For Sale",
+      "available": "Available",
+      "underContract": "Under Contract",
       "sold": "Sold",
       "pending": "Pending"
     }
   },
   "insights": {
     "title": "Market Insights",
-    "subtitle": "Stay informed with the latest trends and analysis from China's luxury real estate markets",
+    "subtitle": "Stay informed with expert analysis, market trends, and strategic insights from the luxury real estate landscape.",
     "readMore": "Read More",
     "viewAll": "View All Insights",
     "categories": {
-      "market": "Market Analysis",
-      "investment": "Investment",
-      "luxury": "Luxury Market"
+      "marketAnalysis": "Market Analysis",
+      "strategy": "Strategy",
+      "investment": "Investment"
     }
   },
   "contact": {
-    "title": "Let's Find Your Perfect Property",
-    "subtitle": "Ready to explore luxury real estate opportunities? I'm here to guide you through every step of your journey.",
+    "title": "Let's Discuss Your Real Estate Goals",
+    "subtitle": "Whether you're buying, selling, or investing, I'm here to provide the expertise and personalized service you deserve.",
     "form": {
       "name": "Full Name",
       "email": "Email Address",
       "phone": "Phone Number",
       "message": "Message",
+      "messagePlaceholder": "Tell me about your real estate needs...",
       "submit": "Send Message"
     },
     "info": {
+      "title": "Contact Information",
+      "office": "Office",
       "phone": "Phone",
       "email": "Email",
-      "address": "Address"
+      "serviceAreas": "Service Areas",
+      "scheduleConsultation": "Schedule a Consultation",
+      "bookAppointment": "Book Appointment"
+    },
+    "toast": {
+      "title": "Message Sent",
+      "description": "Thank you for your inquiry. I'll respond within 24 hours."
     }
   },
   "footer": {
-    "tagline": "Luxury real estate expertise across China's premier markets",
+    "tagline": "Providing exceptional luxury real estate services throughout the Kuala Lumpur metropolitan area.",
     "quickLinks": "Quick Links",
     "contact": "Contact",
-    "copyright": "© 2024 Mu Sichen. All rights reserved.",
+    "copyright": "© 2025 Mu Sichen, Real Estate Negotiator & Advisor. All rights reserved.",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oops! Page not found",
+    "returnHome": "Return to Home"
   }
 }

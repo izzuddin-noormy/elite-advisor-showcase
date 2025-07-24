@@ -4,8 +4,10 @@ import property2 from '@/assets/property-2.jpg';
 import property3 from '@/assets/property-3.jpg';
 import CurrencySwitch, { Currency } from '@/components/CurrencySwitch';
 import { convertPrice } from '@/utils/currency';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const PropertiesSection = () => {
+  const { t } = useLanguage();
   const [currency, setCurrency] = useState<Currency>('USD');
   const properties = [
     {
@@ -48,11 +50,10 @@ const PropertiesSection = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="section-heading text-primary mb-8">
-            Featured Properties
+            {t('properties.title')}
           </h2>
           <p className="font-body text-lg font-light text-muted-foreground max-w-2xl mx-auto mb-8">
-            Discover exceptional properties in the most prestigious neighborhoods 
-            throughout the Kuala Lumpur metropolitan area.
+            {t('properties.subtitle')}
           </p>
           
           <div className="flex justify-center">
@@ -83,7 +84,8 @@ const PropertiesSection = () => {
                         : 'bg-primary text-primary-foreground'
                     }`}
                   >
-                    {property.status}
+                    {property.status === 'Available' ? t('properties.status.available') : 
+                     property.status === 'Under Contract' ? t('properties.status.underContract') : property.status}
                   </span>
                 </div>
               </div>
@@ -103,16 +105,16 @@ const PropertiesSection = () => {
                 </div>
 
                 <div className="flex items-center space-x-4 text-sm text-muted-foreground font-body font-light">
-                  <span>{property.beds} Beds</span>
+                  <span>{property.beds} {t('properties.beds')}</span>
                   <span>•</span>
-                  <span>{property.baths} Baths</span>
+                  <span>{property.baths} {t('properties.baths')}</span>
                   <span>•</span>
-                  <span>{property.sqft} sq ft</span>
+                  <span>{property.sqft} {t('properties.sqft')}</span>
                 </div>
 
                 <div className="mt-6">
                   <button className="w-full py-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
-                    View Details
+                    {t('properties.viewDetails')}
                   </button>
                 </div>
               </div>
@@ -125,7 +127,7 @@ const PropertiesSection = () => {
             href="/properties"
             className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide"
           >
-            View All Properties
+            {t('properties.viewAll')}
           </a>
         </div>
       </div>

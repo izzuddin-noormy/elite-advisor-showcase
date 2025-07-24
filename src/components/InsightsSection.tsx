@@ -1,4 +1,7 @@
+import { useLanguage } from '@/contexts/LanguageContext';
+
 const InsightsSection = () => {
+  const { t } = useLanguage();
   const insights = [
     {
       id: 1,
@@ -31,11 +34,10 @@ const InsightsSection = () => {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="section-heading text-primary mb-8">
-            Market Insights
+            {t('insights.title')}
           </h2>
           <p className="font-body text-lg font-light text-muted-foreground max-w-2xl mx-auto">
-            Stay informed with expert analysis, market trends, and strategic insights 
-            from the luxury real estate landscape.
+            {t('insights.subtitle')}
           </p>
         </div>
 
@@ -48,7 +50,9 @@ const InsightsSection = () => {
               <div className="mb-6">
                 <div className="flex items-center space-x-4 mb-4">
                   <span className="px-3 py-1 bg-gold-light text-primary text-xs font-body font-light tracking-wide">
-                    {insight.category}
+                    {insight.category === 'Market Analysis' ? t('insights.categories.marketAnalysis') :
+                     insight.category === 'Strategy' ? t('insights.categories.strategy') :
+                     insight.category === 'Investment' ? t('insights.categories.investment') : insight.category}
                   </span>
                   <span className="text-sm text-muted-foreground font-body font-light">
                     {insight.date}
@@ -68,7 +72,7 @@ const InsightsSection = () => {
                     {insight.readTime}
                   </span>
                   <button className="font-body text-sm font-light text-primary elegant-underline">
-                    Read More
+                    {t('insights.readMore')}
                   </button>
                 </div>
               </div>
@@ -81,7 +85,7 @@ const InsightsSection = () => {
             href="#"
             className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide"
           >
-            View All Insights
+            {t('insights.viewAll')}
           </a>
         </div>
       </div>
