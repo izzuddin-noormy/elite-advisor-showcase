@@ -19,11 +19,11 @@ const HeroSection = () => {
           </p>
           
           <h1 className="hero-text text-white mb-8 leading-none">
-            Alexandra Sterling
+            Mu Sichen
           </h1>
           
           <p className="tagline text-white/90 max-w-2xl mx-auto mb-12">
-            Private Real Estate Advisor | DC, Maryland, Virginia
+            Real Estate Negotiator & Advisor | Kuala Lumpur, Malaysia
           </p>
           
           <div className="space-y-4 md:space-y-0 md:space-x-6 md:flex md:justify-center">
