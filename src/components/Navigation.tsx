@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitch from '@/components/LanguageSwitch';
+import ThemeSwitch from '@/components/ThemeSwitch';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -54,8 +55,9 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* Language Switch & Contact Button */}
+          {/* Theme Switch, Language Switch & Contact Button */}
           <div className="hidden md:flex items-center space-x-4">
+            <ThemeSwitch />
             <LanguageSwitch />
             <a
               href="#contact"
