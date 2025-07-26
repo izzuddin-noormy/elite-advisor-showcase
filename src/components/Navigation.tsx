@@ -39,7 +39,7 @@ const Navigation = () => {
           {/* Logo */}
           <div className="font-serif text-2xl font-medium tracking-tight">
             <span className="text-primary">Mu</span>
-            <span className="text-gold ml-1">Sichen</span>
+            <span className="text-gold ml-1">SiChen</span>
           </div>
 
           {/* Navigation Links */}
