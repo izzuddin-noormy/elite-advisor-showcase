@@ -90,19 +90,22 @@ const SponsoredHighlight = () => {
         </div>
 
         <Card 
-          className="group relative overflow-hidden bg-card/80 backdrop-blur-sm border-0 shadow-elegant hover:shadow-glow transition-all duration-700 cursor-pointer max-w-5xl mx-auto"
+          className="group relative overflow-hidden bg-card/80 backdrop-blur-sm border-0 shadow-elegant hover:shadow-glow transition-all duration-700 cursor-pointer max-w-5xl mx-auto hover:scale-[1.02] transform"
           onClick={handleProjectClick}
         >
           <CardContent className="p-0">
-            <div className="grid lg:grid-cols-2 gap-0">
-              {/* Image Section */}
-              <div className="relative overflow-hidden h-80 lg:h-96">
-                <img
-                  src={currentProject.image}
-                  alt={currentProject.title}
+            <div className="flex flex-col">
+              {/* Video Section */}
+              <div className="relative overflow-hidden aspect-video">
+                <video
+                  src="/videos/Mu-Reel-720p-Compressed.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent group-hover:from-black/40 transition-all duration-700" />
                 <div className="absolute top-6 left-6">
                   <span className="px-4 py-2 bg-gold text-primary text-xs font-body font-medium tracking-wide">
                     {currentProject.badge}
@@ -115,7 +118,7 @@ const SponsoredHighlight = () => {
               </div>
 
               {/* Content Section */}
-              <div className="p-8 lg:p-12 flex flex-col justify-center">
+              <div className="p-8 lg:p-12">
                 <div className="space-y-6">
                   <div>
                     <h3 className="font-serif text-3xl lg:text-4xl font-light text-primary mb-2 group-hover:text-gold transition-colors duration-300">
