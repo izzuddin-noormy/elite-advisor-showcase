@@ -92,5 +92,10 @@
     "title": "404",
     "message": "Oops! Page not found",
     "returnHome": "Return to Home"
+  },
+  "sponsored": {
+    "badge": "Sponsored Highlight",
+    "title": "Featured Development",
+    "viewProject": "View Project"
   }
 }

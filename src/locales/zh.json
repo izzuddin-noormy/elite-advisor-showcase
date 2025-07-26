@@ -92,5 +92,10 @@
     "title": "404",
     "message": "糟糕！找不到页面",
     "returnHome": "返回首页"
+  },
+  "sponsored": {
+    "badge": "赞助亮点",
+    "title": "特色开发项目",
+    "viewProject": "查看项目"
   }
 }
