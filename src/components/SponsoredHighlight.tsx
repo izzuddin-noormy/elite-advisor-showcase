@@ -23,14 +23,14 @@ const SponsoredHighlight = () => {
 
   // Dummy data for sponsored projects
   const sponsoredProjects: Record<string, SponsoredProject> = {
-    'grand-towers': {
-      id: 'grand-towers',
-      title: 'The Grand Towers',
+    'suria-stonor': {
+      id: 'suria-stonor',
+      title: 'The Suria Stonor',
       subtitle: 'Luxury Penthouse Collection',
-      description: 'Exclusive collection of ultra-luxury penthouses featuring panoramic city views, private terraces, and world-class amenities in the heart of downtown.',
+      description: 'Suria Stonor, a luxury condominium set in a quiet alcove that comprises stately royal houses, embassies and official residences in the vicinity. Situated in the heart of Kuala Lumpur, it is well connected via excellent transport infrastructure and lies close to the Petronas Twin Tower and world-class amenities.',
       image: 'https://images.unsplash.com/photo-1433832597046-4f10e10ac764?q=80&w=1200&auto=format&fit=crop',
-      price: 'From $8,500,000',
-      location: 'Downtown Manhattan',
+      price: 'From $6,300,000',
+      location: 'Kuala Lumpur - KLCC',
       type: 'Penthouse',
       badge: 'EXCLUSIVE PREVIEW'
     },
@@ -98,7 +98,7 @@ const SponsoredHighlight = () => {
               {/* Video Section */}
               <div className="relative overflow-hidden aspect-video">
                 <video
-                  src="/videos/Mu-Reel-720p-Compressed.mp4"
+                  src="/videos/Stonor-KLCC.mp4"
                   autoPlay
                   muted
                   loop
