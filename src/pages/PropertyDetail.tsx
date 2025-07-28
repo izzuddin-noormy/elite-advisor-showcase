@@ -66,7 +66,7 @@ const PropertyDetail = () => {
         '/images/imperial-0.jpg',
         '/images/imperial-1.jpg',
         '/images/imperial-2.jpg',
-        '/images/imperial-3.jpg',
+        '/images/imperial-5.jpg',
         '/images/imperial-4.jpg'
       ],
       description: 'A luxury condominium set in a quiet alcove that comprises stately royal houses, embassies and official residences in the vicinity. Situated in the heart of Kuala Lumpur, it is well connected via excellent transport infrastructure and lies close to the Petronas Twin Tower and world-class amenities.',
