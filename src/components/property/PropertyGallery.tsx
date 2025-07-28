@@ -34,10 +34,10 @@ const PropertyGallery = ({ images, title }: PropertyGalleryProps) => {
 
   return (
     <section className="bg-secondary/20 py-8">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row gap-4">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="flex flex-col lg:flex-row gap-4 max-w-7xl mx-auto">
           {/* Main Image */}
-          <div className="lg:w-[622px] lg:h-[360px] w-full h-64 md:h-80 cursor-pointer overflow-hidden rounded-lg">
+          <div className="flex-1 lg:flex-[2] w-full h-64 md:h-80 lg:h-[360px] cursor-pointer overflow-hidden rounded-lg">
             <img
               src={images[selectedImage]}
               alt={`${title} - Main View`}
@@ -47,11 +47,11 @@ const PropertyGallery = ({ images, title }: PropertyGalleryProps) => {
           </div>
           
           {/* Thumbnail Grid */}
-          <div className="grid grid-cols-2 gap-2 lg:w-[309px]">
+          <div className="flex-1 lg:flex-[1] grid grid-cols-2 gap-2 w-full">
             {images.slice(1, 5).map((image, index) => (
               <div
                 key={index}
-                className="lg:w-[150px] lg:h-[178px] w-full h-24 md:h-32 cursor-pointer overflow-hidden rounded-lg transition-all duration-300 hover:opacity-75"
+                className="aspect-[309/178] w-full cursor-pointer overflow-hidden rounded-lg transition-all duration-300 hover:opacity-75"
                 onClick={() => setSelectedImage(index + 1)}
               >
                 <img
