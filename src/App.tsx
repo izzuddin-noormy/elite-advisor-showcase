@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
+import PropertyDetail from "./pages/PropertyDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/properties" element={<Properties />} />
+            <Route path="/projects/:id" element={<PropertyDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
