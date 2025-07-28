@@ -33,31 +33,31 @@ const PropertyGallery = ({ images, title }: PropertyGalleryProps) => {
   };
 
   return (
-    <section className="bg-secondary/20 py-8">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="flex flex-col lg:flex-row gap-4 max-w-7xl mx-auto">
+    <section className="bg-secondary/20 py-4 sm:py-6 lg:py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col xl:flex-row gap-3 sm:gap-4 lg:gap-6 max-w-7xl mx-auto">
           {/* Main Image */}
-          <div className="flex-1 lg:flex-[2] w-full h-64 md:h-80 lg:h-[360px] cursor-pointer overflow-hidden rounded-lg">
+          <div className="w-full xl:flex-[2] h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[360px] cursor-pointer overflow-hidden rounded-lg shadow-lg">
             <img
               src={images[selectedImage]}
               alt={`${title} - Main View`}
-              className="w-full h-full object-cover rounded-lg shadow-lg transition-transform duration-300 hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
               onClick={() => openModal(selectedImage)}
             />
           </div>
           
           {/* Thumbnail Grid */}
-          <div className="flex-1 lg:flex-[1] grid grid-cols-2 gap-2 w-full">
+          <div className="w-full xl:flex-[1] grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
             {images.slice(1, 5).map((image, index) => (
               <div
                 key={index}
-                className="aspect-[309/178] w-full cursor-pointer overflow-hidden rounded-lg transition-all duration-300 hover:opacity-75"
+                className="aspect-[16/10] sm:aspect-[4/3] lg:aspect-[309/178] w-full cursor-pointer overflow-hidden rounded-lg shadow-sm transition-all duration-300 hover:opacity-75 hover:shadow-md"
                 onClick={() => setSelectedImage(index + 1)}
               >
                 <img
                   src={image}
                   alt={`${title} - View ${index + 2}`}
-                  className={`w-full h-full object-cover rounded-lg transition-transform duration-300 hover:scale-105 ${
+                  className={`w-full h-full object-cover transition-transform duration-300 hover:scale-105 ${
                     selectedImage === index + 1 ? 'ring-2 ring-primary' : ''
                   }`}
                   onClick={(e) => {
@@ -70,15 +70,15 @@ const PropertyGallery = ({ images, title }: PropertyGalleryProps) => {
           </div>
         </div>
         
-        {/* Mobile Image Navigation */}
-        <div className="flex justify-center mt-4 lg:hidden">
+        {/* Mobile Image Navigation - Only show on mobile when thumbnails are hidden */}
+        <div className="flex justify-center mt-4 sm:mt-6 xl:hidden">
           <div className="flex space-x-2">
             {images.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setSelectedImage(index)}
-                className={`w-3 h-3 rounded-full ${
-                  selectedImage === index ? 'bg-primary' : 'bg-muted'
+                className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-200 ${
+                  selectedImage === index ? 'bg-primary scale-110' : 'bg-muted hover:bg-muted-foreground/50'
                 }`}
               />
             ))}
