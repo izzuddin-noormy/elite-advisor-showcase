@@ -64,10 +64,10 @@ const PropertyDetail = () => {
       propertyType: 'Penthouse',
       images: [
         '/images/imperial-0.jpg',
-        '/images/imperial-0.jpg',
-        '/images/imperial-0.jpg',
-        '/images/imperial-0.jpg',
-        '/images/imperial-0.jpg'
+        '/images/imperial-1.jpg',
+        '/images/imperial-2.jpg',
+        '/images/imperial-3.jpg',
+        '/images/imperial-4.jpg'
       ],
       description: 'A luxury condominium set in a quiet alcove that comprises stately royal houses, embassies and official residences in the vicinity. Situated in the heart of Kuala Lumpur, it is well connected via excellent transport infrastructure and lies close to the Petronas Twin Tower and world-class amenities.',
       overview: 'This exceptional penthouse offers unparalleled luxury living in one of the most prestigious locations in the city. The spacious layout features floor-to-ceiling windows, premium finishes, and breathtaking city views. The gourmet kitchen is equipped with top-of-the-line appliances, while the master suite boasts a private terrace and spa-like bathroom. Additional amenities include a private elevator, smart home technology, and access to exclusive building facilities including a rooftop pool, fitness center, and concierge services.',
