@@ -23,13 +23,13 @@ const SponsoredHighlight = () => {
 
   // Dummy data for sponsored projects
   const sponsoredProjects: Record<string, SponsoredProject> = {
-    'suria-stonor': {
-      id: 'suria-stonor',
-      title: 'The Suria Stonor',
+    'imperial-house': {
+      id: 'imperial-suite',
+      title: 'The Imperial Suite',
       subtitle: 'Luxury Penthouse Collection',
-      description: 'Suria Stonor, a luxury condominium set in a quiet alcove that comprises stately royal houses, embassies and official residences in the vicinity. Situated in the heart of Kuala Lumpur, it is well connected via excellent transport infrastructure and lies close to the Petronas Twin Tower and world-class amenities.',
+      description: 'A luxury condominium set in a quiet alcove that comprises stately royal houses, embassies and official residences in the vicinity. Situated in the heart of Kuala Lumpur, it is well connected via excellent transport infrastructure and lies close to the Petronas Twin Tower and world-class amenities.',
       image: 'https://images.unsplash.com/photo-1433832597046-4f10e10ac764?q=80&w=1200&auto=format&fit=crop',
-      price: 'From $6,300,000',
+      price: 'From $8,880,000',
       location: 'Kuala Lumpur - KLCC',
       type: 'Penthouse',
       badge: 'EXCLUSIVE PREVIEW'
