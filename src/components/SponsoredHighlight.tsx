@@ -48,7 +48,7 @@ const SponsoredHighlight = () => {
   };
 
   // Default project if no parameter is provided
-  const defaultProject = sponsoredProjects['grand-towers'];
+  const defaultProject = sponsoredProjects['imperial-house'];
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
