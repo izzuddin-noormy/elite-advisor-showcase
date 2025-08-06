@@ -1,7 +1,9 @@
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
 const InsightsSection = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const insights = [
     {
       id: 1,
@@ -46,6 +48,7 @@ const InsightsSection = () => {
             <article
               key={insight.id}
               className="group cursor-pointer hover-lift"
+              onClick={() => navigate(`/insights/${insight.id}`)}
             >
               <div className="mb-6">
                 <div className="flex items-center space-x-4 mb-4">
@@ -71,7 +74,13 @@ const InsightsSection = () => {
                   <span className="text-sm text-muted-foreground font-body font-light">
                     {insight.readTime}
                   </span>
-                  <button className="font-body text-sm font-light text-primary elegant-underline">
+                  <button 
+                    className="font-body text-sm font-light text-primary elegant-underline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/insights/${insight.id}`);
+                    }}
+                  >
                     {t('insights.readMore')}
                   </button>
                 </div>
