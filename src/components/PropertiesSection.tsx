@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import property1 from '@/assets/property-1.jpg';
 import property2 from '@/assets/property-2.jpg';
 import property3 from '@/assets/property-3.jpg';
@@ -12,6 +13,7 @@ const PropertiesSection = () => {
   const properties = [
     {
       id: 1,
+      slug: 'georgetown-estate',
       image: property1,
       title: 'Georgetown Estate',
       address: '2847 P Street NW, Washington, DC',
@@ -23,6 +25,7 @@ const PropertiesSection = () => {
     },
     {
       id: 2,
+      slug: 'bethesda-contemporary',
       image: property2,
       title: 'Bethesda Contemporary',
       address: '7821 Woodmont Avenue, Bethesda, MD',
@@ -34,6 +37,7 @@ const PropertiesSection = () => {
     },
     {
       id: 3,
+      slug: 'mclean-luxury-home',
       image: property3,
       title: 'McLean Luxury Home',
       address: '1456 Kirby Road, McLean, VA',
@@ -66,9 +70,10 @@ const PropertiesSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {properties.map((property) => (
-            <div
+            <Link
               key={property.id}
-              className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer"
+              to={`/projects/${property.slug}`}
+              className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer block"
             >
               <div className="relative overflow-hidden">
                 <img
@@ -113,22 +118,22 @@ const PropertiesSection = () => {
                 </div>
 
                 <div className="mt-6">
-                  <button className="w-full py-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
+                  <div className="w-full py-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide text-center">
                     {t('properties.viewDetails')}
-                  </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <a
-            href="/properties"
+          <Link
+            to="/properties"
             className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide"
           >
             {t('properties.viewAll')}
-          </a>
+          </Link>
         </div>
       </div>
     </section>
