@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import CurrencySwitch, { Currency } from '@/components/CurrencySwitch';
@@ -16,6 +17,7 @@ const Properties = () => {
   const properties = [
     {
       id: 1,
+      slug: 'georgetown-estate',
       image: property1,
       title: 'Georgetown Estate',
       address: '2847 P Street NW, Washington, DC',
@@ -28,6 +30,7 @@ const Properties = () => {
     },
     {
       id: 2,
+      slug: 'bethesda-contemporary',
       image: property2,
       title: 'Bethesda Contemporary',
       address: '7821 Woodmont Avenue, Bethesda, MD',
@@ -40,6 +43,7 @@ const Properties = () => {
     },
     {
       id: 3,
+      slug: 'mclean-luxury-home',
       image: property3,
       title: 'McLean Luxury Home',
       address: '1456 Kirby Road, McLean, VA',
@@ -52,6 +56,7 @@ const Properties = () => {
     },
     {
       id: 4,
+      slug: 'capitol-hill-townhouse',
       image: property1,
       title: 'Capitol Hill Townhouse',
       address: '234 A Street SE, Washington, DC',
@@ -64,6 +69,7 @@ const Properties = () => {
     },
     {
       id: 5,
+      slug: 'arlington-heights-modern',
       image: property2,
       title: 'Arlington Heights Modern',
       address: '5678 Wilson Boulevard, Arlington, VA',
@@ -76,6 +82,7 @@ const Properties = () => {
     },
     {
       id: 6,
+      slug: 'potomac-waterfront-estate',
       image: property3,
       title: 'Potomac Waterfront Estate',
       address: '9876 River Road, Potomac, MD',
@@ -154,9 +161,10 @@ const Properties = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProperties.map((property) => (
-              <div
+              <Link
                 key={property.id}
-                className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer"
+                to={`/projects/${property.slug}`}
+                className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer block"
               >
                 <div className="relative overflow-hidden">
                   <img
@@ -203,15 +211,15 @@ const Properties = () => {
                   </div>
 
                   <div className="space-y-3">
-                    <button className="w-full py-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
+                    <div className="w-full py-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide text-center">
                       View Details
-                    </button>
+                    </div>
                     <button className="w-full py-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 font-body text-sm font-light tracking-wide">
                       Schedule Viewing
                     </button>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
