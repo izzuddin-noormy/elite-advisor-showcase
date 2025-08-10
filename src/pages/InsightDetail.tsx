@@ -150,12 +150,12 @@ const InsightDetail = () => {
         <Navigation />
         <div className="container mx-auto px-6 py-20">
           <div className="text-center">
-            <h1 className="text-2xl font-serif text-primary mb-4">Article Not Found</h1>
+            <h1 className="text-2xl font-serif text-primary mb-4">{t('insights.notFoundTitle')}</h1>
             <button
               onClick={() => navigate('/')}
               className="text-primary hover:text-gold transition-colors"
             >
-              Return to Home
+              {t('notFound.returnHome')}
             </button>
           </div>
         </div>
@@ -176,7 +176,7 @@ const InsightDetail = () => {
             className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-8 group"
           >
             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-body text-sm">Back to Insights</span>
+            <span className="font-body text-sm">{t('insights.backToInsights')}</span>
           </button>
 
           {/* Article Header */}
@@ -234,7 +234,7 @@ const InsightDetail = () => {
                 onClick={() => navigate('/')}
                 className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide"
               >
-                View More Insights
+                {t('insights.viewMore')}
               </button>
             </div>
           </footer>

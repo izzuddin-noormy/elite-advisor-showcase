@@ -9,8 +9,10 @@ import { Search } from 'lucide-react';
 import property1 from '@/assets/property-1.jpg';
 import property2 from '@/assets/property-2.jpg';
 import property3 from '@/assets/property-3.jpg';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Properties = () => {
+  const { t } = useLanguage();
   const [currency, setCurrency] = useState<Currency>('USD');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -116,11 +118,10 @@ const Properties = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
               <h1 className="section-heading text-primary mb-4">
-                Luxury Properties
+                {t('properties.title')}
               </h1>
               <p className="font-body text-lg font-light text-muted-foreground max-w-2xl">
-                Discover exceptional luxury properties in the most prestigious neighborhoods 
-                throughout the Washington DC metropolitan area.
+                {t('properties.subtitle')}
               </p>
             </div>
             
@@ -141,7 +142,7 @@ const Properties = () => {
               </div>
               <Input
                 type="text"
-                placeholder="Luxury isn't a price — it's a feeling. Describe yours and we will find your perfect space."
+                placeholder={t('properties.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-16 py-6 text-lg font-body font-light bg-card border-border/50 rounded-xl shadow-luxury focus:shadow-lg focus:border-primary/20 transition-all duration-300 placeholder:text-muted-foreground/60"
@@ -180,7 +181,7 @@ const Properties = () => {
                           : 'bg-primary text-primary-foreground'
                       }`}
                     >
-                      {property.status}
+                      {t(`properties.status.${property.status === 'Under Contract' ? 'underContract' : property.status.toLowerCase()}`)}
                     </span>
                   </div>
                 </div>
@@ -203,19 +204,19 @@ const Properties = () => {
                   </div>
 
                   <div className="flex items-center space-x-4 text-sm text-muted-foreground font-body font-light mb-6">
-                    <span>{property.beds} Beds</span>
+                    <span>{property.beds} {t('properties.beds')}</span>
                     <span>•</span>
-                    <span>{property.baths} Baths</span>
+                    <span>{property.baths} {t('properties.baths')}</span>
                     <span>•</span>
-                    <span>{property.sqft} sq ft</span>
+                    <span>{property.sqft} {t('properties.sqft')}</span>
                   </div>
 
                   <div className="space-y-3">
                     <div className="w-full py-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide text-center">
-                      View Details
+                      {t('properties.viewDetails')}
                     </div>
                     <button className="w-full py-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 font-body text-sm font-light tracking-wide">
-                      Schedule Viewing
+                      {t('properties.scheduleViewing')}
                     </button>
                   </div>
                 </div>
@@ -226,7 +227,7 @@ const Properties = () => {
           {/* Load More Button */}
           <div className="text-center mt-12">
             <button className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
-              Load More Properties
+              {t('properties.loadMore')}
             </button>
           </div>
         </div>
