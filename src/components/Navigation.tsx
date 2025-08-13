@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitch from '@/components/LanguageSwitch';
@@ -7,6 +8,7 @@ import ThemeSwitch from '@/components/ThemeSwitch';
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { t } = useLanguage();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +18,14 @@ const Navigation = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const getNavHref = (href: string) => {
+    // If it's a hash link and we're not on the home page, go to home with hash
+    if (href.startsWith('#') && location.pathname !== '/') {
+      return `/${href}`;
+    }
+    return href;
+  };
 
   const navItems = [
     { name: t('nav.home'), href: '/' },
@@ -47,7 +57,7 @@ const Navigation = () => {
             {navItems.map((item) => (
               <a
                 key={item.name}
-                href={item.href}
+                href={getNavHref(item.href)}
                 className="font-body text-sm font-light tracking-wide text-foreground/80 hover:text-foreground transition-colors duration-300 elegant-underline"
               >
                 {item.name}
@@ -60,7 +70,7 @@ const Navigation = () => {
             <ThemeSwitch />
             <LanguageSwitch />
             <a
-              href="#contact"
+              href={getNavHref('#contact')}
               className="inline-flex items-center px-6 py-2 border border-gold text-gold hover:bg-gold hover:text-primary transition-all duration-300 font-body text-sm font-light tracking-wide"
             >
               {t('nav.scheduleConsultation')}
