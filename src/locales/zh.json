@@ -96,6 +96,26 @@
   "sponsored": {
     "badge": "赞助亮点",
     "title": "特色开发项目",
-    "viewProject": "查看项目"
+    "viewProject": "查看项目",
+    "projects": {
+      "imperialHouse": {
+        "title": "帝国套房",
+        "subtitle": "豪华顶层公寓系列",
+        "description": "这是一个位于安静角落的豪华公寓，周围环绕着庄严的皇家住宅、大使馆和官邸。位于吉隆坡市中心，交通基础设施优良，靠近双子塔和世界级设施。",
+        "price": "起价 $8,880,000",
+        "location": "吉隆坡 - KLCC",
+        "type": "顶层公寓",
+        "badge": "独家预览"
+      },
+      "riversideEstate": {
+        "title": "河畔庄园",
+        "subtitle": "滨水豪华生活",
+        "description": "拥有私人码头通道、无边泳池和无遮挡河景的高端滨水住宅。仅限12套房源的收藏版。",
+        "price": "起价 $6,200,000",
+        "location": "哈德逊河谷",
+        "type": "滨水别墅",
+        "badge": "即将推出"
+      }
+    }
   }
 }

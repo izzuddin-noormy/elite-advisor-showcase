@@ -96,6 +96,26 @@
   "sponsored": {
     "badge": "Sponsored Highlight",
     "title": "Featured Development",
-    "viewProject": "View Project"
+    "viewProject": "View Project",
+    "projects": {
+      "imperialHouse": {
+        "title": "The Imperial Suite",
+        "subtitle": "Luxury Penthouse Collection",
+        "description": "A luxury condominium set in a quiet alcove that comprises stately royal houses, embassies and official residences in the vicinity. Situated in the heart of Kuala Lumpur, it is well connected via excellent transport infrastructure and lies close to the Petronas Twin Tower and world-class amenities.",
+        "price": "From $8,880,000",
+        "location": "Kuala Lumpur - KLCC",
+        "type": "Penthouse",
+        "badge": "EXCLUSIVE PREVIEW"
+      },
+      "riversideEstate": {
+        "title": "Riverside Estate",
+        "subtitle": "Waterfront Luxury Living",
+        "description": "Premium waterfront residences with private dock access, infinity pools, and unobstructed river views. Limited collection of only 12 units.",
+        "price": "From $6,200,000",
+        "location": "Hudson River Valley",
+        "type": "Waterfront Villa",
+        "badge": "COMING SOON"
+      }
+    }
   }
 }

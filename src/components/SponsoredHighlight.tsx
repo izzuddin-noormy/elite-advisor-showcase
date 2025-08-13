@@ -21,36 +21,36 @@ const SponsoredHighlight = () => {
   const navigate = useNavigate();
   const [currentProject, setCurrentProject] = useState<SponsoredProject | null>(null);
 
-  // Dummy data for sponsored projects
-  const sponsoredProjects: Record<string, SponsoredProject> = {
+  // Localized project data
+  const getLocalizedProjects = (): Record<string, SponsoredProject> => ({
     'imperial-house': {
       id: 'imperial-suite',
-      title: 'The Imperial Suite',
-      subtitle: 'Luxury Penthouse Collection',
-      description: 'A luxury condominium set in a quiet alcove that comprises stately royal houses, embassies and official residences in the vicinity. Situated in the heart of Kuala Lumpur, it is well connected via excellent transport infrastructure and lies close to the Petronas Twin Tower and world-class amenities.',
+      title: t('sponsored.projects.imperialHouse.title'),
+      subtitle: t('sponsored.projects.imperialHouse.subtitle'),
+      description: t('sponsored.projects.imperialHouse.description'),
       image: 'https://images.unsplash.com/photo-1433832597046-4f10e10ac764?q=80&w=1200&auto=format&fit=crop',
-      price: 'From $8,880,000',
-      location: 'Kuala Lumpur - KLCC',
-      type: 'Penthouse',
-      badge: 'EXCLUSIVE PREVIEW'
+      price: t('sponsored.projects.imperialHouse.price'),
+      location: t('sponsored.projects.imperialHouse.location'),
+      type: t('sponsored.projects.imperialHouse.type'),
+      badge: t('sponsored.projects.imperialHouse.badge')
     },
     'riverside-estate': {
       id: 'riverside-estate',
-      title: 'Riverside Estate',
-      subtitle: 'Waterfront Luxury Living',
-      description: 'Premium waterfront residences with private dock access, infinity pools, and unobstructed river views. Limited collection of only 12 units.',
+      title: t('sponsored.projects.riversideEstate.title'),
+      subtitle: t('sponsored.projects.riversideEstate.subtitle'),
+      description: t('sponsored.projects.riversideEstate.description'),
       image: 'https://images.unsplash.com/photo-1496307653780-42ee777d4833?q=80&w=1200&auto=format&fit=crop',
-      price: 'From $6,200,000',
-      location: 'Hudson River Valley',
-      type: 'Waterfront Villa',
-      badge: 'COMING SOON'
+      price: t('sponsored.projects.riversideEstate.price'),
+      location: t('sponsored.projects.riversideEstate.location'),
+      type: t('sponsored.projects.riversideEstate.type'),
+      badge: t('sponsored.projects.riversideEstate.badge')
     }
-  };
-
-  // Default project if no parameter is provided
-  const defaultProject = sponsoredProjects['imperial-house'];
+  });
 
   useEffect(() => {
+    const sponsoredProjects = getLocalizedProjects();
+    const defaultProject = sponsoredProjects['imperial-house'];
+    
     const searchParams = new URLSearchParams(location.search);
     const highlightParam = searchParams.get('highlight');
     
@@ -67,7 +67,7 @@ const SponsoredHighlight = () => {
     } else {
       setCurrentProject(defaultProject);
     }
-  }, [location.search]);
+  }, [location.search, t]);
 
   const handleProjectClick = () => {
     if (currentProject) {
