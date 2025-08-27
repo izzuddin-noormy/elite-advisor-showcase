@@ -4,6 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X } from 'lucide-react';
 
 const ContactSection = () => {
   const { t } = useLanguage();
@@ -13,6 +15,7 @@ const ContactSection = () => {
     phone: '',
     message: ''
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -227,6 +230,7 @@ const ContactSection = () => {
                 </h4>
                 <Button
                   variant="outline"
+                  onClick={() => setIsModalOpen(true)}
                   className="border-gold text-gold hover:bg-gold hover:text-primary font-body font-light tracking-wide"
                 >
                   {t('contact.info.bookAppointment')}
@@ -236,6 +240,59 @@ const ContactSection = () => {
           </div>
         </div>
       </div>
+
+      {/* Appointment Booking Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            onClick={() => setIsModalOpen(false)}
+          >
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/50" />
+            
+            {/* Modal Content */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="relative bg-background rounded-lg shadow-lg w-full max-w-4xl h-[90vh] md:h-[80vh] flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header with Close Button */}
+              <div className="flex items-center justify-between p-4 border-b border-border">
+                <h3 className="text-lg font-semibold text-foreground">
+                  {t('contact.info.bookAppointment')}
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsModalOpen(false)}
+                  className="h-8 w-8 p-0 hover:bg-secondary"
+                >
+                  <X className="h-4 w-4" />
+                  <span className="sr-only">Close</span>
+                </Button>
+              </div>
+
+              {/* Iframe Container */}
+              <div className="flex-1 p-4">
+                <iframe
+                  src="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ3LnfJ5T5bh5HZf4-meZyUzJMux4phu9q7-RDeIgDODPYLMxSmQWW-8z5-EHXkQOseU1jE8Uhmp"
+                  className="w-full h-full rounded-md border border-border"
+                  title="Book Appointment"
+                  frameBorder="0"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
