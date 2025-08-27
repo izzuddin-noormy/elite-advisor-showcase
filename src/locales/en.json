@@ -76,7 +76,8 @@
       "email": "Email",
       "serviceAreas": "Service Areas",
       "scheduleConsultation": "Schedule a Consultation",
-      "bookAppointment": "Book Appointment"
+      "bookAppointment": "Book Appointment",
+      "whatsappMe": "WhatsApp Me"
     },
     "toast": {
       "title": "Message Sent",

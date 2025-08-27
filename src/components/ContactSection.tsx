@@ -228,13 +228,22 @@ const ContactSection = () => {
                 <h4 className="font-body text-sm font-medium text-foreground mb-4">
                   {t('contact.info.scheduleConsultation')}
                 </h4>
-                <Button
-                  variant="outline"
-                  onClick={() => setIsModalOpen(true)}
-                  className="border-gold text-gold hover:bg-gold hover:text-primary font-body font-light tracking-wide"
-                >
-                  {t('contact.info.bookAppointment')}
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsModalOpen(true)}
+                    className="border-gold text-gold hover:bg-gold hover:text-primary font-body font-light tracking-wide"
+                  >
+                    {t('contact.info.bookAppointment')}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => window.open('https://wa.me/60168280399', '_blank')}
+                    className="border-gold text-gold hover:bg-gold hover:text-primary font-body font-light tracking-wide"
+                  >
+                    {t('contact.info.whatsappMe')}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

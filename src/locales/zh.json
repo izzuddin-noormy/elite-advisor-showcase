@@ -76,7 +76,8 @@
       "email": "邮箱",
       "serviceAreas": "服务区域",
       "scheduleConsultation": "预约咨询",
-      "bookAppointment": "预约"
+      "bookAppointment": "预约",
+      "whatsappMe": "WhatsApp 联系"
     },
     "toast": {
       "title": "信息已发送",
