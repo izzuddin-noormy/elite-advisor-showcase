@@ -50,6 +50,11 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   };
 
   const t = (key: string): string => {
+    // Return key if translations haven't loaded yet
+    if (!translations[language]) {
+      return key;
+    }
+    
     const keys = key.split('.');
     let value = translations[language];
     
