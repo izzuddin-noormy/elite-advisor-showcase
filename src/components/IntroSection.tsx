@@ -16,7 +16,7 @@ const IntroSection = () => {
                 {t('intro.description1')}
               </p>
               
-              <p className="font-body text-base md:text-lg font-light leading-relaxed text-muted-foreground">
+              <p className="font-body text-lg md:text-lg font-light leading-relaxed text-muted-foreground mb-8">
                 {t('intro.description2')}
               </p>
             </div>
