@@ -80,7 +80,12 @@
     },
     "toast": {
       "title": "Message Sent",
-      "description": "Thank you for your inquiry. I'll respond within 24 hours."
+      "description": "Thank you for your inquiry. I'll respond within 24 hours.",
+      "error": "Error",
+      "errorRequired": "Please fill in all required fields.",
+      "errorEmail": "Please enter a valid email address.",
+      "errorPhone": "Please enter a valid phone number.",
+      "errorSubmit": "Failed to send message. Please try again."
     }
   },
   "footer": {

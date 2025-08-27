@@ -80,7 +80,12 @@
     },
     "toast": {
       "title": "信息已发送",
-      "description": "感谢您的咨询。我将在24小时内回复。"
+      "description": "感谢您的咨询。我将在24小时内回复。",
+      "error": "错误",
+      "errorRequired": "请填写所有必填字段。",
+      "errorEmail": "请输入有效的电子邮箱地址。",
+      "errorPhone": "请输入有效的电话号码。",
+      "errorSubmit": "发送信息失败。请重试。"
     }
   },
   "footer": {

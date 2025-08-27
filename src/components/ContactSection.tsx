@@ -15,16 +15,75 @@ const ContactSection = () => {
   });
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simulate form submission
-    toast({
-      title: t('contact.toast.title'),
-      description: t('contact.toast.description'),
-    });
-    
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    // Validate required fields
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      toast({
+        title: t('contact.toast.error'),
+        description: t('contact.toast.errorRequired'),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast({
+        title: t('contact.toast.error'),
+        description: t('contact.toast.errorEmail'),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate phone number (digits, spaces, dashes, parentheses only)
+    if (formData.phone && !/^[\d\s\-\(\)\+]+$/.test(formData.phone)) {
+      toast({
+        title: t('contact.toast.error'),
+        description: t('contact.toast.errorPhone'),
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      // Create FormData for Google Forms submission
+      const googleFormData = new FormData();
+      
+      // Map form fields to Google Form entry IDs
+      // Note: You need to replace these with actual entry IDs from your Google Form
+      googleFormData.append('entry.123456789', formData.name); // Replace with actual Name field entry ID
+      googleFormData.append('entry.987654321', formData.email); // Replace with actual Email field entry ID  
+      googleFormData.append('entry.456789123', formData.phone); // Replace with actual Phone field entry ID
+      googleFormData.append('entry.789123456', formData.message); // Replace with actual Message field entry ID
+
+      // Submit to Google Form
+      await fetch('https://docs.google.com/forms/d/e/1FAIpQLSc_3jEkw_KEyzu8hiWkGtvgZteThz3DjLRYXsyIx7hF85aExA/formResponse', {
+        method: 'POST',
+        mode: 'no-cors', // Required for Google Forms
+        body: googleFormData
+      });
+
+      // Show success message
+      toast({
+        title: t('contact.toast.title'),
+        description: t('contact.toast.description'),
+      });
+      
+      // Reset form
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      
+    } catch (error) {
+      // Show error message
+      toast({
+        title: t('contact.toast.error'),
+        description: t('contact.toast.errorSubmit'),
+        variant: "destructive",
+      });
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
