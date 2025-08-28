@@ -106,7 +106,7 @@ const InsightDetail = () => {
       category: 'Negotiation Strategies',
       author: 'Mu Sichen',
       authorTitle: 'Senior Real-Estate Negotiator'
-    }
+    },
     '3': {
       id: 3,
       title: 'Kuala Lumpur\'s Luxury Property Boom: How Tech Giants Are Reshaping the Market in 2025',
