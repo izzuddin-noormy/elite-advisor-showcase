@@ -145,6 +145,48 @@ const Properties = () => {
       description:
         'Stunning colonial estate on private 2-acre lot with pool, tennis court, and guest house.',
     },
+    {
+      id: 10,
+      slug: 'capitol-hill-townhouse',
+      image: property1,
+      title: 'Capitol Hill Townhouse',
+      address: '234 A Street SE, Washington, DC',
+      price: '$2,850,000',
+      beds: 4,
+      baths: 3.5,
+      sqft: '3,200',
+      status: 'Available',
+      description:
+        'Historic townhouse completely renovated with modern amenities while preserving original charm.',
+    },
+    {
+      id: 11,
+      slug: 'arlington-heights-modern',
+      image: property2,
+      title: 'Arlington Heights Modern',
+      address: '5678 Wilson Boulevard, Arlington, VA',
+      price: '$4,200,000',
+      beds: 5,
+      baths: 4,
+      sqft: '4,800',
+      status: 'Available',
+      description:
+        'Contemporary home with smart home technology, wine cellar, and panoramic city views.',
+    },
+    {
+      id: 12,
+      slug: 'potomac-waterfront-estate',
+      image: property3,
+      title: 'Potomac Waterfront Estate',
+      address: '9876 River Road, Potomac, MD',
+      price: '$7,950,000',
+      beds: 7,
+      baths: 6.5,
+      sqft: '8,500',
+      status: 'Available',
+      description:
+        'Magnificent waterfront estate with private dock, infinity pool, and 180-degree river views.',
+    }
   ];
 
   const filteredProperties = useMemo(() => {
