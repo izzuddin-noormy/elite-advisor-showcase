@@ -25,8 +25,8 @@ const InsightsSection = () => {
       id: 3,
       title: 'Kuala Lumpur\’s Luxury Property Boom: How Tech Giants Are Reshaping the Market in 2025',
       excerpt: 'An in-depth look at how global capital, UHNWIs, and tech giants are transforming Kuala Lumpur\’s luxury property market into a Southeast Asian hub for smart, sustainable living and high-value investments.',
-      date: 'November 28, 2023',
-      readTime: '6 min read',
+      date: 'August 29, 2025',
+      readTime: '7 min read',
       category: 'Investment'
     }
   ];

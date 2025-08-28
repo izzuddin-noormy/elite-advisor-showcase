@@ -160,7 +160,7 @@ const InsightDetail = () => {
       `,
       date: 'August 29, 2025',
       readTime: '7 min read',
-      category: 'Market Analysis',
+      category: 'Investment',
       author: 'Mu Sichen',
       authorTitle: 'Senior Real-Estate Negotiator'
     }
