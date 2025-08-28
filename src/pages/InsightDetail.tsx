@@ -13,132 +13,156 @@ const InsightDetail = () => {
   const articles = {
     '1': {
       id: 1,
-      title: 'Market Trends in Georgetown: What Luxury Buyers Need to Know',
-      excerpt: 'An in-depth analysis of the Georgetown luxury market, including recent sales data and emerging trends that discerning buyers should understand.',
+      title: 'Market Trends in Kuala Lumpur: What Luxury Buyers Need to Know',
+      excerpt: 'An in-depth analysis of the Kuala Lumpur luxury market, including recent sales data and emerging trends that discerning buyers should understand.',
       content: `
-        <h1>Georgetown's Luxury Market: A Comprehensive Analysis</h1>
-        
-        <p>Georgetown continues to be one of the most sought-after luxury real estate markets in the Washington DC metropolitan area. Recent data shows significant shifts in buyer behavior and market dynamics that every discerning buyer should understand.</p>
-        <p></p><p></p>
+        <h1>Market Trends in Kuala Lumpur: What Luxury Buyers Need to Know</h1>
+        </br>
+        <p>Kuala Lumpur\'s prime residential scene has quietly turned a corner. Transaction values across Malaysia hit a decade-high in 2024, and KL\'s luxury segment has since moved from volatility to steadier footing with firmer rents, limited new launches, and selective—but deeper—capital from regional and Middle Eastern buyers.</p>
+        </br></br>
+
         <h3>Key Market Trends</h3>
-        <p></p>
-        <p>The luxury segment in Georgetown has seen remarkable resilience despite broader market fluctuations. Properties priced above $2 million have experienced a 15% increase in demand over the past quarter, with international buyers representing 30% of all transactions.</p>
-        <p></p><p></p>
+        </br>
+        <p><strong>1) Prime rents are rising faster than prices.</strong> Independent trackers report double-digit rental growth in KL\'s prime segment over the past year, outpacing capital value gains—an attractive setup for yield-minded buyers.</p>
+        <p><strong>2) Stabilisation with a supply squeeze at the top end.</strong> Developers have been cautious on new launches, with only a handful of completions recently adding ~1,443 prime units. This scarcity supports pricing and rental resilience.</p>
+        <p><strong>3) “Live-above-the-mall” and branded addresses keep winning.</strong> Projects like TRX Residences and Pavilion Damansara Heights highlight demand for integrated, transit-linked luxury with premium amenities.</p>
+        <p><strong>4) Macro backdrop is constructive, not euphoric.</strong> While national transaction values reached record highs in 2024, 1Q2025 showed a natural dip—reflecting stabilisation rather than overheating.</p>
+        <p><strong>5) Currency tailwinds are moderating.</strong> The ringgit\'s strengthening versus the USD trims offshore bargains but boosts domestic confidence and real returns.</p>
+        </br></br>
+
         <h3>Buyer Demographics and Preferences</h3>
-        <p></p><p></p>
-        <p>Today's luxury buyers in Georgetown are increasingly focused on:</p>
+        </br>
+        <p>The KL luxury market is increasingly shaped by both domestic HNWIs and foreign investors. Chinese buyers in particular are showing greater appetite, while the revamped Malaysia My Second Home (MM2H) programme has seen a surge in approvals, re-engaging long-stay foreign residents.</p>
+        <p>Today\'s luxury buyers prioritise:</p>
         <ul>
-          <li>Historic charm combined with modern amenities</li>
-          <li>Private outdoor spaces and gardens</li>
-          <li>Home offices and flexible living spaces</li>
-          <li>Proximity to cultural institutions and fine dining</li>
+          <li>Proximity to education hubs and financial districts (KLCC, TRX, Damansara, Bangsar)</li>
+          <li>Integrated, walkable ecosystems with mall/park/MRT access</li>
+          <li>Hotel-branded residences offering concierge and service management</li>
+          <li>Yield resilience from strong rental demand and institutional-style tenancy</li>
         </ul>
-        <p></p><p></p>
+        </br></br>
+
         <h3>Investment Outlook</h3>
-        <p></p>
-        <p>The Georgetown luxury market shows strong fundamentals for continued growth. Limited inventory, combined with the area's historic significance and proximity to major employment centers, creates a compelling investment case for sophisticated buyers.</p>
-        <p></p><p></p>
+        </br>
+        <p><strong>Yields & income:</strong> Prime residential yields hover around ~3.5%, with rental growth outpacing capital appreciation. This dynamic favours yield-focused investors who manage leases actively.</p>
+        <p><strong>Supply discipline:</strong> Developers remain cautious, with limited new launches expected in the next 12–18 months, supporting pricing for existing prime stock.</p>
+        <p><strong>Macro & policy watch:</strong> A steady ringgit, stable rates, and sustained momentum in MM2H approvals will underpin market confidence.</p>
+        <p><strong>Opportunity hotspots:</strong> CBD-core integrated towers near TRX and KLCC; low-density enclaves in Damansara Heights and Bukit Tunku; and branded residences offering premium rental returns.</p>
+        </br></br>
+
         <h3>Conclusion</h3>
-        <p></p>
-        <p>For luxury buyers considering Georgetown, the current market presents unique opportunities. Working with an experienced agent who understands the nuances of this exclusive market is essential for success.</p>
+        </br>
+        <p>Kuala Lumpur\'s luxury market has transitioned into a phase of resilient expansion. For discerning buyers, the strategy is clear: focus on integrated, MRT-connected, amenity-rich properties; capture rental-alpha while supply remains tight; and leverage FX or policy windows for optimal entry. In the next 12–24 months, KL offers a rare mix in Asia—income resilience, lifestyle value, and long-term upside as its financial and retail districts fully mature.</p>
       `,
-      date: 'December 15, 2023',
-      readTime: '5 min read',
+      date: 'April 4, 2025',
+      readTime: '6 min read',
       category: 'Market Analysis',
-      author: 'David Hassan',
-      authorTitle: 'Luxury Real Estate Specialist'
+      author: 'Mu Sichen',
+      authorTitle: 'Senior Real-Estate Negotiator'
     },
     '2': {
       id: 2,
-      title: 'The Art of Negotiating Luxury Real Estate Transactions',
-      excerpt: 'Explore the nuanced strategies and insider knowledge required to successfully navigate high-value property negotiations in today\'s market.',
+      title: 'Mastering Luxury Real Estate Negotiations',
+      excerpt: 'A strategic guide to negotiating luxury real estate transactions, focusing on buyer psychology, key strategies, common pitfalls, and the importance of professional representation.',
       content: `
         <h1>Mastering Luxury Real Estate Negotiations</h1>
-        <p></p>
+        </br></br>
         <p>Negotiating luxury real estate transactions requires a unique blend of market knowledge, psychological insight, and strategic thinking. Unlike standard residential deals, luxury transactions often involve complex terms, extended timelines, and sophisticated parties.</p>
-        <p></p><p></p>
+        </br>
+
         <h3>Understanding the Luxury Buyer Mindset</h3>
-        <p></p>
-        <p>Luxury buyers are typically less price-sensitive but more value-conscious. They seek exclusivity, quality, and unique features that justify premium pricing. Understanding this mindset is crucial for successful negotiations.</p>
-        <p></p><p></p>
+        </br>
+        <p>Luxury buyers are typically less price-sensitive but more value-conscious. They seek exclusivity, quality, and unique features that justify premium pricing. Recognising this mindset is crucial for successful negotiations, as the focus extends beyond cost to lifestyle, prestige, and long-term value.</p>
+        </br>
+
         <h3>Key Negotiation Strategies</h3>
-        <p></p>
-        <p>Successful luxury negotiations often hinge on:</p>
+        </br>
+        <p>Successful luxury negotiations often hinge on several critical strategies:</p>
         <ul>
-          <li>Thorough market analysis and comparable sales</li>
+          <li>Conducting thorough market analysis and reviewing comparable sales</li>
           <li>Understanding the seller's motivations and timeline</li>
-          <li>Leveraging unique property features and benefits</li>
-          <li>Structuring creative deal terms beyond price</li>
+          <li>Highlighting and leveraging unique property features and benefits</li>
+          <li>Structuring creative deal terms that extend beyond just price</li>
         </ul>
-        <p></p><p></p>
+        </br></br>
+
         <h3>Common Pitfalls to Avoid</h3>
-        <p></p>
-        <p>Many negotiations fail due to:</p>
+        </br>
+        <p>Many luxury negotiations fail due to avoidable mistakes, such as:</p>
         <ul>
-          <li>Overemphasis on price at the expense of other terms</li>
-          <li>Inadequate due diligence on property condition</li>
+          <li>Overemphasis on price at the expense of other valuable terms</li>
+          <li>Inadequate due diligence on property condition and title</li>
           <li>Poor timing of offers and counteroffers</li>
-          <li>Failure to establish rapport with the seller</li>
+          <li>Failure to establish rapport and trust with the seller</li>
         </ul>
-        <p></p><p></p>
+        </br></br>
+
         <h3>The Role of Professional Representation</h3>
-        <p></p>
-        <p>In luxury transactions, having skilled representation can make the difference between success and failure. An experienced agent brings market intelligence, negotiation expertise, and professional networks that prove invaluable.</p>
+        </br>
+        <p>In luxury transactions, having skilled representation often makes the difference between success and failure. An experienced agent brings market intelligence, refined negotiation expertise, and access to elite professional networks. These capabilities ensure that clients secure not just the right property, but also the most advantageous terms possible.</p>
       `,
-      date: 'December 8, 2023',
-      readTime: '7 min read',
-      category: 'Strategy',
-      author: 'David Hassan',
-      authorTitle: 'Luxury Real Estate Specialist'
-    },
+      date: 'July 6, 2025',
+      readTime: '5 min read',
+      category: 'Negotiation Strategies',
+      author: 'Mu Sichen',
+      authorTitle: 'Senior Real-Estate Negotiator'
+    }
     '3': {
       id: 3,
-      title: 'Investment Opportunities in the DC Metro Luxury Market',
-      excerpt: 'Discover emerging neighborhoods and property types that present exceptional investment potential for sophisticated real estate portfolios.',
+      title: 'Kuala Lumpur\'s Luxury Property Boom: How Tech Giants Are Reshaping the Market in 2025',
+      excerpt: 'An in-depth look at how global capital, UHNWIs, and tech giants are transforming Kuala Lumpur\'s luxury property market into a Southeast Asian hub for smart, sustainable living and high-value investments.',
       content: `
-        <h1>Emerging Investment Opportunities in DC Metro Luxury Market</h1>
-        <p></p><p></p>
-        <p>The Washington DC metropolitan area continues to offer compelling investment opportunities for sophisticated real estate portfolios. Recent market analysis reveals several emerging trends and neighborhoods worthy of consideration.</p>
-        <p></p><p></p>
-        <h3>Emerging Neighborhoods</h3>
-        <p></p>
-        <p>While established areas like Georgetown and Dupont Circle maintain their appeal, several emerging neighborhoods are showing strong investment potential:</p>
-        <p></p><p></p>
-        <h4>The Wharf</h4>
-        <p>This waterfront development has transformed Southwest DC into a luxury destination with high-end condominiums, world-class dining, and cultural attractions.</p>
-        <p></p>
-        <h4>Navy Yard</h4>
-        <p>Proximity to Nationals Park and ongoing development make this area attractive for luxury rental investments.</p>
-        <p></p><p></p>
-        <h3>Property Types Showing Strong Returns</h3>
-        <p></p>
-        <p>Current market data indicates strong performance in:</p>
+        <h1>Kuala Lumpur\'s Luxury Property Boom: How Tech Giants Are Reshaping the Market in 2025</h1>
+        </br>
+        <p>Kuala Lumpur\'s luxury property market is experiencing a defining shift in 2025, fueled by global capital inflows, a growing population of ultra-high-net-worth individuals (UHNWIs), and the arrival of technology giants investing billions into Malaysia\'s digital future. The interplay between limited supply, surging demand, and a transformation of the city\'s skyline is positioning KL as a Southeast Asian hub for luxury living and smart real estate investment.</p>
+        </br></br>
+
+        <h3>Rising Demand Meets Scarcity</h3>
+        </br>
+        <p>Luxury property prices in Kuala Lumpur are climbing steadily as demand outpaces supply. Developers have slowed launches amid high construction costs, but affluent buyers—both local and international—continue to seek premium addresses. Inquiries from Chinese investors surged by more than 40% in 2024 for properties above RM1 million, while the number of UHNWIs in Malaysia is projected to grow by 34.6% between 2023 and 2028.</p>
+        </br></br>
+
+        <h3>Global Capital Flows Fuel Growth</h3>
+        </br>
+        <p>Malaysia is benefiting from an upswing in global real estate investment. Institutional investors and private funds are increasingly targeting luxury residences and Grade-A office spaces in KL. Knight Frank estimates more than US$800 billion in commercial property investment globally in 2024, and Malaysia is capturing a healthy share of that momentum.</p>
+        </br></br>
+
+        <h3>Smart, Sustainable Living as the New Luxury</h3>
+        </br>
+        <p>By 2025, homebuyers in KL are prioritising technology and sustainability. Nearly 70% of buyers now consider smart home features a must-have, while green certifications such as LEED and GreenRE are becoming standard. For offices, eco-conscious design is proving its worth—green-certified buildings in KL command rental premiums of up to 8%.</p>
+        </br></br>
+
+        <h3>Tech Giants Redefining Commercial Real Estate</h3>
+        </br>
+        <p>The arrival of global tech leaders is reshaping the city\'s property dynamics. Google is investing US$2 billion into a Malaysian data centre and cloud hub, Microsoft is committing US$2.2 billion to AI and cloud services, and Arm is spearheading a US$250 million integrated circuit design park. These investments are driving demand for high-quality commercial spaces, reducing KL\'s office vacancy rate from nearly 24% in 2024 to just under 20% by mid-2025.</p>
+        </br></br>
+
+        <h3>Megaprojects and New Icons on the Skyline</h3>
+        </br>
+        <p>Several large-scale developments are reinforcing KL\'s luxury identity:</p>
         <ul>
-          <li>Luxury condominiums with amenities</li>
-          <li>Historic townhomes with modern renovations</li>
-          <li>Penthouse units with outdoor space</li>
-          <li>Properties near metro stations</li>
+          <li><strong>KL Metropolis:</strong> A 75-acre mixed-use hub anchored by a proposed 100-storey tower.</li>
+          <li><strong>Oxley Towers:</strong> A trio of skyscrapers in KLCC set for completion in 2027.</li>
+          <li><strong>CloutHaus Residences & Hanaz Suites:</strong> Boutique luxury residences featuring rainwater harvesting and automated parking systems.</li>
         </ul>
-        <p></p><p></p>
-        <h3>Investment Strategies</h3>
-        <p></p>
-        <p>Successful luxury real estate investment in the DC market requires:</p>
-        <ul>
-          <li>Long-term perspective (5-10 year holding periods)</li>
-          <li>Focus on unique, irreplaceable properties</li>
-          <li>Understanding of local zoning and development restrictions</li>
-          <li>Professional property management for rental properties</li>
-        </ul>
-        <p></p><p></p>
-        <h3>Market Outlook</h3>
-        <p></p>
-        <p>The DC luxury market benefits from stable government employment, international demand, and limited land availability. These factors create a foundation for continued appreciation in well-selected properties.</p>
+        <p>Together, these projects are redefining the standards of modern luxury living while strengthening KL\'s status as a regional business and lifestyle hub.</p>
+        </br></br>
+
+        <h3>Transit-Oriented and Regeneration Growth</h3>
+        </br>
+        <p>Neighborhoods such as Sentul are emerging as new hotspots, supported by infrastructure projects like the KLSP2040 urban plan, the East Coast Rail Link (ECRL), and the Johor–Singapore RTS Link. These initiatives are enhancing connectivity while stimulating sustainable, mixed-use communities that are attractive to both investors and residents.</p>
+        </br></br>
+
+        <h3>Looking Ahead</h3>
+        </br>
+        <p>Kuala Lumpur\'s luxury real estate market is at an inflection point. With scarcity driving values upward, smart and sustainable design becoming the new benchmark, and global tech giants anchoring the city\'s economic expansion, KL is set to cement its place as one of Asia\'s most dynamic luxury markets.</p>
+        <p>For developers, the opportunity lies in transit-oriented, eco-luxury projects. For investors, the window remains open to capture value before prices accelerate further. For the city itself, the fusion of technology, sustainability, and luxury is fast becoming its defining identity.</p>
       `,
-      date: 'November 28, 2023',
-      readTime: '6 min read',
-      category: 'Investment',
-      author: 'David Hassan',
-      authorTitle: 'Luxury Real Estate Specialist'
+      date: 'August 29, 2025',
+      readTime: '7 min read',
+      category: 'Market Analysis',
+      author: 'Mu Sichen',
+      authorTitle: 'Senior Real-Estate Negotiator'
     }
   };
 

@@ -7,24 +7,24 @@ const InsightsSection = () => {
   const insights = [
     {
       id: 1,
-      title: 'Market Trends in Georgetown: What Luxury Buyers Need to Know',
-      excerpt: 'An in-depth analysis of the Georgetown luxury market, including recent sales data and emerging trends that discerning buyers should understand.',
-      date: 'December 15, 2023',
-      readTime: '5 min read',
-      category: 'Market Analysis'
+      title: 'Market Trends in Kuala Lumpur: What Luxury Buyers Need to Know',
+      excerpt: 'An in-depth analysis of the Kuala Lumpur luxury market, including recent sales data and emerging trends that discerning buyers should understand.',
+      date: 'April 4, 2025',
+      readTime: '6 min read',
+      category: 'Market Analysis',
     },
     {
       id: 2,
-      title: 'The Art of Negotiating Luxury Real Estate Transactions',
-      excerpt: 'Explore the nuanced strategies and insider knowledge required to successfully navigate high-value property negotiations in today\'s market.',
-      date: 'December 8, 2023',
-      readTime: '7 min read',
-      category: 'Strategy'
+      title: 'Mastering Luxury Real Estate Negotiations',
+      excerpt: 'A strategic guide to negotiating luxury real estate transactions, focusing on buyer psychology, key strategies, common pitfalls, and the importance of professional representation.',
+      date: 'July 6, 2025',
+      readTime: '5 min read',
+      category: 'Negotiation Strategies',
     },
     {
       id: 3,
-      title: 'Investment Opportunities in the DC Metro Luxury Market',
-      excerpt: 'Discover emerging neighborhoods and property types that present exceptional investment potential for sophisticated real estate portfolios.',
+      title: 'Kuala Lumpur\’s Luxury Property Boom: How Tech Giants Are Reshaping the Market in 2025',
+      excerpt: 'An in-depth look at how global capital, UHNWIs, and tech giants are transforming Kuala Lumpur\’s luxury property market into a Southeast Asian hub for smart, sustainable living and high-value investments.',
       date: 'November 28, 2023',
       readTime: '6 min read',
       category: 'Investment'
