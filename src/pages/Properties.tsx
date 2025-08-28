@@ -94,7 +94,46 @@ const Properties = () => {
       sqft: '8,500',
       status: 'Available',
       description: 'Magnificent waterfront estate with private dock, infinity pool, and 180-degree river views.'
-    }
+    },
+    {
+      id: 7,
+      slug: 'georgetown-estate',
+      image: property1,
+      title: 'Georgetown Estate',
+      address: '2847 P Street NW, Washington, DC',
+      price: '$4,850,000',
+      beds: 5,
+      baths: 4.5,
+      sqft: '4,200',
+      status: 'Available',
+      description: 'Exquisite Georgetown estate featuring original hardwood floors, chef\'s kitchen, and private garden.'
+    },
+    {
+      id: 8,
+      slug: 'bethesda-contemporary',
+      image: property2,
+      title: 'Bethesda Contemporary',
+      address: '7821 Woodmont Avenue, Bethesda, MD',
+      price: '$3,200,000',
+      beds: 4,
+      baths: 3.5,
+      sqft: '3,800',
+      status: 'Under Contract',
+      description: 'Modern luxury home with floor-to-ceiling windows, open concept design, and premium finishes.'
+    },
+    {
+      id: 9,
+      slug: 'mclean-luxury-home',
+      image: property3,
+      title: 'McLean Luxury Home',
+      address: '1456 Kirby Road, McLean, VA',
+      price: '$5,750,000',
+      beds: 6,
+      baths: 5.5,
+      sqft: '5,200',
+      status: 'Available',
+      description: 'Stunning colonial estate on private 2-acre lot with pool, tennis court, and guest house.'
+    },
   ];
 
   const filteredProperties = useMemo(() => {
