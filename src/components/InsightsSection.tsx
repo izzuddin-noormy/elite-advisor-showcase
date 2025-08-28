@@ -11,7 +11,7 @@ const InsightsSection = () => {
       excerpt: 'An in-depth analysis of the Kuala Lumpur luxury market, including recent sales data and emerging trends that discerning buyers should understand.',
       date: 'April 4, 2025',
       readTime: '6 min read',
-      category: 'Market Analysis',
+      category: 'Market Analysis'
     },
     {
       id: 2,
@@ -19,7 +19,7 @@ const InsightsSection = () => {
       excerpt: 'A strategic guide to negotiating luxury real estate transactions, focusing on buyer psychology, key strategies, common pitfalls, and the importance of professional representation.',
       date: 'July 6, 2025',
       readTime: '5 min read',
-      category: 'Negotiation Strategies',
+      category: 'Negotiation Strategies'
     },
     {
       id: 3,
