@@ -251,13 +251,13 @@ const Properties = () => {
                 }}
                 className="w-full pl-12 pr-16 py-6 text-lg font-body font-light bg-card border-border/50 rounded-xl shadow-luxury focus:shadow-lg focus:border-primary/20 transition-all duration-300 placeholder:text-muted-foreground/60"
               />
-              <!-- 
+              {/*
               <button className="absolute inset-y-0 right-4 flex items-center text-muted-foreground hover:text-primary transition-colors">
                 <div className="w-6 h-6 rounded-full border border-current flex items-center justify-center text-sm font-light">
                   +
                 </div>
               </button>
-              -->
+              */}
             </div>
           </div>
         </div>
