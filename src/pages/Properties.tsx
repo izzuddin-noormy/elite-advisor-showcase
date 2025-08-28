@@ -15,6 +15,8 @@ const Properties = () => {
   const { t } = useLanguage();
   const [currency, setCurrency] = useState<Currency>('USD');
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   const properties = [
     {
@@ -28,7 +30,8 @@ const Properties = () => {
       baths: 4.5,
       sqft: '4,200',
       status: 'Available',
-      description: 'Exquisite Georgetown estate featuring original hardwood floors, chef\'s kitchen, and private garden.'
+      description:
+        "Exquisite Georgetown estate featuring original hardwood floors, chef's kitchen, and private garden.",
     },
     {
       id: 2,
@@ -41,7 +44,8 @@ const Properties = () => {
       baths: 3.5,
       sqft: '3,800',
       status: 'Under Contract',
-      description: 'Modern luxury home with floor-to-ceiling windows, open concept design, and premium finishes.'
+      description:
+        'Modern luxury home with floor-to-ceiling windows, open concept design, and premium finishes.',
     },
     {
       id: 3,
@@ -54,7 +58,8 @@ const Properties = () => {
       baths: 5.5,
       sqft: '5,200',
       status: 'Available',
-      description: 'Stunning colonial estate on private 2-acre lot with pool, tennis court, and guest house.'
+      description:
+        'Stunning colonial estate on private 2-acre lot with pool, tennis court, and guest house.',
     },
     {
       id: 4,
@@ -67,7 +72,8 @@ const Properties = () => {
       baths: 3.5,
       sqft: '3,200',
       status: 'Available',
-      description: 'Historic townhouse completely renovated with modern amenities while preserving original charm.'
+      description:
+        'Historic townhouse completely renovated with modern amenities while preserving original charm.',
     },
     {
       id: 5,
@@ -80,7 +86,8 @@ const Properties = () => {
       baths: 4,
       sqft: '4,800',
       status: 'Available',
-      description: 'Contemporary home with smart home technology, wine cellar, and panoramic city views.'
+      description:
+        'Contemporary home with smart home technology, wine cellar, and panoramic city views.',
     },
     {
       id: 6,
@@ -93,11 +100,12 @@ const Properties = () => {
       baths: 6.5,
       sqft: '8,500',
       status: 'Available',
-      description: 'Magnificent waterfront estate with private dock, infinity pool, and 180-degree river views.'
+      description:
+        'Magnificent waterfront estate with private dock, infinity pool, and 180-degree river views.',
     },
     {
       id: 7,
-      slug: 'georgetown-estate',
+      slug: 'georgetown-estate-2',
       image: property1,
       title: 'Georgetown Estate',
       address: '2847 P Street NW, Washington, DC',
@@ -106,11 +114,12 @@ const Properties = () => {
       baths: 4.5,
       sqft: '4,200',
       status: 'Available',
-      description: 'Exquisite Georgetown estate featuring original hardwood floors, chef\'s kitchen, and private garden.'
+      description:
+        "Exquisite Georgetown estate featuring original hardwood floors, chef's kitchen, and private garden.",
     },
     {
       id: 8,
-      slug: 'bethesda-contemporary',
+      slug: 'bethesda-contemporary-2',
       image: property2,
       title: 'Bethesda Contemporary',
       address: '7821 Woodmont Avenue, Bethesda, MD',
@@ -119,11 +128,12 @@ const Properties = () => {
       baths: 3.5,
       sqft: '3,800',
       status: 'Under Contract',
-      description: 'Modern luxury home with floor-to-ceiling windows, open concept design, and premium finishes.'
+      description:
+        'Modern luxury home with floor-to-ceiling windows, open concept design, and premium finishes.',
     },
     {
       id: 9,
-      slug: 'mclean-luxury-home',
+      slug: 'mclean-luxury-home-2',
       image: property3,
       title: 'McLean Luxury Home',
       address: '1456 Kirby Road, McLean, VA',
@@ -132,25 +142,35 @@ const Properties = () => {
       baths: 5.5,
       sqft: '5,200',
       status: 'Available',
-      description: 'Stunning colonial estate on private 2-acre lot with pool, tennis court, and guest house.'
+      description:
+        'Stunning colonial estate on private 2-acre lot with pool, tennis court, and guest house.',
     },
   ];
 
   const filteredProperties = useMemo(() => {
     if (!searchQuery.trim()) return properties;
-    
-    return properties.filter(property => 
-      property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      property.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      property.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      property.status.toLowerCase().includes(searchQuery.toLowerCase())
+
+    return properties.filter(
+      (property) =>
+        property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        property.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        property.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        property.status.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [properties, searchQuery]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
+  const paginatedProperties = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return filteredProperties.slice(start, end);
+  }, [filteredProperties, currentPage]);
 
   return (
     <div className="min-h-screen">
       <Navigation />
-      
+
       {/* Header Section */}
       <section className="pt-24 pb-16 bg-background">
         <div className="container mx-auto px-6">
@@ -163,17 +183,17 @@ const Properties = () => {
                 {t('properties.subtitle')}
               </p>
             </div>
-            
+
             <div className="mt-6 md:mt-0">
-              <CurrencySwitch 
-                currency={currency} 
+              <CurrencySwitch
+                currency={currency}
                 onCurrencyChange={setCurrency}
                 className="justify-end"
               />
             </div>
           </div>
 
-          {/* ChatGPT-style Search Box */}
+          {/* Search Box */}
           <div className="max-w-2xl mx-auto mt-8">
             <div className="relative">
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
@@ -183,7 +203,10 @@ const Properties = () => {
                 type="text"
                 placeholder={t('properties.searchPlaceholder')}
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1); // reset to first page on search
+                }}
                 className="w-full pl-12 pr-16 py-6 text-lg font-body font-light bg-card border-border/50 rounded-xl shadow-luxury focus:shadow-lg focus:border-primary/20 transition-all duration-300 placeholder:text-muted-foreground/60"
               />
               <button className="absolute inset-y-0 right-4 flex items-center text-muted-foreground hover:text-primary transition-colors">
@@ -200,7 +223,7 @@ const Properties = () => {
       <section className="pb-20 bg-background">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProperties.map((property) => (
+            {paginatedProperties.map((property) => (
               <Link
                 key={property.id}
                 to={`/projects/${property.slug}`}
@@ -220,7 +243,13 @@ const Properties = () => {
                           : 'bg-primary text-primary-foreground'
                       }`}
                     >
-                      {t(`properties.status.${property.status === 'Under Contract' ? 'underContract' : property.status.toLowerCase()}`)}
+                      {t(
+                        `properties.status.${
+                          property.status === 'Under Contract'
+                            ? 'underContract'
+                            : property.status.toLowerCase()
+                        }`
+                      )}
                     </span>
                   </div>
                 </div>
@@ -235,7 +264,7 @@ const Properties = () => {
                   <p className="font-body text-sm text-muted-foreground mb-4 line-clamp-2">
                     {property.description}
                   </p>
-                  
+
                   <div className="flex items-center justify-between mb-4">
                     <span className="font-serif text-2xl font-light text-primary">
                       {convertPrice(property.price, currency)}
@@ -263,12 +292,53 @@ const Properties = () => {
             ))}
           </div>
 
-          {/* Load More Button */}
-          <div className="text-center mt-12">
-            <button className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
-              {t('properties.loadMore')}
-            </button>
-          </div>
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center space-x-2 mt-12 flex-wrap">
+              {/* Prev */}
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 border border-primary text-primary disabled:opacity-50 hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+              >
+                {t('properties.prev')}
+              </button>
+
+              {/* Desktop full page numbers */}
+              <div className="hidden sm:flex space-x-2">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-4 py-2 border ${
+                      currentPage === i + 1
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'border-primary text-primary hover:bg-primary hover:text-primary-foreground'
+                    } transition-all duration-300`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+
+              {/* Mobile compact view */}
+              <div className="flex sm:hidden items-center space-x-2">
+                <span className="px-3 py-2 border border-primary text-primary rounded">
+                  {currentPage}
+                </span>
+                <span className="text-muted-foreground">/ {totalPages}</span>
+              </div>
+
+              {/* Next */}
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 border border-primary text-primary disabled:opacity-50 hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+              >
+                {t('properties.next')}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
