@@ -91,7 +91,7 @@ const InsightsSection = () => {
 
         <div className="text-center mt-12">
           <a
-            href="#"
+            href="#insights"
             className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide"
           >
             {t('insights.viewAll')}
