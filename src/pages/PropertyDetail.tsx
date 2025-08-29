@@ -188,15 +188,15 @@ const PropertyDetail = () => {
               
               {/* School Information */}
               <SchoolInformation schools={property.schools} />
-              
-              {/* Other Details */}
-              <OtherDetails details={property.otherDetails} />
             </div>
             
             {/* Sidebar */}
             <div className="space-y-8">
               {/* Mortgage Calculator */}
               <MortgageCalculator homePrice={property.price} />
+              
+              {/* Additional Information */}
+              <OtherDetails details={property.otherDetails} />
               
               {/* Map */}
               <PropertyMap 
