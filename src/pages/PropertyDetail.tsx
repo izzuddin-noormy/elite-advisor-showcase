@@ -188,22 +188,25 @@ const PropertyDetail = () => {
               
               {/* School Information */}
               <SchoolInformation schools={property.schools} />
-            </div>
-            
-            {/* Sidebar */}
-            <div className="space-y-8">
-              {/* Mortgage Calculator */}
-              <MortgageCalculator homePrice={property.price} />
-              
+
               {/* Additional Information */}
               <OtherDetails details={property.otherDetails} />
-              
+
               {/* Map */}
               <PropertyMap 
                 location={property.location} 
                 address={property.address}
                 title={property.title}
               />
+
+            </div>
+            
+            {/* Sidebar */}
+            <div className="space-y-8">
+              
+              {/* Mortgage Calculator */}
+              <MortgageCalculator homePrice={property.price} />
+
             </div>
           </div>
         </div>
