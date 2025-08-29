@@ -1,11 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { X, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import * as maptiler from '@maptiler/sdk';
-import '@maptiler/sdk/dist/maptiler-sdk.css';
 
 interface PropertyMapProps {
   location: {
@@ -18,39 +16,9 @@ interface PropertyMapProps {
 
 const PropertyMap = ({ location, address, title }: PropertyMapProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<maptiler.Map | null>(null);
-
-  // MapTiler API key
-  const MAPTILER_API_KEY = '522410ba274148eab613f22043e33480_c408bf3c0a10d029576ec940b09fa963a68890c30308868d1c8fcfe2f92b5c99';
-
-  useEffect(() => {
-    if (!mapContainer.current || !isModalOpen) return;
-
-    // Set MapTiler API key
-    maptiler.config.apiKey = MAPTILER_API_KEY;
-
-    // Initialize map
-    map.current = new maptiler.Map({
-      container: mapContainer.current,
-      style: maptiler.MapStyle.STREETS,
-      center: [location.lng, location.lat],
-      zoom: 15,
-      pitch: 0,
-    });
-
-    // Add marker at property location
-    new maptiler.Marker({ color: 'hsl(var(--primary))' })
-      .setLngLat([location.lng, location.lat])
-      .addTo(map.current);
-
-    // Add navigation controls
-    map.current.addControl(new maptiler.NavigationControl(), 'top-right');
-
-    return () => {
-      map.current?.remove();
-    };
-  }, [isModalOpen, location.lat, location.lng]);
+  
+  // Google Maps embed URL using the address
+  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dgsWMVHFd2xVE4&q=${encodeURIComponent(address)}`;
 
   return (
     <>
@@ -111,10 +79,15 @@ const PropertyMap = ({ location, address, title }: PropertyMapProps) => {
                 
                 <div className="flex-1 p-6 pt-4">
                   <div className="w-full h-full rounded-lg overflow-hidden">
-                    <div
-                      ref={mapContainer}
-                      className="w-full h-full"
-                      style={{ minHeight: '400px' }}
+                    <iframe
+                      src={mapUrl}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0, minHeight: '400px' }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title={`Map showing ${address}`}
                     />
                   </div>
                 </div>
