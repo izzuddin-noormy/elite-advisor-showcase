@@ -37,7 +37,7 @@ const HeroSection = () => {
           
           <div className="space-y-4 md:space-y-0 md:space-x-6 md:flex md:justify-center">
             <a
-              href="#properties"
+              onClick={() => navigate('/properties')}
               className="inline-block px-8 py-3 bg-transparent border border-white/50 text-white hover:bg-white hover:text-primary transition-all duration-300 font-body text-sm font-light tracking-wide"
             >
               {t('hero.viewProperties')}
