@@ -196,7 +196,7 @@ const InsightDetail = () => {
         <div className="container mx-auto px-6 max-w-4xl">
           {/* Back Button */}
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/#insights')}
             className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-8 group"
           >
             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
@@ -255,7 +255,7 @@ const InsightDetail = () => {
           <footer className="mt-16 pt-8 border-t border-border">
             <div className="text-center">
               <button
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/#insights')}
                 className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide"
               >
                 {t('insights.viewMore')}
