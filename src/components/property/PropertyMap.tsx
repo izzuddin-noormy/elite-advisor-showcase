@@ -18,7 +18,7 @@ const PropertyMap = ({ location, address, title }: PropertyMapProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   // Google Maps embed URL using the address
-  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyD2jlT6C_to6X1mMvR9yRWeRvpIgTXgddM&q=${encodeURIComponent(address)}`;
+  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyCNCZ0Twm_HFRaZ5i-FuPDYs3rLwm4_848&q=${encodeURIComponent(address)}`;
 
   return (
     <>
