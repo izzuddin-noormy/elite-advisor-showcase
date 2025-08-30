@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { X, MapPin } from 'lucide-react';
+import { X, MapPin, Loader2, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface PropertyMapProps {
@@ -16,9 +16,48 @@ interface PropertyMapProps {
 
 const PropertyMap = ({ location, address, title }: PropertyMapProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // Google Maps embed URL using the address
-  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyCNCZ0Twm_HFRaZ5i-FuPDYs3rLwm4_848&q=${encodeURIComponent(address)}`;
+  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchCoordinates = async (address: string) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`
+      );
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch coordinates');
+      }
+      
+      const data = await response.json();
+      
+      if (data.length === 0) {
+        throw new Error('Address not found');
+      }
+      
+      const { lat, lon } = data[0];
+      setCoordinates({ lat: parseFloat(lat), lng: parseFloat(lon) });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load map');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isModalOpen && !coordinates) {
+      fetchCoordinates(address);
+    }
+  }, [isModalOpen, address, coordinates]);
+
+  // Google Maps embed URL using coordinates (no API key needed)
+  const mapUrl = coordinates 
+    ? `https://www.google.com/maps?q=${coordinates.lat},${coordinates.lng}&output=embed`
+    : null;
 
   return (
     <>
@@ -78,17 +117,44 @@ const PropertyMap = ({ location, address, title }: PropertyMapProps) => {
                 </DialogHeader>
                 
                 <div className="flex-1 p-6 pt-4">
-                  <div className="w-full h-full rounded-lg overflow-hidden">
-                    <iframe
-                      src={mapUrl}
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0, minHeight: '400px' }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      title={`Map showing ${address}`}
-                    />
+                  <div className="w-full h-full rounded-lg overflow-hidden flex items-center justify-center">
+                    {loading && (
+                      <div className="flex flex-col items-center justify-center h-64">
+                        <Loader2 className="w-8 h-8 text-primary animate-spin mb-3" />
+                        <p className="text-sm text-muted-foreground">Loading map...</p>
+                      </div>
+                    )}
+                    
+                    {error && (
+                      <div className="flex flex-col items-center justify-center h-64">
+                        <AlertTriangle className="w-8 h-8 text-destructive mb-3" />
+                        <p className="text-sm text-destructive text-center">
+                          Failed to load map: {error}
+                        </p>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="mt-3"
+                          onClick={() => fetchCoordinates(address)}
+                        >
+                          Try Again
+                        </Button>
+                      </div>
+                    )}
+                    
+                    {mapUrl && !loading && !error && (
+                      <iframe
+                        src={mapUrl}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0, minHeight: '400px' }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title={`Map showing ${address}`}
+                        className="w-full h-full"
+                      />
+                    )}
                   </div>
                 </div>
               </motion.div>
