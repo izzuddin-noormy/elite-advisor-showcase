@@ -7,14 +7,169 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.12 (cd3cf9e)"
+    PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
-      [_ in never]: never
+      insights: {
+        Row: {
+          author: string | null
+          category: string | null
+          content_en: string
+          content_zh: string
+          created_at: string | null
+          excerpt_en: string | null
+          excerpt_zh: string | null
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          published_at: string | null
+          read_time: number | null
+          slug: string
+          title_en: string
+          title_zh: string
+          updated_at: string | null
+        }
+        Insert: {
+          author?: string | null
+          category?: string | null
+          content_en: string
+          content_zh: string
+          created_at?: string | null
+          excerpt_en?: string | null
+          excerpt_zh?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          published_at?: string | null
+          read_time?: number | null
+          slug: string
+          title_en: string
+          title_zh: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string | null
+          category?: string | null
+          content_en?: string
+          content_zh?: string
+          created_at?: string | null
+          excerpt_en?: string | null
+          excerpt_zh?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          published_at?: string | null
+          read_time?: number | null
+          slug?: string
+          title_en?: string
+          title_zh?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      pages: {
+        Row: {
+          content_en: string
+          content_zh: string
+          created_at: string | null
+          featured: boolean | null
+          id: string
+          slug: string
+          title_en: string
+          title_zh: string
+          type: Database["public"]["Enums"]["content_type"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          content_en: string
+          content_zh: string
+          created_at?: string | null
+          featured?: boolean | null
+          id?: string
+          slug: string
+          title_en: string
+          title_zh: string
+          type?: Database["public"]["Enums"]["content_type"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          content_en?: string
+          content_zh?: string
+          created_at?: string | null
+          featured?: boolean | null
+          id?: string
+          slug?: string
+          title_en?: string
+          title_zh?: string
+          type?: Database["public"]["Enums"]["content_type"] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      properties: {
+        Row: {
+          address: string | null
+          baths: number | null
+          beds: number | null
+          created_at: string | null
+          description_en: string
+          description_zh: string
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          location: string
+          price: number
+          slug: string
+          sqft: number | null
+          status: Database["public"]["Enums"]["property_status"] | null
+          title_en: string
+          title_zh: string
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          baths?: number | null
+          beds?: number | null
+          created_at?: string | null
+          description_en: string
+          description_zh: string
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          location: string
+          price: number
+          slug: string
+          sqft?: number | null
+          status?: Database["public"]["Enums"]["property_status"] | null
+          title_en: string
+          title_zh: string
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          baths?: number | null
+          beds?: number | null
+          created_at?: string | null
+          description_en?: string
+          description_zh?: string
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          location?: string
+          price?: number
+          slug?: string
+          sqft?: number | null
+          status?: Database["public"]["Enums"]["property_status"] | null
+          title_en?: string
+          title_zh?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +178,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      content_type: "static" | "listing" | "insight"
+      property_status: "available" | "under_contract" | "sold" | "pending"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +306,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      content_type: ["static", "listing", "insight"],
+      property_status: ["available", "under_contract", "sold", "pending"],
+    },
   },
 } as const
