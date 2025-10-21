@@ -1,38 +1,53 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import property1 from '@/assets/property-1.jpg';
+import property2 from '@/assets/property-2.jpg';
+import property3 from '@/assets/property-3.jpg';
 import CurrencySwitch, { Currency } from '@/components/CurrencySwitch';
 import { convertPrice } from '@/utils/currency';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Loader2 } from 'lucide-react';
 
 const PropertiesSection = () => {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [currency, setCurrency] = useState<Currency>('USD');
-  const [properties, setProperties] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('properties')
-          .select('*')
-          .eq('featured', true)
-          .order('created_at', { ascending: false })
-          .limit(3);
-
-        if (error) throw error;
-        setProperties(data || []);
-      } catch (error) {
-        console.error('Error fetching featured properties:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProperties();
-  }, []);
+  const properties = [
+    {
+      id: 1,
+      slug: 'georgetown-estate',
+      image: property1,
+      title: 'Georgetown Estate',
+      address: '2847 P Street NW, Washington, DC',
+      price: '$4,850,000',
+      beds: 5,
+      baths: 4.5,
+      sqft: '4,200',
+      status: 'Available'
+    },
+    {
+      id: 2,
+      slug: 'bethesda-contemporary',
+      image: property2,
+      title: 'Bethesda Contemporary',
+      address: '7821 Woodmont Avenue, Bethesda, MD',
+      price: '$3,200,000',
+      beds: 4,
+      baths: 3.5,
+      sqft: '3,800',
+      status: 'Under Contract'
+    },
+    {
+      id: 3,
+      slug: 'mclean-luxury-home',
+      image: property3,
+      title: 'McLean Luxury Home',
+      address: '1456 Kirby Road, McLean, VA',
+      price: '$5,750,000',
+      beds: 6,
+      baths: 5.5,
+      sqft: '5,200',
+      status: 'Available'
+    }
+  ];
 
   return (
     <section id="properties" className="py-20 md:py-32 bg-secondary/30">
@@ -53,72 +68,64 @@ const PropertiesSection = () => {
           </div>
         </div>
 
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((property) => {
-              const title = language === 'zh' ? property.title_zh : property.title_en;
-              
-              return (
-                <Link
-                  key={property.id}
-                  to={`/projects/${property.slug}`}
-                  className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer block"
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={property.image_url || '/images/imperial-0.jpg'}
-                      alt={title}
-                      className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 text-xs font-body font-light tracking-wide bg-gold text-primary">
-                        {property.status === 'available' ? t('properties.status.available') : 
-                         property.status === 'under_contract' ? t('properties.status.underContract') :
-                         property.status === 'sold' ? t('properties.status.sold') : 
-                         t('properties.status.pending')}
-                      </span>
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {properties.map((property) => (
+            <Link
+              key={property.id}
+              to={`/projects/${property.slug}`}
+              className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer block"
+            >
+              <div className="relative overflow-hidden">
+                <img
+                  src={property.image}
+                  alt={property.title}
+                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute top-4 left-4">
+                  <span
+                    className={`px-3 py-1 text-xs font-body font-light tracking-wide ${
+                      property.status === 'Available'
+                        ? 'bg-gold text-primary'
+                        : 'bg-primary text-primary-foreground'
+                    }`}
+                  >
+                    {property.status === 'Available' ? t('properties.status.available') : 
+                     property.status === 'Under Contract' ? t('properties.status.underContract') : property.status}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-6">
+                <h3 className="font-serif text-xl font-medium text-primary mb-2">
+                  {property.title}
+                </h3>
+                <p className="font-body text-sm text-muted-foreground mb-4">
+                  {property.address}
+                </p>
+                
+                <div className="flex items-center justify-between mb-4">
+                  <span className="font-serif text-2xl font-light text-primary">
+                    {convertPrice(property.price, currency)}
+                  </span>
+                </div>
+
+                <div className="flex items-center space-x-4 text-sm text-muted-foreground font-body font-light">
+                  <span>{property.beds} {t('properties.beds')}</span>
+                  <span>•</span>
+                  <span>{property.baths} {t('properties.baths')}</span>
+                  <span>•</span>
+                  <span>{property.sqft} {t('properties.sqft')}</span>
+                </div>
+
+                <div className="mt-6">
+                  <div className="w-full py-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide text-center">
+                    {t('properties.viewDetails')}
                   </div>
-
-                  <div className="p-6">
-                    <h3 className="font-serif text-xl font-medium text-primary mb-2">
-                      {title}
-                    </h3>
-                    <p className="font-body text-sm text-muted-foreground mb-4">
-                      {property.address || property.location}
-                    </p>
-                    
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="font-serif text-2xl font-light text-primary">
-                        {convertPrice(`$${property.price}`, currency)}
-                      </span>
-                    </div>
-
-                    {(property.beds || property.baths || property.sqft) && (
-                      <div className="flex items-center space-x-4 text-sm text-muted-foreground font-body font-light">
-                        {property.beds && <span>{property.beds} {t('properties.beds')}</span>}
-                        {property.beds && property.baths && <span>•</span>}
-                        {property.baths && <span>{property.baths} {t('properties.baths')}</span>}
-                        {(property.beds || property.baths) && property.sqft && <span>•</span>}
-                        {property.sqft && <span>{property.sqft} {t('properties.sqft')}</span>}
-                      </div>
-                    )}
-
-                    <div className="mt-6">
-                      <div className="w-full py-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide text-center">
-                        {t('properties.viewDetails')}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        )}
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
 
         <div className="text-center mt-12">
           <Link
