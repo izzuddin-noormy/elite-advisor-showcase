@@ -1,205 +1,58 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import CurrencySwitch, { Currency } from '@/components/CurrencySwitch';
 import { convertPrice } from '@/utils/currency';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
-import property1 from '@/assets/property-1.jpg';
-import property2 from '@/assets/property-2.jpg';
-import property3 from '@/assets/property-3.jpg';
+import { Search, Loader2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Properties = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [currency, setCurrency] = useState<Currency>('USD');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [properties, setProperties] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 9;
 
-  const properties = [
-    {
-      id: 1,
-      slug: 'georgetown-estate',
-      image: property1,
-      title: 'Georgetown Estate',
-      address: '2847 P Street NW, Washington, DC',
-      price: '$4,850,000',
-      beds: 5,
-      baths: 4.5,
-      sqft: '4,200',
-      status: 'Available',
-      description:
-        "Exquisite Georgetown estate featuring original hardwood floors, chef's kitchen, and private garden.",
-    },
-    {
-      id: 2,
-      slug: 'bethesda-contemporary',
-      image: property2,
-      title: 'Bethesda Contemporary',
-      address: '7821 Woodmont Avenue, Bethesda, MD',
-      price: '$3,200,000',
-      beds: 4,
-      baths: 3.5,
-      sqft: '3,800',
-      status: 'Under Contract',
-      description:
-        'Modern luxury home with floor-to-ceiling windows, open concept design, and premium finishes.',
-    },
-    {
-      id: 3,
-      slug: 'mclean-luxury-home',
-      image: property3,
-      title: 'McLean Luxury Home',
-      address: '1456 Kirby Road, McLean, VA',
-      price: '$5,750,000',
-      beds: 6,
-      baths: 5.5,
-      sqft: '5,200',
-      status: 'Available',
-      description:
-        'Stunning colonial estate on private 2-acre lot with pool, tennis court, and guest house.',
-    },
-    {
-      id: 4,
-      slug: 'capitol-hill-townhouse',
-      image: property1,
-      title: 'Capitol Hill Townhouse',
-      address: '234 A Street SE, Washington, DC',
-      price: '$2,850,000',
-      beds: 4,
-      baths: 3.5,
-      sqft: '3,200',
-      status: 'Available',
-      description:
-        'Historic townhouse completely renovated with modern amenities while preserving original charm.',
-    },
-    {
-      id: 5,
-      slug: 'arlington-heights-modern',
-      image: property2,
-      title: 'Arlington Heights Modern',
-      address: '5678 Wilson Boulevard, Arlington, VA',
-      price: '$4,200,000',
-      beds: 5,
-      baths: 4,
-      sqft: '4,800',
-      status: 'Available',
-      description:
-        'Contemporary home with smart home technology, wine cellar, and panoramic city views.',
-    },
-    {
-      id: 6,
-      slug: 'potomac-waterfront-estate',
-      image: property3,
-      title: 'Potomac Waterfront Estate',
-      address: '9876 River Road, Potomac, MD',
-      price: '$7,950,000',
-      beds: 7,
-      baths: 6.5,
-      sqft: '8,500',
-      status: 'Available',
-      description:
-        'Magnificent waterfront estate with private dock, infinity pool, and 180-degree river views.',
-    },
-    {
-      id: 7,
-      slug: 'georgetown-estate-2',
-      image: property1,
-      title: 'Georgetown Estate',
-      address: '2847 P Street NW, Washington, DC',
-      price: '$4,850,000',
-      beds: 5,
-      baths: 4.5,
-      sqft: '4,200',
-      status: 'Available',
-      description:
-        "Exquisite Georgetown estate featuring original hardwood floors, chef's kitchen, and private garden.",
-    },
-    {
-      id: 8,
-      slug: 'bethesda-contemporary-2',
-      image: property2,
-      title: 'Bethesda Contemporary',
-      address: '7821 Woodmont Avenue, Bethesda, MD',
-      price: '$3,200,000',
-      beds: 4,
-      baths: 3.5,
-      sqft: '3,800',
-      status: 'Under Contract',
-      description:
-        'Modern luxury home with floor-to-ceiling windows, open concept design, and premium finishes.',
-    },
-    {
-      id: 9,
-      slug: 'mclean-luxury-home-2',
-      image: property3,
-      title: 'McLean Luxury Home',
-      address: '1456 Kirby Road, McLean, VA',
-      price: '$5,750,000',
-      beds: 6,
-      baths: 5.5,
-      sqft: '5,200',
-      status: 'Available',
-      description:
-        'Stunning colonial estate on private 2-acre lot with pool, tennis court, and guest house.',
-    },
-    {
-      id: 10,
-      slug: 'capitol-hill-townhouse',
-      image: property1,
-      title: 'Capitol Hill Townhouse',
-      address: '234 A Street SE, Washington, DC',
-      price: '$2,850,000',
-      beds: 4,
-      baths: 3.5,
-      sqft: '3,200',
-      status: 'Available',
-      description:
-        'Historic townhouse completely renovated with modern amenities while preserving original charm.',
-    },
-    {
-      id: 11,
-      slug: 'arlington-heights-modern',
-      image: property2,
-      title: 'Arlington Heights Modern',
-      address: '5678 Wilson Boulevard, Arlington, VA',
-      price: '$4,200,000',
-      beds: 5,
-      baths: 4,
-      sqft: '4,800',
-      status: 'Available',
-      description:
-        'Contemporary home with smart home technology, wine cellar, and panoramic city views.',
-    },
-    {
-      id: 12,
-      slug: 'potomac-waterfront-estate',
-      image: property3,
-      title: 'Potomac Waterfront Estate',
-      address: '9876 River Road, Potomac, MD',
-      price: '$7,950,000',
-      beds: 7,
-      baths: 6.5,
-      sqft: '8,500',
-      status: 'Available',
-      description:
-        'Magnificent waterfront estate with private dock, infinity pool, and 180-degree river views.',
-    }
-  ];
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('properties')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        setProperties(data || []);
+      } catch (error) {
+        console.error('Error fetching properties:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, []);
 
   const filteredProperties = useMemo(() => {
     if (!searchQuery.trim()) return properties;
 
-    return properties.filter(
-      (property) =>
-        property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        property.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        property.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        property.status.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [properties, searchQuery]);
+    return properties.filter((property) => {
+      const title = language === 'zh' ? property.title_zh : property.title_en;
+      const description = language === 'zh' ? property.description_zh : property.description_en;
+      const location = property.location || '';
+      
+      return (
+        title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    });
+  }, [properties, searchQuery, language]);
 
   // Pagination logic
   const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
@@ -208,6 +61,18 @@ const Properties = () => {
     const end = start + itemsPerPage;
     return filteredProperties.slice(start, end);
   }, [filteredProperties, currentPage]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <Navigation />
+        <div className="flex items-center justify-center py-32">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -267,73 +132,71 @@ const Properties = () => {
       <section className="pb-20 bg-background">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {paginatedProperties.map((property) => (
-              <Link
-                key={property.id}
-                to={`/projects/${property.slug}`}
-                className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer block"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={property.image}
-                    alt={property.title}
-                    className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span
-                      className={`px-3 py-1 text-xs font-body font-light tracking-wide ${
-                        property.status === 'Available'
-                          ? 'bg-gold text-primary'
-                          : 'bg-primary text-primary-foreground'
-                      }`}
-                    >
-                      {t(
-                        `properties.status.${
-                          property.status === 'Under Contract'
-                            ? 'underContract'
-                            : property.status.toLowerCase()
-                        }`
-                      )}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="font-serif text-xl font-medium text-primary mb-2">
-                    {property.title}
-                  </h3>
-                  <p className="font-body text-sm text-muted-foreground mb-3">
-                    {property.address}
-                  </p>
-                  <p className="font-body text-sm text-muted-foreground mb-4 line-clamp-2">
-                    {property.description}
-                  </p>
-
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="font-serif text-2xl font-light text-primary">
-                      {convertPrice(property.price, currency)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center space-x-4 text-sm text-muted-foreground font-body font-light mb-6">
-                    <span>{property.beds} {t('properties.beds')}</span>
-                    <span>•</span>
-                    <span>{property.baths} {t('properties.baths')}</span>
-                    <span>•</span>
-                    <span>{property.sqft} {t('properties.sqft')}</span>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="w-full py-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide text-center">
-                      {t('properties.viewDetails')}
+            {paginatedProperties.map((property) => {
+              const title = language === 'zh' ? property.title_zh : property.title_en;
+              const description = language === 'zh' ? property.description_zh : property.description_en;
+              
+              return (
+                <Link
+                  key={property.id}
+                  to={`/projects/${property.slug}`}
+                  className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer block"
+                >
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={property.image_url || '/images/imperial-0.jpg'}
+                      alt={title}
+                      className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 text-xs font-body font-light tracking-wide bg-gold text-primary">
+                        {property.status === 'available' ? t('properties.status.available') : 
+                         property.status === 'under_contract' ? t('properties.status.underContract') :
+                         property.status === 'sold' ? t('properties.status.sold') : 
+                         t('properties.status.pending')}
+                      </span>
                     </div>
-                    <button className="w-full py-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 font-body text-sm font-light tracking-wide">
-                      {t('properties.scheduleViewing')}
-                    </button>
                   </div>
-                </div>
-              </Link>
-            ))}
+
+                  <div className="p-6">
+                    <h3 className="font-serif text-xl font-medium text-primary mb-2">
+                      {title}
+                    </h3>
+                    <p className="font-body text-sm text-muted-foreground mb-3">
+                      {property.address || property.location}
+                    </p>
+                    <p className="font-body text-sm text-muted-foreground mb-4 line-clamp-2">
+                      {description}
+                    </p>
+
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="font-serif text-2xl font-light text-primary">
+                        {convertPrice(`$${property.price}`, currency)}
+                      </span>
+                    </div>
+
+                    {(property.beds || property.baths || property.sqft) && (
+                      <div className="flex items-center space-x-4 text-sm text-muted-foreground font-body font-light mb-6">
+                        {property.beds && <span>{property.beds} {t('properties.beds')}</span>}
+                        {property.beds && property.baths && <span>•</span>}
+                        {property.baths && <span>{property.baths} {t('properties.baths')}</span>}
+                        {(property.beds || property.baths) && property.sqft && <span>•</span>}
+                        {property.sqft && <span>{property.sqft} {t('properties.sqft')}</span>}
+                      </div>
+                    )}
+
+                    <div className="space-y-3">
+                      <div className="w-full py-2 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide text-center">
+                        {t('properties.viewDetails')}
+                      </div>
+                      <button className="w-full py-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 font-body text-sm font-light tracking-wide">
+                        {t('properties.scheduleViewing')}
+                      </button>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
           {/* Pagination Controls */}

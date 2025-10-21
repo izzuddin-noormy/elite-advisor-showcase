@@ -1,8 +1,10 @@
-import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { supabase } from '@/integrations/supabase/client';
+import { Loader2 } from 'lucide-react';
 import PropertyGallery from '@/components/property/PropertyGallery';
 import PropertyOverview from '@/components/property/PropertyOverview';
 import PropertyDetails from '@/components/property/PropertyDetails';
@@ -49,124 +51,91 @@ interface Property {
 
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { t } = useLanguage();
+  const navigate = useNavigate();
+  const { t, language } = useLanguage();
+  const [property, setProperty] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Dummy property data - would be fetched by ID in real app
-  const properties: Record<string, Property> = {
-    'imperial-suite': {
-      id: 'imperial-suite',
-      title: 'The Imperial Suite',
-      address: '2847 P Street NW, Washington, DC 20007',
-      price: 8880000,
-      beds: 5,
-      baths: 4.5,
-      sqft: 4200,
-      propertyType: 'Penthouse',
-      images: [
-        '/images/imperial-0.jpg',
-        '/images/imperial-1.jpg',
-        '/images/imperial-2.jpg',
-        '/images/imperial-5.jpg',
-        '/images/imperial-4.jpg'
-      ],
-      description: 'A luxury condominium set in a quiet alcove that comprises stately royal houses, embassies and official residences in the vicinity. Situated in the heart of Kuala Lumpur, it is well connected via excellent transport infrastructure and lies close to the Petronas Twin Tower and world-class amenities.',
-      overview: 'This exceptional penthouse offers unparalleled luxury living in one of the most prestigious locations in the city. The spacious layout features floor-to-ceiling windows, premium finishes, and breathtaking city views. The gourmet kitchen is equipped with top-of-the-line appliances, while the master suite boasts a private terrace and spa-like bathroom. Additional amenities include a private elevator, smart home technology, and access to exclusive building facilities including a rooftop pool, fitness center, and concierge services.',
-      features: {
-        interior: ['Hardwood Floors', 'Granite Countertops', 'Stainless Steel Appliances', 'Walk-in Closets', 'Fireplace', 'Central Air', 'High Ceilings'],
-        exterior: ['Private Terrace', 'City Views', 'Balcony', 'Rooftop Access'],
-        style: 'Contemporary',
-        lotSize: '0.25 acres'
-      },
-      location: {
-        lat: 40.7831,
-        lng: -73.9712
-      },
-      schools: {
-        elementary: [
-          { name: 'Georgetown Elementary', rating: 9, distance: '0.3 miles' },
-          { name: 'Potomac Primary School', rating: 8, distance: '0.5 miles' }
-        ],
-        highSchool: [
-          { name: 'Georgetown Preparatory', rating: 9, distance: '0.8 miles' },
-          { name: 'Washington International School', rating: 8, distance: '1.2 miles' }
-        ]
-      },
-      otherDetails: {
-        daysOnMarket: 45,
-        yearBuilt: 2019,
-        garage: '2-car attached',
-        accessibility: ['Elevator Access', 'Wide Doorways', 'Accessible Bathroom'],
-        heating: 'Central Heating',
-        cooling: 'Central Air Conditioning'
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('properties')
+          .select('*')
+          .eq('slug', id)
+          .maybeSingle();
+
+        if (error) throw error;
+        
+        if (!data) {
+          navigate('/properties');
+          return;
+        }
+
+        setProperty(data);
+      } catch (error) {
+        console.error('Error fetching property:', error);
+        navigate('/properties');
+      } finally {
+        setLoading(false);
       }
+    };
+
+    fetchProperty();
+  }, [id, navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="flex items-center justify-center py-32">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!property) {
+    return null;
+  }
+
+  // Map Supabase data to component format
+  const mappedProperty = {
+    id: property.id,
+    title: language === 'zh' ? property.title_zh : property.title_en,
+    address: property.address || property.location,
+    price: property.price,
+    beds: property.beds || 0,
+    baths: property.baths || 0,
+    sqft: property.sqft || 0,
+    propertyType: language === 'zh' ? property.title_zh : property.title_en,
+    images: property.image_url ? [property.image_url] : ['/images/imperial-0.jpg'],
+    description: language === 'zh' ? property.description_zh : property.description_en,
+    overview: language === 'zh' ? property.description_zh : property.description_en,
+    features: {
+      interior: ['Hardwood Floors', 'Granite Countertops', 'Stainless Steel Appliances'],
+      exterior: ['Private Terrace', 'City Views'],
+      style: 'Contemporary',
+      lotSize: property.sqft ? `${property.sqft} sqft` : 'N/A'
     },
-    'georgetown-estate': {
-      id: 'georgetown-estate',
-      title: 'Georgetown Estate',
-      address: '2847 P Street NW, Washington, DC',
-      price: 4850000,
-      beds: 5,
-      baths: 4.5,
-      sqft: 4200,
-      propertyType: 'Estate',
-      images: ['/images/imperial-1.jpg', '/images/imperial-2.jpg', '/images/imperial-3.jpg'],
-      description: 'Exquisite Georgetown estate featuring original hardwood floors, chef\'s kitchen, and private garden.',
-      overview: 'This magnificent Georgetown estate combines historic charm with modern luxury. The property features original architectural details, premium finishes, and a beautifully landscaped private garden. The chef\'s kitchen is equipped with professional-grade appliances, while the spacious living areas offer elegant entertaining spaces.',
-      features: {
-        interior: ['Original Hardwood Floors', 'Chef\'s Kitchen', 'Crown Molding', 'Marble Bathrooms', 'Wine Cellar'],
-        exterior: ['Private Garden', 'Covered Patio', 'Historic Facade'],
-        style: 'Historic Georgian',
-        lotSize: '0.18 acres'
-      },
-      location: { lat: 38.9072, lng: -77.0369 },
-      schools: {
-        elementary: [{ name: 'Georgetown Elementary', rating: 9, distance: '0.2 miles' }],
-        highSchool: [{ name: 'Georgetown Preparatory', rating: 9, distance: '0.5 miles' }]
-      },
-      otherDetails: {
-        daysOnMarket: 30,
-        yearBuilt: 1925,
-        garage: '2-car detached',
-        accessibility: ['Wide Doorways'],
-        heating: 'Radiant Heating',
-        cooling: 'Central Air'
-      }
+    location: {
+      lat: 3.1569,
+      lng: 101.7123
     },
-    'bethesda-contemporary': {
-      id: 'bethesda-contemporary',
-      title: 'Bethesda Contemporary',
-      address: '7821 Woodmont Avenue, Bethesda, MD',
-      price: 3200000,
-      beds: 4,
-      baths: 3.5,
-      sqft: 3800,
-      propertyType: 'Contemporary',
-      images: ['/images/imperial-0.jpg', '/images/imperial-4.jpg', '/images/imperial-5.jpg'],
-      description: 'Modern luxury home with floor-to-ceiling windows, open concept design, and premium finishes.',
-      overview: 'This stunning contemporary home showcases modern design at its finest. Floor-to-ceiling windows flood the space with natural light, while the open concept layout creates seamless flow between living areas. Premium finishes and smart home technology throughout.',
-      features: {
-        interior: ['Floor-to-Ceiling Windows', 'Open Concept', 'Smart Home Technology', 'Italian Kitchen'],
-        exterior: ['Modern Architecture', 'Landscaped Yard', 'Three-Car Garage'],
-        style: 'Contemporary',
-        lotSize: '0.22 acres'
-      },
-      location: { lat: 38.9847, lng: -77.0953 },
-      schools: {
-        elementary: [{ name: 'Bethesda Elementary', rating: 8, distance: '0.4 miles' }],
-        highSchool: [{ name: 'Bethesda-Chevy Chase High', rating: 9, distance: '0.8 miles' }]
-      },
-      otherDetails: {
-        daysOnMarket: 25,
-        yearBuilt: 2020,
-        garage: '3-car attached',
-        accessibility: ['Elevator', 'Accessible Entrance'],
-        heating: 'Geothermal',
-        cooling: 'Zoned HVAC'
-      }
+    schools: {
+      elementary: [],
+      highSchool: []
+    },
+    otherDetails: {
+      daysOnMarket: 30,
+      yearBuilt: 2020,
+      garage: '2-car attached',
+      accessibility: ['Elevator Access'],
+      heating: 'Central Heating',
+      cooling: 'Central Air Conditioning'
     }
   };
-
-  const property = properties[id || 'imperial-suite'] || properties['imperial-suite'];
 
   return (
     <div className="min-h-screen bg-background">
@@ -174,29 +143,29 @@ const PropertyDetail = () => {
       
       <main className="pt-20">
         {/* Property Gallery */}
-        <PropertyGallery images={property.images} title={property.title} />
+        <PropertyGallery images={mappedProperty.images} title={mappedProperty.title} />
         
         <div className="container mx-auto px-6 py-12">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-12">
               {/* Property Overview */}
-              <PropertyOverview property={property} />
+              <PropertyOverview property={mappedProperty} />
               
               {/* Property Details */}
-              <PropertyDetails features={property.features} />
+              <PropertyDetails features={mappedProperty.features} />
               
               {/* School Information */}
-              <SchoolInformation schools={property.schools} />
+              <SchoolInformation schools={mappedProperty.schools} />
 
               {/* Additional Information */}
-              <OtherDetails details={property.otherDetails} />
+              <OtherDetails details={mappedProperty.otherDetails} />
 
               {/* Map */}
               <PropertyMap 
-                location={property.location} 
-                address={property.address}
-                title={property.title}
+                location={mappedProperty.location} 
+                address={mappedProperty.address}
+                title={mappedProperty.title}
               />
 
             </div>
@@ -205,7 +174,7 @@ const PropertyDetail = () => {
             <div className="space-y-8">
               
               {/* Mortgage Calculator */}
-              <MortgageCalculator homePrice={property.price} />
+              <MortgageCalculator homePrice={mappedProperty.price} />
 
             </div>
           </div>
