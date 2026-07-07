@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Outlet, Link, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { LogOut, FileText, Home, Building2, Lightbulb, LayoutDashboard } from 'lucide-react';
+import { LogOut, FileText, Home, Building2, Lightbulb, LayoutDashboard, Languages, Image, Mail, Settings } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
@@ -72,9 +72,13 @@ const Admin = () => {
 
   const navItems = [
     { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/admin/pages', label: 'Pages', icon: FileText },
     { path: '/admin/properties', label: 'Properties', icon: Building2 },
     { path: '/admin/insights', label: 'Insights', icon: Lightbulb },
+    { path: '/admin/pages', label: 'Pages', icon: FileText },
+    { path: '/admin/content', label: 'Site Content', icon: Languages },
+    { path: '/admin/media', label: 'Media', icon: Image },
+    { path: '/admin/messages', label: 'Messages', icon: Mail },
+    { path: '/admin/settings', label: 'Settings', icon: Settings },
   ];
 
   return (

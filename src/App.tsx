@@ -19,6 +19,10 @@ import AdminProperties from "./pages/AdminProperties";
 import AdminPropertyEditor from "./pages/AdminPropertyEditor";
 import AdminInsights from "./pages/AdminInsights";
 import AdminInsightEditor from "./pages/AdminInsightEditor";
+import AdminSiteContent from "./pages/AdminSiteContent";
+import AdminMedia from "./pages/AdminMedia";
+import AdminMessages from "./pages/AdminMessages";
+import AdminSettings from "./pages/AdminSettings";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +53,10 @@ const App = () => (
               <Route path="insights" element={<AdminInsights />} />
               <Route path="insights/new" element={<AdminInsightEditor />} />
               <Route path="insights/:id" element={<AdminInsightEditor />} />
+              <Route path="content" element={<AdminSiteContent />} />
+              <Route path="media" element={<AdminMedia />} />
+              <Route path="messages" element={<AdminMessages />} />
+              <Route path="settings" element={<AdminSettings />} />
             </Route>
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
