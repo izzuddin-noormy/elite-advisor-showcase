@@ -88,27 +88,30 @@ const PropertyGallery = ({ images, title }: PropertyGalleryProps) => {
 
       {/* Fullscreen Image Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-screen-lg w-full h-screen bg-black/95 border-0 p-0 flex items-center justify-center">
+        <DialogContent className="max-w-screen-lg w-full h-screen bg-black/95 border-0 p-0 flex items-center justify-center [&>button]:hidden">
           <div className="relative w-full h-full flex items-center justify-center">
             {/* Close Button */}
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-4 right-4 z-50 text-white hover:bg-white/20"
+              className="absolute top-4 right-4 z-50 h-11 w-11 rounded-full bg-black/50 text-white border border-white/30 hover:bg-black/70 hover:text-white"
               onClick={closeModal}
             >
               <X className="h-6 w-6" />
             </Button>
 
             {/* Previous Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20"
-              onClick={prevImage}
-            >
-              <ChevronLeft className="h-8 w-8" />
-            </Button>
+            {images.length > 1 && (
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Previous image"
+                className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-50 h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-black/50 text-white border border-white/30 shadow-lg hover:bg-black/70 hover:text-white"
+                onClick={prevImage}
+              >
+                <ChevronLeft className="h-7 w-7 sm:h-9 sm:w-9" />
+              </Button>
+            )}
 
             {/* Main Image */}
             <img
@@ -118,14 +121,17 @@ const PropertyGallery = ({ images, title }: PropertyGalleryProps) => {
             />
 
             {/* Next Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 text-white hover:bg-white/20"
-              onClick={nextImage}
-            >
-              <ChevronRight className="h-8 w-8" />
-            </Button>
+            {images.length > 1 && (
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Next image"
+                className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-50 h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-black/50 text-white border border-white/30 shadow-lg hover:bg-black/70 hover:text-white"
+                onClick={nextImage}
+              >
+                <ChevronRight className="h-7 w-7 sm:h-9 sm:w-9" />
+              </Button>
+            )}
 
             {/* Image Counter */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
