@@ -130,6 +130,7 @@ export interface PageRow {
 export interface DevHighlight { title_en?: string; title_zh?: string; desc_en?: string; desc_zh?: string; }
 export interface DevSpec { label_en?: string; label_zh?: string; value_en?: string; value_zh?: string; }
 export interface DevConnectivity { text_en?: string; text_zh?: string; }
+export interface DevFloorplan { label_en?: string; label_zh?: string; spec_en?: string; spec_zh?: string; size?: string; price?: string; image?: string; }
 
 export interface DevelopmentRow {
   id: string;
@@ -155,6 +156,7 @@ export interface DevelopmentRow {
   highlights: DevHighlight[] | null;
   specs: DevSpec[] | null;
   connectivity: DevConnectivity[] | null;
+  floorplans: DevFloorplan[] | null;
   location_lat: number | null;
   location_lng: number | null;
   gallery: string[] | null;
