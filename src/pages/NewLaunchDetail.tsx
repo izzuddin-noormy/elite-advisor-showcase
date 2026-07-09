@@ -344,8 +344,8 @@ const CINE_CSS = `
 .cine{--ivory:#f3efe7;--ivory-dim:rgba(243,239,231,.62);--gold:#c9a96a;--ink:#0c0b09;--cserif:'Playfair Display',Georgia,serif;--csans:'Inter',system-ui,sans-serif;background:var(--ink);color:var(--ivory);font-family:var(--csans);position:fixed;inset:0;z-index:0;overflow:hidden}
 @media (pointer:fine){.cine,.cine a,.cine button{cursor:none}}
 .cine ::selection{background:var(--gold);color:var(--ink)}
-.cine-main{height:100dvh;overflow-y:auto;scroll-snap-type:y proximity;perspective:1200px}
-.cine-panel{position:relative;height:100dvh;scroll-snap-align:start;overflow:hidden;display:flex;align-items:flex-end}
+.cine-main{height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;perspective:1200px;scroll-behavior:smooth}
+.cine-panel{position:relative;height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden;display:flex;align-items:flex-end}
 .cine-media{position:absolute;inset:-6%;z-index:0;will-change:transform;transform-style:preserve-3d}
 .cine-media video,.cine-media .cine-kenburns{width:100%;height:100%;object-fit:cover;display:block}
 .cine-kenburns{background-size:cover;background-position:center;animation:cinekb 26s ease-in-out infinite alternate}
@@ -406,9 +406,9 @@ const CINE_CSS = `
 .blueprint.inview .bp-svg .draw{stroke-dashoffset:0 !important}
 .blueprint .cine-caption{max-width:1100px}
 .blueprint h2{font-size:clamp(3.4rem,9vw,7.5rem);mix-blend-mode:screen}
-.cine-gallery-panel{background:#070706;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:14vh clamp(1.4rem,6vw,6rem) 9vh;height:auto;min-height:100dvh;scroll-snap-align:start}
-.cine-gallery-panel .cine-caption{padding:0 0 2rem;max-width:none}
-.cine-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.cine-gallery-panel{background:#070706;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:12vh clamp(1.4rem,6vw,6rem) 6vh;height:100dvh}
+.cine-gallery-panel .cine-caption{padding:0 0 1.5rem;max-width:none;flex:0 0 auto}
+.cine-grid{flex:1 1 auto;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;align-content:start}
 .cine-grid-item{border:0;padding:0;overflow:hidden;background:#111;aspect-ratio:4/3;border-radius:2px}
 .cine-grid-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
 .cine-grid-item:hover img{transform:scale(1.06)}
