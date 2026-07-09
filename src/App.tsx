@@ -23,6 +23,10 @@ import AdminSiteContent from "./pages/AdminSiteContent";
 import AdminMedia from "./pages/AdminMedia";
 import AdminMessages from "./pages/AdminMessages";
 import AdminSettings from "./pages/AdminSettings";
+import NewLaunch from "./pages/NewLaunch";
+import NewLaunchDetail from "./pages/NewLaunchDetail";
+import AdminDevelopments from "./pages/AdminDevelopments";
+import AdminDevelopmentEditor from "./pages/AdminDevelopmentEditor";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +43,8 @@ const App = () => (
             <Route path="/properties" element={<Properties />} />
             <Route path="/projects/:id" element={<PropertyDetail />} />
             <Route path="/insights/:id" element={<InsightDetail />} />
+            <Route path="/new-launch" element={<NewLaunch />} />
+            <Route path="/new-launch/:slug" element={<NewLaunchDetail />} />
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -53,6 +59,9 @@ const App = () => (
               <Route path="insights" element={<AdminInsights />} />
               <Route path="insights/new" element={<AdminInsightEditor />} />
               <Route path="insights/:id" element={<AdminInsightEditor />} />
+              <Route path="developments" element={<AdminDevelopments />} />
+              <Route path="developments/new" element={<AdminDevelopmentEditor />} />
+              <Route path="developments/:id" element={<AdminDevelopmentEditor />} />
               <Route path="content" element={<AdminSiteContent />} />
               <Route path="media" element={<AdminMedia />} />
               <Route path="messages" element={<AdminMessages />} />

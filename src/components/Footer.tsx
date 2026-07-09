@@ -65,7 +65,7 @@ const Footer = () => {
 
         <div className="border-t border-primary-foreground/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="font-body text-xs font-light text-primary-foreground/60">
-            {t('footer.copyright')}
+            {t('footer.copyright').replace(/\d{4}/, String(new Date().getFullYear()))}
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="font-body text-xs font-light text-primary-foreground/60 hover:text-gold transition-colors duration-300">

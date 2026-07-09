@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitch from '@/components/LanguageSwitch';
@@ -30,6 +30,7 @@ const Navigation = () => {
   const navItems = [
     { name: t('nav.home'), href: '/' },
     { name: t('nav.about'), href: '#about' },
+    { name: t('nav.newLaunch'), href: '/new-launch' },
     { name: t('nav.properties'), href: '/properties' },
     { name: t('nav.insights'), href: '#insights' },
     { name: t('nav.contact'), href: '#contact' },
@@ -38,7 +39,8 @@ const Navigation = () => {
   return (
     <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        // Always render with the dark palette so the bar stays dark in light mode
+        'dark fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
           ? 'bg-background/95 backdrop-blur-md border-b border-border'
           : 'bg-transparent'
@@ -47,10 +49,10 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="font-serif text-2xl font-medium tracking-tight">
+          <Link to="/" className="font-serif text-2xl font-medium tracking-tight" aria-label="Home">
             <span className="text-primary">Mu</span>
             <span className="text-gold ml-1">SiChen</span>
-          </div>
+          </Link>
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">

@@ -2,10 +2,27 @@
   "nav": {
     "home": "首页",
     "about": "关于",
+    "newLaunch": "全新发布",
     "properties": "房产",
     "insights": "洞察",
     "contact": "联系",
     "scheduleConsultation": "预约咨询"
+  },
+  "newLaunch": {
+    "badge": "全新发布",
+    "title": "全新发展项目",
+    "subtitle": "探索吉隆坡最受追捧地段最新推出的豪华发展项目。",
+    "empty": "暂无发展项目。",
+    "explore": "了解详情",
+    "overview": "项目概览",
+    "factSheet": "项目资料",
+    "developer": "发展商",
+    "highlights": "项目亮点",
+    "location": "地点与交通",
+    "gallery": "项目图库",
+    "register": "登记兴趣",
+    "registerTitle": "登记您的兴趣",
+    "registerSubtitle": "抢先获取户型图、价格及专属发布优惠。"
   },
   "hero": {
     "welcomeTo": "欢迎来到",

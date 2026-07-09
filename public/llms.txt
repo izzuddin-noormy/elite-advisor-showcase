@@ -1,6 +1,9 @@
 # Mu SiChen — Luxury Real Estate Negotiator & Advisor
 
-> Luxury real estate advisory in Kuala Lumpur, Malaysia. Exclusive property listings, market insights, and bilingual (English / 中文) service.
+> Luxury real estate advisory in Kuala Lumpur, Malaysia. Exclusive property listings, new-launch developments, market insights, and bilingual (English / 中文) service.
+
+## New Launch Developments
+- (none published)
 
 ## Properties
 - [The Imperial Suite](https://www.musichen.com/projects/imperial-suite)

@@ -2,10 +2,27 @@
   "nav": {
     "home": "Home",
     "about": "About",
+    "newLaunch": "New Launch",
     "properties": "Properties",
     "insights": "Insights",
     "contact": "Contact",
     "scheduleConsultation": "Schedule Consultation"
+  },
+  "newLaunch": {
+    "badge": "NEW LAUNCH",
+    "title": "New Launch Developments",
+    "subtitle": "Discover the latest luxury developments launching across Kuala Lumpur's most sought-after addresses.",
+    "empty": "No developments available yet.",
+    "explore": "Explore",
+    "overview": "Overview",
+    "factSheet": "Fact Sheet",
+    "developer": "Developer",
+    "highlights": "Highlights",
+    "location": "Location & Connectivity",
+    "gallery": "Gallery",
+    "register": "Register Interest",
+    "registerTitle": "Register Your Interest",
+    "registerSubtitle": "Be among the first to preview floor plans, pricing and exclusive launch privileges."
   },
   "hero": {
     "welcomeTo": "Welcome to",

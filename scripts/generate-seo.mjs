@@ -32,19 +32,20 @@ const SITE_URL = (readEnv('SITE_URL') || DEFAULT_SITE_URL).replace(/\/$/, '');
 const SUPABASE_URL = readEnv('VITE_SUPABASE_URL');
 const SUPABASE_KEY = readEnv('VITE_SUPABASE_PUBLISHABLE_KEY');
 
-const staticRoutes = ['/', '/properties'];
+const staticRoutes = ['/', '/properties', '/new-launch'];
 
 async function fetchDynamic() {
   if (!SUPABASE_URL || !SUPABASE_KEY) {
     console.warn('[seo] Supabase env vars missing — generating sitemap with static routes only.');
-    return { properties: [], insights: [] };
+    return { properties: [], insights: [], developments: [] };
   }
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-  const [{ data: properties }, { data: insights }] = await Promise.all([
+  const [{ data: properties }, { data: insights }, devRes] = await Promise.all([
     supabase.from('properties').select('slug, updated_at, title_en').eq('published', true),
     supabase.from('insights').select('slug, updated_at, title_en').eq('published', true),
+    supabase.from('developments').select('slug, updated_at, name_en').eq('published', true).then((r) => r, () => ({ data: [] })),
   ]);
-  return { properties: properties || [], insights: insights || [] };
+  return { properties: properties || [], insights: insights || [], developments: (devRes && devRes.data) || [] };
 }
 
 function urlEntry(loc, lastmod) {
@@ -53,11 +54,12 @@ function urlEntry(loc, lastmod) {
 
 async function main() {
   fs.mkdirSync(publicDir, { recursive: true });
-  const { properties, insights } = await fetchDynamic();
+  const { properties, insights, developments } = await fetchDynamic();
 
   // sitemap.xml
   const entries = [
     ...staticRoutes.map((r) => urlEntry(r)),
+    ...developments.map((d) => urlEntry(`/new-launch/${d.slug}`, d.updated_at)),
     ...properties.map((p) => urlEntry(`/projects/${p.slug}`, p.updated_at)),
     ...insights.map((a) => urlEntry(`/insights/${a.slug}`, a.updated_at)),
   ];
@@ -69,7 +71,7 @@ async function main() {
   fs.writeFileSync(path.join(publicDir, 'robots.txt'), robots);
 
   // llms.txt (GEO — helps AI crawlers understand the site)
-  const llms = `# Mu SiChen — Luxury Real Estate Negotiator & Advisor\n\n> Luxury real estate advisory in Kuala Lumpur, Malaysia. Exclusive property listings, market insights, and bilingual (English / 中文) service.\n\n## Properties\n${properties.map((p) => `- [${p.title_en}](${SITE_URL}/projects/${p.slug})`).join('\n') || '- (none published)'}\n\n## Insights\n${insights.map((a) => `- [${a.title_en}](${SITE_URL}/insights/${a.slug})`).join('\n') || '- (none published)'}\n\n## Contact\n- Website: ${SITE_URL}\n`;
+  const llms = `# Mu SiChen — Luxury Real Estate Negotiator & Advisor\n\n> Luxury real estate advisory in Kuala Lumpur, Malaysia. Exclusive property listings, new-launch developments, market insights, and bilingual (English / 中文) service.\n\n## New Launch Developments\n${developments.map((d) => `- [${d.name_en}](${SITE_URL}/new-launch/${d.slug})`).join('\n') || '- (none published)'}\n\n## Properties\n${properties.map((p) => `- [${p.title_en}](${SITE_URL}/projects/${p.slug})`).join('\n') || '- (none published)'}\n\n## Insights\n${insights.map((a) => `- [${a.title_en}](${SITE_URL}/insights/${a.slug})`).join('\n') || '- (none published)'}\n\n## Contact\n- Website: ${SITE_URL}\n`;
   fs.writeFileSync(path.join(publicDir, 'llms.txt'), llms);
 
   console.log(`[seo] Wrote sitemap.xml (${entries.length} urls), robots.txt, llms.txt for ${SITE_URL}`);

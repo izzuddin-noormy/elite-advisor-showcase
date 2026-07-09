@@ -127,6 +127,46 @@ export interface PageRow {
   updated_at?: string | null;
 }
 
+export interface DevHighlight { title_en?: string; title_zh?: string; desc_en?: string; desc_zh?: string; }
+export interface DevSpec { label_en?: string; label_zh?: string; value_en?: string; value_zh?: string; }
+export interface DevConnectivity { text_en?: string; text_zh?: string; }
+
+export interface DevelopmentRow {
+  id: string;
+  slug: string;
+  name_en: string;
+  name_zh: string;
+  tagline_en: string | null;
+  tagline_zh: string | null;
+  location_en: string | null;
+  location_zh: string | null;
+  status_en: string | null;
+  status_zh: string | null;
+  price_from: string | null;
+  tenure_en: string | null;
+  tenure_zh: string | null;
+  completion: string | null;
+  developer_en: string | null;
+  developer_zh: string | null;
+  hero_image: string | null;
+  hero_video_url: string | null;
+  overview_en: string | null;
+  overview_zh: string | null;
+  highlights: DevHighlight[] | null;
+  specs: DevSpec[] | null;
+  connectivity: DevConnectivity[] | null;
+  location_lat: number | null;
+  location_lng: number | null;
+  gallery: string[] | null;
+  seo: SEO | null;
+  faqs: FAQ[] | null;
+  featured: boolean | null;
+  published: boolean | null;
+  sort_order: number | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
 export interface SiteContentRow {
   id: string;
   key: string;
