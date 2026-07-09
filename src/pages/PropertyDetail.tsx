@@ -127,7 +127,9 @@ const PropertyDetail = () => {
       <Navigation />
 
       <main className="pt-20">
-        {property.images.length > 0 && <PropertyGallery images={property.images} title={property.title} />}
+        {(property.images.length > 0 || row.video_url) && (
+          <PropertyGallery images={property.images} title={property.title} videoUrl={row.video_url} />
+        )}
 
         <div className="container mx-auto px-6 py-12">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">

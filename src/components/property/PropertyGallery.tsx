@@ -2,18 +2,25 @@ import { useState } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { getVideoEmbed } from '@/lib/video';
 
 interface PropertyGalleryProps {
   images: string[];
   title: string;
+  videoUrl?: string | null;
 }
 
-const PropertyGallery = ({ images, title }: PropertyGalleryProps) => {
+const PropertyGallery = ({ images, title, videoUrl }: PropertyGalleryProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
 
-  if (!images || images.length === 0) return null;
+  const video = getVideoEmbed(videoUrl);
+  const hasImages = images && images.length > 0;
+  if (!hasImages && !video) return null;
+
+  // When a video exists it takes the main slot, so thumbnails show all images.
+  const thumbs = video ? images.slice(0, 4) : images.slice(1, 5);
 
   const openModal = (index: number) => {
     setModalImageIndex(index);
@@ -36,42 +43,58 @@ const PropertyGallery = ({ images, title }: PropertyGalleryProps) => {
     <section className="bg-secondary/20 py-4 sm:py-6 lg:py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col xl:flex-row gap-3 sm:gap-4 lg:gap-6 max-w-7xl mx-auto">
-          {/* Main Image */}
-          <div className="w-full xl:flex-[2] h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[360px] cursor-pointer overflow-hidden rounded-lg shadow-lg">
-            <img
-              src={images[selectedImage]}
-              alt={`${title} - Main View`}
-              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-              onClick={() => openModal(selectedImage)}
-            />
-          </div>
-          
-          {/* Thumbnail Grid */}
-          <div className="w-full xl:flex-[1] grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
-            {images.slice(1, 5).map((image, index) => (
-              <div
-                key={index}
-                className="aspect-[16/10] sm:aspect-[4/3] lg:aspect-[309/178] w-full cursor-pointer overflow-hidden rounded-lg shadow-sm transition-all duration-300 hover:opacity-75 hover:shadow-md"
-                onClick={() => setSelectedImage(index + 1)}
-              >
-                <img
-                  src={image}
-                  alt={`${title} - View ${index + 2}`}
-                  className={`w-full h-full object-cover transition-transform duration-300 hover:scale-105 ${
-                    selectedImage === index + 1 ? 'ring-2 ring-primary' : ''
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openModal(index + 1);
-                  }}
+          {/* Main slot: video (if available) otherwise the selected image */}
+          <div className="w-full xl:flex-[2] h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[360px] overflow-hidden rounded-lg shadow-lg bg-black">
+            {video ? (
+              video.type === 'file' ? (
+                <video src={video.src} controls playsInline className="w-full h-full object-cover" />
+              ) : (
+                <iframe
+                  src={video.src}
+                  title={`${title} - Video`}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
                 />
-              </div>
-            ))}
+              )
+            ) : (
+              <img
+                src={images[selectedImage]}
+                alt={`${title} - Main View`}
+                className="w-full h-full object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
+                onClick={() => openModal(selectedImage)}
+              />
+            )}
           </div>
+
+          {/* Thumbnail Grid */}
+          {thumbs.length > 0 && (
+            <div className="w-full xl:flex-[1] grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
+              {thumbs.map((image, index) => {
+                const actual = video ? index : index + 1;
+                return (
+                  <div
+                    key={actual}
+                    className="aspect-[16/10] sm:aspect-[4/3] lg:aspect-[309/178] w-full cursor-pointer overflow-hidden rounded-lg shadow-sm transition-all duration-300 hover:opacity-75 hover:shadow-md"
+                    onClick={() => openModal(actual)}
+                  >
+                    <img
+                      src={image}
+                      alt={`${title} - View ${actual + 1}`}
+                      className={`w-full h-full object-cover transition-transform duration-300 hover:scale-105 ${
+                        !video && selectedImage === actual ? 'ring-2 ring-primary' : ''
+                      }`}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
         
         {/* Mobile Image Navigation - Only show on mobile when thumbnails are hidden */}
-        <div className="flex justify-center mt-4 sm:mt-6 xl:hidden">
+        {!video && hasImages && <div className="flex justify-center mt-4 sm:mt-6 xl:hidden">
+
           <div className="flex space-x-2">
             {images.map((_, index) => (
               <button
@@ -83,7 +106,7 @@ const PropertyGallery = ({ images, title }: PropertyGalleryProps) => {
               />
             ))}
           </div>
-        </div>
+        </div>}
       </div>
 
       {/* Fullscreen Image Modal */}

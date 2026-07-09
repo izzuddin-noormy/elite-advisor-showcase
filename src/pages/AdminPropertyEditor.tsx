@@ -20,7 +20,7 @@ import type { PropertyRow, School } from '@/integrations/supabase/cms-types';
 const empty: any = {
   slug: '', title_en: '', title_zh: '', property_type: '', price: 0, location: '', address: '',
   beds: 0, baths: 0, sqft: 0, status: 'available', featured: false, published: true,
-  image_url: '', gallery: [], description_en: '', description_zh: '', overview_en: '', overview_zh: '',
+  image_url: '', video_url: '', gallery: [], description_en: '', description_zh: '', overview_en: '', overview_zh: '',
   features: { interior_en: [], interior_zh: [], exterior_en: [], exterior_zh: [], style_en: '', style_zh: '', lot_size: '' },
   schools: { elementary: [], high_school: [] },
   other_details: { days_on_market: 0, year_built: 0, garage_en: '', garage_zh: '', accessibility_en: [], accessibility_zh: [], heating_en: '', heating_zh: '', cooling_en: '', cooling_zh: '' },
@@ -211,6 +211,11 @@ const AdminPropertyEditor = () => {
           <TabsContent value="media" className="mt-4 space-y-6">
             <Card><CardHeader><CardTitle>Cover Image</CardTitle></CardHeader><CardContent>
               <ImageUploader value={form.image_url} onChange={(url) => set({ image_url: url })} folder="properties" label="" />
+            </CardContent></Card>
+            <Card><CardHeader><CardTitle>Video (optional)</CardTitle></CardHeader><CardContent className="space-y-2">
+              <Label>Video URL</Label>
+              <Input value={form.video_url || ''} onChange={(e) => set({ video_url: e.target.value })} placeholder="https://youtube.com/watch?v=... , Vimeo, or a direct .mp4 link" />
+              <p className="text-sm text-muted-foreground">When set, the detail page shows this video in the main slot instead of the cover image. Supports YouTube, Vimeo, and direct video files.</p>
             </CardContent></Card>
             <Card><CardHeader><CardTitle>Gallery</CardTitle></CardHeader><CardContent className="space-y-4">
               {gallery.map((url: string, i: number) => (

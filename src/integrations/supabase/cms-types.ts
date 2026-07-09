@@ -71,6 +71,7 @@ export interface PropertyRow {
   featured: boolean | null;
   published: boolean | null;
   image_url: string | null;
+  video_url: string | null;
   gallery: string[] | null;
   description_en: string;
   description_zh: string;
