@@ -11,10 +11,21 @@ import { breadcrumbJsonLd, faqJsonLd } from '@/lib/jsonld';
 import { Loader2, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 const stripHtml = (html?: string | null) => (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+const firstSentence = (s?: string | null) => { const t = stripHtml(s); const m = t.match(/^[\s\S]*?[.。]/); return (m ? m[0] : t).trim(); };
+
+// Cinematic background stills carried over from the Aurelia cinematic template
+const CINE_BG = [
+  'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2400&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2400&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=2400&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2400&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2400&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2400&auto=format&fit=crop',
+];
 
 type Panel =
   | { type: 'hero'; video?: string | null; img?: string | null; eyebrow: string; title: string; text: string; price?: string | null }
-  | { type: 'text'; video?: string | null; img?: string | null; eyebrow: string; title: string; text: string; specs?: { label: string; value: string }[] }
+  | { type: 'text'; video?: string | null; img?: string | null; eyebrow: string; title: string; text: string; specs?: { label: string; value: string }[]; center?: boolean }
   | { type: 'location'; img?: string | null; eyebrow: string; title: string; items: string[] }
   | { type: 'plan'; eyebrow: string; title: string; text: string }
   | { type: 'gallery'; eyebrow: string; title: string; images: string[] }
@@ -54,21 +65,31 @@ const NewLaunchDetail = () => {
     const highlights = d.highlights || [];
     const connectivity = (d.connectivity || []).map((c) => pick(language, c.text_en, c.text_zh)).filter(Boolean);
 
+    // Cinematic background stills (from the Aurelia cinematic template)
+    const bg = (i: number) => CINE_BG[i % CINE_BG.length];
+    const overviewLead = firstSentence(pick(language, d.overview_en, d.overview_zh));
+
     const panels: Panel[] = [];
     panels.push({ type: 'hero', video: d.hero_video_url, img: d.hero_image, eyebrow: `${status} · ${loc}`, title: name, text: tagline, price: d.price_from });
-    panels.push({ type: 'text', img: g(0), eyebrow: `— ${t('newLaunch.overview')}`, title: tagline || name, text: stripHtml(pick(language, d.overview_en, d.overview_zh)), specs: specs.slice(0, 3) });
+    // 02 — Overview (minimal: short heading + one-line lead)
+    panels.push({ type: 'text', img: bg(0), eyebrow: `— ${t('newLaunch.overview')}`, title: tagline || name, text: overviewLead, specs: specs.slice(0, 3) });
+    // 03–06 — Highlights
     highlights.forEach((h, i) => {
       panels.push({
-        type: 'text', img: g(i + 1),
+        type: 'text', img: bg(i + 1),
         eyebrow: `0${i + 1} — ${pick(language, h.title_en, h.title_zh)}`,
         title: pick(language, h.title_en, h.title_zh),
         text: pick(language, h.desc_en, h.desc_zh),
       });
     });
-    if (connectivity.length) panels.push({ type: 'location', img: g(highlights.length + 1), eyebrow: `— ${t('newLaunch.location')}`, title: loc, items: connectivity });
-    panels.push({ type: 'plan', eyebrow: `— ${t('newLaunch.factSheet')}`, title: t('newLaunch.overview'), text: tagline });
+    // 07 — Location
+    if (connectivity.length) panels.push({ type: 'location', img: bg(5), eyebrow: `— ${t('newLaunch.location')}`, title: loc, items: connectivity });
+    // 08 — Lifestyle (section-2 video)
+    panels.push({ type: 'text', video: '/videos/aurelia-living.mp4', img: bg(0), eyebrow: `— ${t('newLaunch.life')}`, title: t('newLaunch.lifeTitle'), text: t('newLaunch.lifeText') });
+    // 09 — Gallery
     if (gallery.length) panels.push({ type: 'gallery', eyebrow: `— ${t('newLaunch.gallery')}`, title: t('newLaunch.gallery'), images: gallery });
-    panels.push({ type: 'contact', img: g(2), eyebrow: t('newLaunch.register'), title: t('newLaunch.registerTitle'), text: t('newLaunch.registerSubtitle') });
+    // 10 — Contact
+    panels.push({ type: 'contact', img: bg(4), eyebrow: t('newLaunch.register'), title: t('newLaunch.registerTitle'), text: t('newLaunch.registerSubtitle') });
     return panels;
   };
   const panels = buildPanels();
@@ -214,7 +235,7 @@ const NewLaunchDetail = () => {
       <style>{CINE_CSS}</style>
 
       <header className="cine-header">
-        <Link to="/" className="cine-logo">Mu SiChen</Link>
+        <Link to="/" className="cine-logo" aria-label="Mu SiChen — Home"><span className="cine-logo-mu">Mu</span><span className="cine-logo-sc">SiChen</span></Link>
         <div className="cine-header-right">
           <LanguageSwitch />
           <a className="cine-menu" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer">{t('newLaunch.register')}</a>
@@ -235,10 +256,10 @@ const NewLaunchDetail = () => {
             return (
               <section key={i} className="cine-panel cine-gallery-panel">
                 <div className="cine-caption">
-                  <div className="eyebrow rv">{p.eyebrow}</div>
-                  <h2 className="rv">{p.title}</h2>
+                  <div className="eyebrow">{p.eyebrow}</div>
+                  <h2>{p.title}</h2>
                 </div>
-                <div className="cine-grid rv">
+                <div className="cine-grid">
                   {p.images.map((url, gi) => (
                     <button key={gi} className="cine-grid-item" onClick={() => setLightbox(gi)}>
                       <img src={url} alt={`${name} ${gi + 1}`} loading="lazy" />
@@ -323,7 +344,7 @@ const CINE_CSS = `
 .cine{--ivory:#f3efe7;--ivory-dim:rgba(243,239,231,.62);--gold:#c9a96a;--ink:#0c0b09;--cserif:'Playfair Display',Georgia,serif;--csans:'Inter',system-ui,sans-serif;background:var(--ink);color:var(--ivory);font-family:var(--csans);position:fixed;inset:0;z-index:0;overflow:hidden}
 @media (pointer:fine){.cine,.cine a,.cine button{cursor:none}}
 .cine ::selection{background:var(--gold);color:var(--ink)}
-.cine-main{height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;perspective:1200px}
+.cine-main{height:100dvh;overflow-y:auto;scroll-snap-type:y proximity;perspective:1200px}
 .cine-panel{position:relative;height:100dvh;scroll-snap-align:start;overflow:hidden;display:flex;align-items:flex-end}
 .cine-media{position:absolute;inset:-6%;z-index:0;will-change:transform;transform-style:preserve-3d}
 .cine-media video,.cine-media .cine-kenburns{width:100%;height:100%;object-fit:cover;display:block}
@@ -348,7 +369,9 @@ const CINE_CSS = `
 .cine .inview .rv{opacity:1;transform:translateY(0)}
 .cine .inview .rv:nth-child(2){transition-delay:.12s}.cine .inview .rv:nth-child(3){transition-delay:.24s}.cine .inview .rv:nth-child(4){transition-delay:.36s}
 .cine-header{position:absolute;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:1.5rem clamp(1.4rem,4vw,3.4rem)}
-.cine-logo{font-family:var(--cserif);font-size:1.25rem;letter-spacing:.28em;text-transform:uppercase;color:#fff;text-decoration:none}
+.cine-logo{font-family:var(--cserif);font-size:1.6rem;font-weight:500;letter-spacing:0;text-transform:none;text-decoration:none;line-height:1}
+.cine-logo-mu{color:#fff}
+.cine-logo-sc{color:var(--gold);margin-left:.3rem}
 .cine-header-right{display:flex;align-items:center;gap:1rem}
 .cine-menu{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.4);padding:.6rem 1.2rem;border-radius:99px}
 .cine-menu:hover{border-color:var(--gold);color:var(--gold)}
@@ -362,6 +385,8 @@ const CINE_CSS = `
 @keyframes cinedrip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}56%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 .cine-hero{align-items:center;justify-content:center;text-align:center}
 .cine-hero .cine-caption{padding-bottom:0;max-width:1000px}
+.cine-hero .cine-caption p{margin-inline:auto}
+.cine-hero .cine-price{text-align:center}
 .cine-hero .eyebrow{justify-content:center}
 .cta-row{margin-top:2.2rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
 .cine .btn{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;text-decoration:none;padding:1.05rem 2.3rem;border-radius:99px;transition:all .35s ease;border:0}
@@ -381,10 +406,10 @@ const CINE_CSS = `
 .blueprint.inview .bp-svg .draw{stroke-dashoffset:0 !important}
 .blueprint .cine-caption{max-width:1100px}
 .blueprint h2{font-size:clamp(3.4rem,9vw,7.5rem);mix-blend-mode:screen}
-.cine-gallery-panel{background:#070706;flex-direction:column;justify-content:center;align-items:stretch;padding:8vh clamp(1.4rem,6vw,6rem)}
+.cine-gallery-panel{background:#070706;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:14vh clamp(1.4rem,6vw,6rem) 9vh;height:auto;min-height:100dvh;scroll-snap-align:start}
 .cine-gallery-panel .cine-caption{padding:0 0 2rem;max-width:none}
-.cine-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-height:66vh;overflow:auto}
-.cine-grid-item{border:0;padding:0;overflow:hidden;background:#111;aspect-ratio:4/3}
+.cine-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.cine-grid-item{border:0;padding:0;overflow:hidden;background:#111;aspect-ratio:4/3;border-radius:2px}
 .cine-grid-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
 .cine-grid-item:hover img{transform:scale(1.06)}
 @media (max-width:640px){.cine-dots{display:none}.specline{gap:1.1rem}.cine-grid{grid-template-columns:repeat(2,1fr)}}
