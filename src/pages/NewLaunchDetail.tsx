@@ -1,17 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import LanguageSwitch from '@/components/LanguageSwitch';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSettings } from '@/lib/useSettings';
 import { supabase } from '@/integrations/supabase/client';
 import { pick } from '@/integrations/supabase/cms-types';
 import type { DevelopmentRow } from '@/integrations/supabase/cms-types';
 import { breadcrumbJsonLd, faqJsonLd } from '@/lib/jsonld';
-import { getVideoEmbed } from '@/lib/video';
-import { Loader2, MapPin, Check, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Loader2, ChevronLeft, ChevronRight, X } from 'lucide-react';
+
+const stripHtml = (html?: string | null) => (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+type Panel =
+  | { type: 'hero'; video?: string | null; img?: string | null; eyebrow: string; title: string; text: string; price?: string | null }
+  | { type: 'text'; video?: string | null; img?: string | null; eyebrow: string; title: string; text: string; specs?: { label: string; value: string }[] }
+  | { type: 'location'; img?: string | null; eyebrow: string; title: string; items: string[] }
+  | { type: 'plan'; eyebrow: string; title: string; text: string }
+  | { type: 'gallery'; eyebrow: string; title: string; images: string[] }
+  | { type: 'contact'; img?: string | null; eyebrow: string; title: string; text: string };
 
 const NewLaunchDetail = () => {
   const { slug } = useParams();
@@ -19,191 +26,377 @@ const NewLaunchDetail = () => {
   const { settings } = useSettings();
   const [d, setD] = useState<DevelopmentRow | null>(null);
   const [loading, setLoading] = useState(true);
+  const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let active = true;
+    let on = true;
     (async () => {
       setLoading(true);
       const { data } = await supabase.from('developments').select('*').eq('slug', slug).eq('published', true).maybeSingle();
-      if (active) { setD(data as unknown as DevelopmentRow); setLoading(false); }
+      if (on) { setD(data as unknown as DevelopmentRow); setLoading(false); }
     })();
-    return () => { active = false; };
+    return () => { on = false; };
   }, [slug]);
 
-  if (loading) return <div className="min-h-screen"><Navigation /><div className="flex items-center justify-center py-40"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div><Footer /></div>;
-  if (!d) return <div className="min-h-screen"><Navigation /><div className="container mx-auto px-6 py-40 text-center"><h1 className="text-2xl font-serif text-primary">{t('notFound.message')}</h1></div><Footer /></div>;
+  // Build panels from CMS data
+  const buildPanels = (): Panel[] => {
+    if (!d) return [];
+    const name = pick(language, d.name_en, d.name_zh);
+    const tagline = pick(language, d.tagline_en, d.tagline_zh);
+    const loc = pick(language, d.location_en, d.location_zh);
+    const status = pick(language, d.status_en, d.status_zh);
+    const gallery = d.gallery || [];
+    const g = (i: number) => gallery.length ? gallery[i % gallery.length] : d.hero_image;
+    const specs = (d.specs || []).map((s) => ({ label: pick(language, s.label_en, s.label_zh), value: pick(language, s.value_en, s.value_zh) }));
+    const highlights = d.highlights || [];
+    const connectivity = (d.connectivity || []).map((c) => pick(language, c.text_en, c.text_zh)).filter(Boolean);
+
+    const panels: Panel[] = [];
+    panels.push({ type: 'hero', video: d.hero_video_url, img: d.hero_image, eyebrow: `${status} · ${loc}`, title: name, text: tagline, price: d.price_from });
+    panels.push({ type: 'text', img: g(0), eyebrow: `— ${t('newLaunch.overview')}`, title: tagline || name, text: stripHtml(pick(language, d.overview_en, d.overview_zh)), specs: specs.slice(0, 3) });
+    highlights.forEach((h, i) => {
+      panels.push({
+        type: 'text', img: g(i + 1),
+        eyebrow: `0${i + 1} — ${pick(language, h.title_en, h.title_zh)}`,
+        title: pick(language, h.title_en, h.title_zh),
+        text: pick(language, h.desc_en, h.desc_zh),
+      });
+    });
+    if (connectivity.length) panels.push({ type: 'location', img: g(highlights.length + 1), eyebrow: `— ${t('newLaunch.location')}`, title: loc, items: connectivity });
+    panels.push({ type: 'plan', eyebrow: `— ${t('newLaunch.factSheet')}`, title: t('newLaunch.overview'), text: tagline });
+    if (gallery.length) panels.push({ type: 'gallery', eyebrow: `— ${t('newLaunch.gallery')}`, title: t('newLaunch.gallery'), images: gallery });
+    panels.push({ type: 'contact', img: g(2), eyebrow: t('newLaunch.register'), title: t('newLaunch.registerTitle'), text: t('newLaunch.registerSubtitle') });
+    return panels;
+  };
+  const panels = buildPanels();
+
+  // Cinematic engine: media loader, in-view reveals, parallax, mouse, cursor, blueprint self-draw
+  useEffect(() => {
+    if (!d || !rootRef.current || !mainRef.current) return;
+    const root = rootRef.current;
+    const main = mainRef.current;
+    const panelEls = [...root.querySelectorAll<HTMLElement>('.cine-panel')];
+    const fine = window.matchMedia('(pointer:fine)').matches;
+
+    // 1) media loader (video with Ken Burns image fallback)
+    panelEls.forEach((panel) => {
+      const holder = panel.querySelector<HTMLElement>('.cine-media');
+      if (!holder) return;
+      const vSrc = panel.dataset.video;
+      const iSrc = panel.dataset.img;
+      const useImage = () => {
+        holder.innerHTML = '';
+        if (!iSrc) return;
+        const kb = document.createElement('div');
+        kb.className = 'cine-kenburns';
+        kb.style.backgroundImage = `url('${iSrc}')`;
+        holder.appendChild(kb);
+      };
+      if (vSrc) {
+        const v = document.createElement('video');
+        v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
+        v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+        v.preload = 'metadata'; v.src = vSrc; if (iSrc) v.poster = iSrc;
+        v.addEventListener('error', useImage);
+        const to = setTimeout(() => { if (v.readyState < 2) useImage(); }, 6000);
+        v.addEventListener('canplay', () => clearTimeout(to));
+        holder.appendChild(v);
+      } else { useImage(); }
+    });
+
+    // 2) intersection observer → reveals, active index, video play/pause
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        const idx = panelEls.indexOf(en.target as HTMLElement);
+        const vid = (en.target as HTMLElement).querySelector('video');
+        if (en.isIntersecting && en.intersectionRatio > 0.55) {
+          (en.target as HTMLElement).classList.add('inview');
+          setActive(idx);
+          if (vid) vid.play().catch(() => {});
+        } else if (en.intersectionRatio < 0.15) {
+          if (vid) vid.pause();
+        }
+      });
+    }, { root: main, threshold: [0.15, 0.55] });
+    panelEls.forEach((p) => io.observe(p));
+
+    // 3) parallax paint
+    let ticking = false;
+    const paint = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      panelEls.forEach((p) => {
+        const r = p.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const prog = (vh - r.top) / (vh + r.height);
+        const c = prog - 0.5;
+        const media = p.querySelector<HTMLElement>('.cine-media');
+        const cap = p.querySelector<HTMLElement>('.cine-caption');
+        if (media) media.style.transform = `translate3d(0, ${c * -9}%, 0) scale(${1.08 + Math.abs(c) * 0.1}) rotateX(${c * -3}deg)`;
+        if (cap) cap.style.transform = `translate3d(0, ${c * 26}px, 0) rotateX(${c * 5}deg)`;
+        const bp = p.querySelector<HTMLElement>('.bp-stage');
+        if (bp) { const tilt = Math.max(0, -c * 130); bp.style.transform = `rotateX(${tilt}deg) translateY(${c * -6}%) scale(${1 - Math.abs(c) * 0.12})`; }
+      });
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(paint); } };
+    main.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', paint);
+    paint();
+
+    // 4) mouse parallax + 6) custom cursor
+    let mx = 0, my = 0, tx = 0, ty = 0, raf1 = 0, raf2 = 0;
+    let dot: HTMLElement | null = null, ring: HTMLElement | null = null, glow: HTMLElement | null = null;
+    const onMove = (e: MouseEvent) => { tx = e.clientX / window.innerWidth - 0.5; ty = e.clientY / window.innerHeight - 0.5; };
+    if (fine) {
+      window.addEventListener('mousemove', onMove, { passive: true });
+      const loop = () => {
+        mx += (tx - mx) * 0.06; my += (ty - my) * 0.06;
+        const act = panelEls.find((p) => { const r = p.getBoundingClientRect(); return r.top < window.innerHeight * 0.5 && r.bottom > window.innerHeight * 0.5; });
+        if (act) {
+          const inner = act.querySelector<HTMLElement>('.cine-media video, .cine-media .cine-kenburns, .bp-svg');
+          if (inner) inner.style.transform = `translate3d(${mx * -22}px, ${my * -14}px, 0) scale(1.06) rotateY(${mx * 2.4}deg) rotateX(${my * -1.6}deg)`;
+        }
+        raf1 = requestAnimationFrame(loop);
+      };
+      raf1 = requestAnimationFrame(loop);
+
+      dot = document.createElement('div'); dot.className = 'cine-cursor-dot';
+      ring = document.createElement('div'); ring.className = 'cine-cursor-ring';
+      glow = document.createElement('div'); glow.className = 'cine-cursor-glow';
+      root.append(glow, ring, dot);
+      let cx = innerWidth / 2, cy = innerHeight / 2, rx = cx, ry = cy, gx = cx, gy = cy;
+      const onMove2 = (e: MouseEvent) => { cx = e.clientX; cy = e.clientY; dot!.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`; };
+      window.addEventListener('mousemove', onMove2, { passive: true });
+      const cloop = () => { rx += (cx - rx) * 0.16; ry += (cy - ry) * 0.16; gx += (cx - gx) * 0.055; gy += (cy - gy) * 0.055; ring!.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`; glow!.style.transform = `translate(${gx}px,${gy}px) translate(-50%,-50%)`; raf2 = requestAnimationFrame(cloop); };
+      raf2 = requestAnimationFrame(cloop);
+      (window as any).__cineMove2 = onMove2;
+    }
+
+    // 5) blueprint self-drawing
+    root.querySelectorAll<SVGGeometryElement>('.bp-svg .draw').forEach((el, i) => {
+      let len = 300; try { len = (el as any).getTotalLength() + 2; } catch { /* noop */ }
+      el.style.strokeDasharray = String(len);
+      el.style.strokeDashoffset = String(len);
+      el.style.transition = `stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1) ${0.15 + i * 0.05}s`;
+    });
+
+    return () => {
+      io.disconnect();
+      main.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', paint);
+      window.removeEventListener('mousemove', onMove);
+      if ((window as any).__cineMove2) window.removeEventListener('mousemove', (window as any).__cineMove2);
+      cancelAnimationFrame(raf1); cancelAnimationFrame(raf2);
+      dot?.remove(); ring?.remove(); glow?.remove();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [d, language]);
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-[#0c0b09]"><Loader2 className="h-8 w-8 animate-spin text-[#c9a96a]" /></div>;
+  if (!d) return <div className="min-h-screen flex flex-col items-center justify-center bg-[#0c0b09] text-[#f3efe7]"><p className="mb-4">{t('notFound.message')}</p><Link to="/new-launch" className="text-[#c9a96a]">← {t('nav.newLaunch')}</Link></div>;
 
   const name = pick(language, d.name_en, d.name_zh);
-  const tagline = pick(language, d.tagline_en, d.tagline_zh);
-  const loc = pick(language, d.location_en, d.location_zh);
-  const status = pick(language, d.status_en, d.status_zh);
-  const overview = pick(language, d.overview_en, d.overview_zh);
   const seo = d.seo || {};
-  const gallery = d.gallery || [];
-  const highlights = d.highlights || [];
-  const specs = d.specs || [];
-  const connectivity = d.connectivity || [];
-  const video = getVideoEmbed(d.hero_video_url);
   const whatsapp = settings.whatsapp || '60168280399';
 
-  const openLightbox = (i: number) => setLightbox(i);
-  const nextImg = () => setLightbox((p) => (p === null ? p : (p + 1) % gallery.length));
-  const prevImg = () => setLightbox((p) => (p === null ? p : (p - 1 + gallery.length) % gallery.length));
-
   return (
-    <div className="min-h-screen bg-background">
+    <div className="cine" ref={rootRef}>
       <Seo
         title={pick(language, seo.meta_title_en, seo.meta_title_zh) || `${name} | Mu SiChen`}
-        description={pick(language, seo.meta_description_en, seo.meta_description_zh) || tagline}
-        keywords={seo.keywords}
-        ogImage={seo.og_image || d.hero_image || undefined}
-        ogType="article"
-        lang={language}
-        jsonLd={[
-          breadcrumbJsonLd([{ name: 'Home', url: '/' }, { name: t('nav.newLaunch'), url: '/new-launch' }, { name, url: `/new-launch/${d.slug}` }]),
-          faqJsonLd(d.faqs || [], language),
-        ]}
+        description={pick(language, seo.meta_description_en, seo.meta_description_zh) || pick(language, d.tagline_en, d.tagline_zh)}
+        keywords={seo.keywords} ogImage={seo.og_image || d.hero_image || undefined} ogType="article" lang={language}
+        jsonLd={[breadcrumbJsonLd([{ name: 'Home', url: '/' }, { name: t('nav.newLaunch'), url: '/new-launch' }, { name, url: `/new-launch/${d.slug}` }]), faqJsonLd(d.faqs || [], language)]}
       />
-      <Navigation />
 
-      {/* HERO */}
-      <section className="relative h-[88vh] min-h-[520px] w-full overflow-hidden">
-        {video ? (
-          video.type === 'file'
-            ? <video src={video.src} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" />
-            : <iframe src={video.src} title={name} className="absolute inset-0 w-full h-full" allow="autoplay; encrypted-media" allowFullScreen />
-        ) : (
-          <img src={d.hero_image || '/placeholder.svg'} alt={name} className="absolute inset-0 w-full h-full object-cover" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/40" />
-        <div className="relative z-10 h-full container mx-auto px-6 flex flex-col justify-end pb-16 text-white">
-          <span className="inline-block w-fit px-4 py-2 bg-gold text-primary text-xs font-body font-medium tracking-[0.2em] uppercase mb-6">{status}</span>
-          <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-light max-w-4xl leading-tight">{name}</h1>
-          <p className="font-body text-lg md:text-xl font-light mt-4 max-w-2xl opacity-90">{tagline}</p>
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-2 mt-6 font-body font-light">
-            <span className="inline-flex items-center"><MapPin className="h-4 w-4 mr-2 text-gold" />{loc}</span>
-            {d.price_from && <span className="text-gold font-serif text-2xl">{d.price_from}</span>}
-          </div>
-          <div className="mt-8">
-            <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer" className="inline-flex items-center px-8 py-3 bg-gold text-primary hover:bg-gold-dark transition-colors font-body text-sm font-medium tracking-wide">
-              {t('newLaunch.register')}
-            </a>
-          </div>
+      <style>{CINE_CSS}</style>
+
+      <header className="cine-header">
+        <Link to="/" className="cine-logo">Mu SiChen</Link>
+        <div className="cine-header-right">
+          <LanguageSwitch />
+          <a className="cine-menu" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer">{t('newLaunch.register')}</a>
         </div>
-      </section>
+      </header>
 
-      {/* OVERVIEW + quick facts */}
-      <section className="py-20 md:py-28">
-        <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-12">
-          <div className="lg:col-span-2">
-            <h2 className="section-heading text-primary mb-6">{t('newLaunch.overview')}</h2>
-            <div className="prose prose-lg max-w-none font-body text-muted-foreground" dangerouslySetInnerHTML={{ __html: overview }} />
-          </div>
-          <div className="bg-secondary/40 rounded-lg p-8 h-fit space-y-4">
-            <h3 className="font-serif text-xl text-primary mb-2">{t('newLaunch.factSheet')}</h3>
-            {specs.map((s, i) => (
-              <div key={i} className="flex justify-between border-b border-border pb-2 last:border-0">
-                <span className="font-body text-sm text-muted-foreground">{pick(language, s.label_en, s.label_zh)}</span>
-                <span className="font-body text-sm font-medium text-primary text-right">{pick(language, s.value_en, s.value_zh)}</span>
-              </div>
-            ))}
-            {d.developer_en && (
-              <div className="flex justify-between border-b border-border pb-2">
-                <span className="font-body text-sm text-muted-foreground">{t('newLaunch.developer')}</span>
-                <span className="font-body text-sm font-medium text-primary text-right">{pick(language, d.developer_en, d.developer_zh)}</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
+      <nav className="cine-dots">
+        {panels.map((_, i) => (
+          <button key={i} aria-label={`Section ${i + 1}`} className={i === active ? 'on' : ''} onClick={() => mainRef.current?.querySelectorAll('.cine-panel')[i]?.scrollIntoView({ behavior: 'smooth' })} />
+        ))}
+      </nav>
+      <div className="cine-counter"><b>{String(active + 1).padStart(2, '0')}</b> / {String(panels.length).padStart(2, '0')}</div>
+      <div className="cine-grain" />
 
-      {/* HIGHLIGHTS */}
-      {highlights.length > 0 && (
-        <section className="py-20 bg-secondary/30">
-          <div className="container mx-auto px-6">
-            <h2 className="section-heading text-primary text-center mb-14">{t('newLaunch.highlights')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-              {highlights.map((h, i) => (
-                <div key={i} className="text-center">
-                  <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gold/15 flex items-center justify-center"><Check className="h-5 w-5 text-gold" /></div>
-                  <h3 className="font-serif text-xl text-primary mb-2">{pick(language, h.title_en, h.title_zh)}</h3>
-                  <p className="font-body text-sm text-muted-foreground font-light leading-relaxed">{pick(language, h.desc_en, h.desc_zh)}</p>
+      <main className="cine-main" ref={mainRef}>
+        {panels.map((p, i) => {
+          if (p.type === 'gallery') {
+            return (
+              <section key={i} className="cine-panel cine-gallery-panel">
+                <div className="cine-caption">
+                  <div className="eyebrow rv">{p.eyebrow}</div>
+                  <h2 className="rv">{p.title}</h2>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* LOCATION & CONNECTIVITY */}
-      {(connectivity.length > 0 || d.location_lat) && (
-        <section className="py-20 md:py-28">
-          <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="section-heading text-primary mb-6">{t('newLaunch.location')}</h2>
-              <p className="font-body text-muted-foreground mb-6">{loc}</p>
-              <ul className="space-y-3">
-                {connectivity.map((c, i) => (
-                  <li key={i} className="flex items-start font-body text-foreground/90"><MapPin className="h-4 w-4 mr-3 mt-1 text-gold shrink-0" />{pick(language, c.text_en, c.text_zh)}</li>
-                ))}
-              </ul>
-            </div>
-            {d.location_lat && d.location_lng && (
-              <div className="rounded-lg overflow-hidden shadow-luxury h-80">
-                <iframe title="map" className="w-full h-full" loading="lazy" src={`https://www.google.com/maps?q=${d.location_lat},${d.location_lng}&output=embed`} />
+                <div className="cine-grid rv">
+                  {p.images.map((url, gi) => (
+                    <button key={gi} className="cine-grid-item" onClick={() => setLightbox(gi)}>
+                      <img src={url} alt={`${name} ${gi + 1}`} loading="lazy" />
+                    </button>
+                  ))}
+                </div>
+              </section>
+            );
+          }
+          if (p.type === 'plan') {
+            return (
+              <section key={i} className="cine-panel blueprint">
+                <div className="bp-stage">{BLUEPRINT_SVG}</div>
+                <div className="cine-caption">
+                  <div className="eyebrow rv">{p.eyebrow}</div>
+                  <h2 className="rv">{p.title}</h2>
+                  <p className="rv">{p.text}</p>
+                </div>
+              </section>
+            );
+          }
+          const isHero = p.type === 'hero';
+          return (
+            <section key={i} className={`cine-panel${isHero ? ' cine-hero' : ''}`} data-video={(p as any).video || undefined} data-img={(p as any).img || undefined}>
+              <div className="cine-media" />
+              <div className="cine-veil" />
+              <div className="cine-caption">
+                <div className="eyebrow rv">{p.eyebrow}</div>
+                {isHero ? <h1 className="rv">{p.title}</h1> : <h2 className="rv">{p.title}</h2>}
+                {'text' in p && p.text && <p className="rv">{p.text}</p>}
+                {p.type === 'hero' && p.price && <div className="cine-price rv">{p.price}</div>}
+                {p.type === 'text' && p.specs && p.specs.length > 0 && (
+                  <div className="specline rv">{p.specs.map((s, si) => (<div key={si}><b>{s.value}</b>{s.label}</div>))}</div>
+                )}
+                {p.type === 'location' && (
+                  <ul className="cine-conn rv">{p.items.map((it, ii) => (<li key={ii}>{it}</li>))}</ul>
+                )}
+                {p.type === 'contact' && (
+                  <div className="cta-row rv">
+                    <a className="btn gold" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer">{t('newLaunch.register')}</a>
+                    <button className="btn ghost" onClick={() => mainRef.current?.querySelector('.cine-panel')?.scrollIntoView({ behavior: 'smooth' })}>↑</button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </section>
-      )}
+              {isHero && <div className="cine-scrollcue">Scroll</div>}
+            </section>
+          );
+        })}
+      </main>
 
-      {/* GALLERY (second-last section) */}
-      {gallery.length > 0 && (
-        <section className="py-20 bg-secondary/30">
-          <div className="container mx-auto px-6">
-            <h2 className="section-heading text-primary text-center mb-12">{t('newLaunch.gallery')}</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 max-w-6xl mx-auto">
-              {gallery.map((url, i) => (
-                <button key={i} onClick={() => openLightbox(i)} className="group relative overflow-hidden rounded-md aspect-[4/3]">
-                  <img src={url} alt={`${name} ${i + 1}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* CTA (last section) */}
-      <section className="py-20 md:py-28">
-        <div className="container mx-auto px-6 text-center max-w-2xl">
-          <h2 className="section-heading text-primary mb-4">{t('newLaunch.registerTitle')}</h2>
-          <p className="font-body text-muted-foreground mb-8">{t('newLaunch.registerSubtitle')}</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer" className="inline-flex items-center px-8 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors font-body text-sm tracking-wide">{t('newLaunch.register')}</a>
-            <Link to="/#contact" className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors font-body text-sm tracking-wide">{t('nav.contact')}</Link>
-          </div>
+      {lightbox !== null && d.gallery && (
+        <div className="cine-lightbox" onClick={() => setLightbox(null)}>
+          <button className="cine-lb-btn" style={{ top: 20, right: 20 }} onClick={(e) => { e.stopPropagation(); setLightbox(null); }}><X /></button>
+          {d.gallery.length > 1 && <button className="cine-lb-btn" style={{ left: 20, top: '50%' }} onClick={(e) => { e.stopPropagation(); setLightbox((v) => v === null ? v : (v - 1 + d.gallery!.length) % d.gallery!.length); }}><ChevronLeft /></button>}
+          <img src={d.gallery[lightbox]} alt="" onClick={(e) => e.stopPropagation()} />
+          {d.gallery.length > 1 && <button className="cine-lb-btn" style={{ right: 20, top: '50%' }} onClick={(e) => { e.stopPropagation(); setLightbox((v) => v === null ? v : (v + 1) % d.gallery!.length); }}><ChevronRight /></button>}
         </div>
-      </section>
-
-      {/* Lightbox */}
-      <Dialog open={lightbox !== null} onOpenChange={(o) => !o && setLightbox(null)}>
-        <DialogContent className="max-w-screen-lg w-full h-screen bg-black/95 border-0 p-0 flex items-center justify-center [&>button]:hidden">
-          {lightbox !== null && (
-            <div className="relative w-full h-full flex items-center justify-center">
-              <button onClick={() => setLightbox(null)} className="absolute top-4 right-4 z-50 h-11 w-11 rounded-full bg-black/50 text-white border border-white/30 flex items-center justify-center hover:bg-black/70"><X className="h-6 w-6" /></button>
-              {gallery.length > 1 && <button onClick={prevImg} className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-50 h-12 w-12 rounded-full bg-black/50 text-white border border-white/30 flex items-center justify-center hover:bg-black/70"><ChevronLeft className="h-7 w-7" /></button>}
-              <img src={gallery[lightbox]} alt="" className="max-w-full max-h-full object-contain" />
-              {gallery.length > 1 && <button onClick={nextImg} className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-50 h-12 w-12 rounded-full bg-black/50 text-white border border-white/30 flex items-center justify-center hover:bg-black/70"><ChevronRight className="h-7 w-7" /></button>}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">{lightbox + 1} / {gallery.length}</div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      <Footer />
+      )}
     </div>
   );
 };
+
+/* The self-drawing floor-plan SVG (from the Aurelia cinematic template). */
+const BLUEPRINT_SVG = (
+  <svg className="bp-svg" viewBox="0 0 760 520" xmlns="http://www.w3.org/2000/svg" aria-label="Floor plan">
+    <g className="thin" opacity=".16">
+      <line className="draw" x1="40" y1="130" x2="720" y2="130" /><line className="draw" x1="40" y1="230" x2="720" y2="230" /><line className="draw" x1="40" y1="330" x2="720" y2="330" />
+      <line className="draw" x1="140" y1="40" x2="140" y2="480" /><line className="draw" x1="240" y1="40" x2="240" y2="480" /><line className="draw" x1="340" y1="40" x2="340" y2="480" /><line className="draw" x1="540" y1="40" x2="540" y2="480" /><line className="draw" x1="640" y1="40" x2="640" y2="480" />
+    </g>
+    <rect className="ln draw" x="40" y="40" width="680" height="440" /><rect className="thin draw" x="48" y="48" width="664" height="424" />
+    <line className="ln draw" x1="430" y1="40" x2="430" y2="180" /><line className="ln draw" x1="430" y1="250" x2="430" y2="480" /><line className="ln draw" x1="430" y1="300" x2="560" y2="300" /><line className="ln draw" x1="620" y1="300" x2="720" y2="300" />
+    <path className="ln red draw" d="M150,478 A70,70 0 0 0 82,410" /><line className="ln red draw" x1="82" y1="410" x2="82" y2="478" />
+    <rect className="ln draw" x="450" y="56" width="254" height="34" /><rect className="ln draw" x="670" y="100" width="34" height="110" /><rect className="ln draw" x="480" y="160" width="120" height="56" /><line className="thin draw" x1="480" y1="188" x2="600" y2="188" />
+    <circle className="ln draw" cx="250" cy="150" r="34" /><circle className="thin draw" cx="250" cy="103" r="9" /><circle className="thin draw" cx="250" cy="197" r="9" /><circle className="thin draw" cx="203" cy="150" r="9" /><circle className="thin draw" cx="297" cy="150" r="9" />
+    <rect className="ln draw" x="90" y="290" width="180" height="58" /><rect className="thin draw" x="300" y="298" width="52" height="42" />
+    <rect className="ln draw" x="470" y="330" width="150" height="110" /><rect className="thin draw" x="482" y="342" width="40" height="26" /><rect className="thin draw" x="530" y="342" width="40" height="26" />
+    <text x="155" y="252">LIVING</text><text x="510" y="130">KITCHEN</text><text x="500" y="400">BEDROOM</text><text x="98" y="500" className="redtxt">ENTRANCE</text>
+  </svg>
+);
+
+const CINE_CSS = `
+.cine{--ivory:#f3efe7;--ivory-dim:rgba(243,239,231,.62);--gold:#c9a96a;--ink:#0c0b09;--cserif:'Playfair Display',Georgia,serif;--csans:'Inter',system-ui,sans-serif;background:var(--ink);color:var(--ivory);font-family:var(--csans);position:fixed;inset:0;z-index:0;overflow:hidden}
+@media (pointer:fine){.cine,.cine a,.cine button{cursor:none}}
+.cine ::selection{background:var(--gold);color:var(--ink)}
+.cine-main{height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;perspective:1200px}
+.cine-panel{position:relative;height:100dvh;scroll-snap-align:start;overflow:hidden;display:flex;align-items:flex-end}
+.cine-media{position:absolute;inset:-6%;z-index:0;will-change:transform;transform-style:preserve-3d}
+.cine-media video,.cine-media .cine-kenburns{width:100%;height:100%;object-fit:cover;display:block}
+.cine-kenburns{background-size:cover;background-position:center;animation:cinekb 26s ease-in-out infinite alternate}
+@keyframes cinekb{from{transform:scale(1.02) translate3d(0,0,0)}to{transform:scale(1.14) translate3d(-1.5%,1.5%,0)}}
+.cine-veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(12,11,9,.55) 0%,rgba(12,11,9,0) 28%,rgba(12,11,9,0) 55%,rgba(12,11,9,.78) 100%)}
+.cine-grain{position:absolute;inset:0;z-index:40;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E")}
+.cine-caption{position:relative;z-index:2;padding:0 clamp(1.4rem,6vw,7rem) clamp(3.2rem,8vh,6.5rem);max-width:880px;will-change:transform,opacity;transform-style:preserve-3d}
+.cine-caption::before{content:"";position:absolute;z-index:-1;pointer-events:none;inset:-7rem -9rem -5rem -9rem;background:radial-gradient(ellipse closest-side at 40% 58%,rgba(12,11,9,.78) 0%,rgba(12,11,9,.5) 55%,rgba(12,11,9,0) 100%)}
+.cine-hero .cine-caption::before{inset:-9rem -11rem;background:radial-gradient(ellipse closest-side at 50% 50%,rgba(12,11,9,.74) 0%,rgba(12,11,9,.46) 55%,rgba(12,11,9,0) 100%)}
+.cine .eyebrow{font-family:var(--csans);font-size:.66rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem;display:flex;align-items:center;gap:.9rem}
+.cine h1,.cine h2{font-family:var(--cserif);font-weight:300;font-size:clamp(2.6rem,6.5vw,5.4rem);line-height:1.02;letter-spacing:.01em;color:var(--ivory)}
+.cine-caption p{margin-top:1.2rem;max-width:46ch;font-weight:300;font-size:clamp(.86rem,1.15vw,1rem);line-height:1.75;color:var(--ivory-dim)}
+.cine-price{margin-top:1.4rem;font-family:var(--cserif);font-size:1.9rem;color:var(--gold)}
+.specline{display:flex;gap:clamp(1.2rem,3vw,3rem);margin-top:1.8rem;flex-wrap:wrap}
+.specline div{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ivory-dim)}
+.specline b{display:block;font-family:var(--cserif);font-size:1.7rem;font-weight:400;color:var(--ivory);letter-spacing:0;text-transform:none;margin-bottom:.25rem}
+.cine-conn{margin-top:1.6rem;list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.cine-conn li{padding-left:1.4rem;position:relative;color:var(--ivory-dim);font-weight:300}
+.cine-conn li::before{content:"";position:absolute;left:0;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.cine .rv{opacity:0;transform:translateY(46px);transition:opacity 1s cubic-bezier(.2,.65,.2,1),transform 1s cubic-bezier(.2,.65,.2,1)}
+.cine .inview .rv{opacity:1;transform:translateY(0)}
+.cine .inview .rv:nth-child(2){transition-delay:.12s}.cine .inview .rv:nth-child(3){transition-delay:.24s}.cine .inview .rv:nth-child(4){transition-delay:.36s}
+.cine-header{position:absolute;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:1.5rem clamp(1.4rem,4vw,3.4rem)}
+.cine-logo{font-family:var(--cserif);font-size:1.25rem;letter-spacing:.28em;text-transform:uppercase;color:#fff;text-decoration:none}
+.cine-header-right{display:flex;align-items:center;gap:1rem}
+.cine-menu{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.4);padding:.6rem 1.2rem;border-radius:99px}
+.cine-menu:hover{border-color:var(--gold);color:var(--gold)}
+.cine-dots{position:absolute;right:clamp(.9rem,2.4vw,2.2rem);top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:.85rem}
+.cine-dots button{width:8px;height:8px;border-radius:50%;background:rgba(243,239,231,.28);transition:all .4s ease;display:block;border:0;padding:0}
+.cine-dots button.on{background:var(--gold);transform:scale(1.5)}
+.cine-counter{position:absolute;left:clamp(1.4rem,4vw,3.4rem);bottom:2rem;z-index:50;font-family:var(--cserif);font-size:.95rem;color:var(--ivory-dim);letter-spacing:.15em}
+.cine-counter b{color:var(--ivory);font-weight:400;font-size:1.5rem}
+.cine-scrollcue{position:absolute;left:50%;bottom:2.2rem;transform:translateX(-50%);z-index:3;font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;color:var(--ivory-dim);display:flex;flex-direction:column;align-items:center;gap:.7rem}
+.cine-scrollcue::after{content:"";width:1px;height:52px;background:linear-gradient(180deg,var(--gold),transparent);animation:cinedrip 2.2s ease-in-out infinite}
+@keyframes cinedrip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}56%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.cine-hero{align-items:center;justify-content:center;text-align:center}
+.cine-hero .cine-caption{padding-bottom:0;max-width:1000px}
+.cine-hero .eyebrow{justify-content:center}
+.cta-row{margin-top:2.2rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+.cine .btn{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;text-decoration:none;padding:1.05rem 2.3rem;border-radius:99px;transition:all .35s ease;border:0}
+.cine .btn.gold{background:var(--gold);color:var(--ink)}
+.cine .btn.gold:hover{background:var(--ivory)}
+.cine .btn.ghost{border:1px solid rgba(243,239,231,.35);color:var(--ivory);background:transparent;padding:1.05rem 1.4rem}
+.cine .btn.ghost:hover{border-color:var(--gold);color:var(--gold)}
+.blueprint{background:#050505;perspective:1100px}
+.bp-stage{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;padding:4vh 4vw 16vh;will-change:transform;transform-style:preserve-3d;transform-origin:50% 60%}
+.bp-svg{width:min(80vw,880px);height:auto;overflow:visible;will-change:transform}
+.bp-svg .ln{stroke:rgba(243,239,231,.92);stroke-width:1.3;fill:none;stroke-linecap:round}
+.bp-svg .thin{stroke:rgba(243,239,231,.4);stroke-width:.7;fill:none;stroke-linecap:round}
+.bp-svg .red{stroke:#c9473a}
+.bp-svg text{fill:rgba(243,239,231,.55);font-family:var(--csans);font-size:9.5px;letter-spacing:.24em;opacity:0;transition:opacity 1.2s ease 1.6s}
+.bp-svg text.redtxt{fill:#c9473a}
+.blueprint.inview .bp-svg text{opacity:1}
+.blueprint.inview .bp-svg .draw{stroke-dashoffset:0 !important}
+.blueprint .cine-caption{max-width:1100px}
+.blueprint h2{font-size:clamp(3.4rem,9vw,7.5rem);mix-blend-mode:screen}
+.cine-gallery-panel{background:#070706;flex-direction:column;justify-content:center;align-items:stretch;padding:8vh clamp(1.4rem,6vw,6rem)}
+.cine-gallery-panel .cine-caption{padding:0 0 2rem;max-width:none}
+.cine-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-height:66vh;overflow:auto}
+.cine-grid-item{border:0;padding:0;overflow:hidden;background:#111;aspect-ratio:4/3}
+.cine-grid-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.cine-grid-item:hover img{transform:scale(1.06)}
+@media (max-width:640px){.cine-dots{display:none}.specline{gap:1.1rem}.cine-grid{grid-template-columns:repeat(2,1fr)}}
+.cine-cursor-dot,.cine-cursor-ring,.cine-cursor-glow{position:fixed;top:0;left:0;z-index:60;pointer-events:none;will-change:transform}
+.cine-cursor-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);transform:translate(-50%,-50%)}
+.cine-cursor-ring{width:38px;height:38px;border-radius:50%;border:1px solid rgba(243,239,231,.8);transform:translate(-50%,-50%);mix-blend-mode:difference}
+.cine-cursor-glow{width:340px;height:340px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(201,169,106,.14) 0%,rgba(201,169,106,0) 65%);mix-blend-mode:screen}
+@media (pointer:coarse){.cine-cursor-dot,.cine-cursor-ring,.cine-cursor-glow{display:none}}
+.cine-lightbox{position:fixed;inset:0;z-index:80;background:rgba(4,4,4,.96);display:flex;align-items:center;justify-content:center}
+.cine-lightbox img{max-width:92vw;max-height:88vh;object-fit:contain}
+.cine-lb-btn{position:absolute;transform:translateY(-50%);height:46px;width:46px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#fff;display:flex;align-items:center;justify-content:center}
+@media (prefers-reduced-motion:reduce){.cine-kenburns{animation:none}.cine .rv{transition:none}}
+`;
 
 export default NewLaunchDetail;

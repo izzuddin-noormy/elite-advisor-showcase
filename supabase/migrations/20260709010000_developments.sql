@@ -99,3 +99,8 @@ INSERT INTO public.developments (
   ]'::jsonb,
   true, true, 0
 ) ON CONFLICT (slug) DO NOTHING;
+
+-- Attach the cinematic hero video for Aurelia (idempotent).
+UPDATE public.developments
+  SET hero_video_url = '/videos/aurelia-hero.mp4'
+  WHERE slug = 'aurelia-damansara-heights' AND (hero_video_url IS NULL OR hero_video_url = '');
