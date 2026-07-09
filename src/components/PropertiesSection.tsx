@@ -19,7 +19,7 @@ const statusLabel = (status: string | null, t: (k: string) => string) => {
 
 const PropertiesSection = () => {
   const { t, language } = useLanguage();
-  const [currency, setCurrency] = useState<Currency>('USD');
+  const [currency, setCurrency] = useState<Currency>('MYR');
   const [properties, setProperties] = useState<PropertyRow[]>([]);
 
   useEffect(() => {

@@ -14,7 +14,7 @@ import type { PropertyRow } from '@/integrations/supabase/cms-types';
 
 const Properties = () => {
   const { t, language } = useLanguage();
-  const [currency, setCurrency] = useState<Currency>('USD');
+  const [currency, setCurrency] = useState<Currency>('MYR');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [properties, setProperties] = useState<PropertyRow[]>([]);
