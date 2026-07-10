@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import PropertyDetail from "./pages/PropertyDetail";
 import InsightDetail from "./pages/InsightDetail";
+import InsightsList from "./pages/InsightsList";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import Admin from "./pages/Admin";
@@ -54,6 +55,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/properties" element={<Properties />} />
             <Route path="/projects/:id" element={<PropertyDetail />} />
+            <Route path="/insights" element={<InsightsList />} />
             <Route path="/insights/:id" element={<InsightDetail />} />
             <Route path="/new-launch" element={<NewLaunch />} />
             <Route path="/new-launch/:slug" element={<NewLaunchDetail />} />

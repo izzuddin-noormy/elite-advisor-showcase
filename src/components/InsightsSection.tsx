@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { pick } from '@/integrations/supabase/cms-types';
 import type { InsightRow } from '@/integrations/supabase/cms-types';
@@ -69,9 +69,9 @@ const InsightsSection = () => {
         </div>
 
         <div className="text-center mt-12">
-          <a href="#insights" className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
+          <Link to="/insights" className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
             {t('insights.viewAll')}
-          </a>
+          </Link>
         </div>
       </div>
     </section>
