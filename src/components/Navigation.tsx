@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitch from '@/components/LanguageSwitch';
 import ThemeSwitch from '@/components/ThemeSwitch';
+import Brand from '@/components/Brand';
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -49,9 +50,8 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="font-serif text-2xl font-medium tracking-tight" aria-label="Home">
-            <span className="text-primary">Mu</span>
-            <span className="text-gold ml-1">SiChen</span>
+          <Link to="/" aria-label="Mu SiChen Estates & Co. — Home">
+            <Brand size="sm" />
           </Link>
 
           {/* Navigation Links */}

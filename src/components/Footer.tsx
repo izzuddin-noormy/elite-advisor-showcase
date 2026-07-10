@@ -5,6 +5,7 @@ import { pick } from '@/integrations/supabase/cms-types';
 import type { PageRow } from '@/integrations/supabase/cms-types';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Loader2 } from 'lucide-react';
+import Brand from '@/components/Brand';
 
 const Footer = () => {
   const { t, language } = useLanguage();
@@ -27,9 +28,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
-            <div className="font-serif text-2xl font-medium tracking-tight mb-4">
-              <span className="text-primary-foreground">Mu</span>
-              <span className="text-gold ml-1">Sichen</span>
+            <div className="mb-4">
+              <Brand size="lg" />
             </div>
             <p className="font-body text-sm font-light text-primary-foreground/80 leading-relaxed">
               {t('footer.tagline')}

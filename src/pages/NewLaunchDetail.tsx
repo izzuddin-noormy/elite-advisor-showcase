@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Seo from '@/components/Seo';
 import LanguageSwitch from '@/components/LanguageSwitch';
+import Brand from '@/components/Brand';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSettings } from '@/lib/useSettings';
 import { supabase } from '@/integrations/supabase/client';
@@ -264,7 +265,7 @@ const NewLaunchDetail = () => {
 
       <header className="cine-header">
         <div className="cine-header-left">
-          <Link to="/" className="cine-logo" aria-label="Mu SiChen — Home"><span className="cine-logo-mu">Mu</span><span className="cine-logo-sc">SiChen</span></Link>
+          <Link to="/" aria-label="Mu SiChen Estates & Co. — Home"><Brand size="sm" /></Link>
           <Link to="/" className="cine-menu cine-return">← {t('newLaunch.returnHome')}</Link>
         </div>
         <div className="cine-header-right">
