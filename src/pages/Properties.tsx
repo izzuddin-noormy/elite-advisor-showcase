@@ -97,7 +97,7 @@ const Properties = () => {
                 placeholder={t('properties.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                className="w-full pl-11 pr-6 py-4 text-sm font-body font-light bg-card border-border/50 rounded-xl focus:shadow-lg focus:border-primary/20 transition-all duration-300 placeholder:text-xs placeholder:text-muted-foreground/60"
+                className="w-full pl-11 pr-6 py-4 text-sm font-body font-light bg-card border-border/50 rounded-xl focus:shadow-lg focus:border-primary/20 transition-all duration-300 placeholder:text-sm placeholder:text-muted-foreground/60"
               />
             </div>
           </div>
