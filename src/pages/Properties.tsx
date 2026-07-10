@@ -18,7 +18,7 @@ const Properties = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [properties, setProperties] = useState<PropertyRow[]>([]);
-  const itemsPerPage = 9;
+  const itemsPerPage = 12;
 
   useEffect(() => {
     (async () => {
@@ -62,9 +62,9 @@ const Properties = () => {
       <Seo title={`${t('properties.searchTitle')} | Mu SiChen`} description={t('properties.searchSubtitle')} lang={language} />
       <Navigation />
 
-      <section className="pt-24 pb-16 bg-background">
+      <section className="pt-24 pb-6 bg-background">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="section-heading text-primary mb-4">{t('properties.searchTitle')}</h1>
               <p className="font-body text-lg font-light text-muted-foreground max-w-2xl">{t('properties.searchSubtitle')}</p>
@@ -73,8 +73,13 @@ const Properties = () => {
               <CurrencySwitch currency={currency} onCurrencyChange={setCurrency} className="justify-end" />
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="max-w-2xl mx-auto mt-8">
+      {/* Sticky search bar — locks below the menu when scrolling */}
+      <div className="sticky top-16 z-40 bg-background/95 backdrop-blur-md border-y border-border/50 py-3">
+        <div className="container mx-auto px-6">
+          <div className="max-w-2xl mx-auto">
             <div className="relative">
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-muted-foreground" />
@@ -84,12 +89,12 @@ const Properties = () => {
                 placeholder={t('properties.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                className="w-full pl-12 pr-16 py-6 text-lg font-body font-light bg-card border-border/50 rounded-xl shadow-luxury focus:shadow-lg focus:border-primary/20 transition-all duration-300 placeholder:text-muted-foreground/60"
+                className="w-full pl-12 pr-16 py-4 text-base md:text-lg font-body font-light bg-card border-border/50 rounded-xl focus:shadow-lg focus:border-primary/20 transition-all duration-300 placeholder:text-muted-foreground/60"
               />
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       <section className="pb-20 bg-background">
         <div className="container mx-auto px-6">
