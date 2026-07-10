@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Plus, Pencil, Trash2, Star } from 'lucide-react';
+import { Plus, Pencil, Trash2, Star, Copy } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
@@ -84,6 +84,25 @@ const AdminProperties = () => {
     }
   };
 
+  const handleDuplicate = async (id: string) => {
+    try {
+      const { data, error } = await supabase.from('properties').select('*').eq('id', id).single();
+      if (error || !data) throw error || new Error('Not found');
+      const copy: any = { ...data };
+      delete copy.id; delete copy.created_at; delete copy.updated_at;
+      copy.slug = `${data.slug}-copy-${Math.random().toString(36).slice(2, 6)}`;
+      copy.title_en = `${data.title_en} (Copy)`;
+      copy.title_zh = data.title_zh ? `${data.title_zh}（副本）` : data.title_zh;
+      copy.featured = false;
+      const { error: insErr } = await supabase.from('properties').insert([copy]);
+      if (insErr) throw insErr;
+      toast({ title: 'Duplicated', description: 'A copy was created' });
+      fetchProperties();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-MY', {
       style: 'currency',
@@ -127,7 +146,7 @@ const AdminProperties = () => {
           </Card>
         ) : (
           properties.map((property) => (
-            <Card key={property.id} className="hover:shadow-md transition-shadow">
+            <Card key={property.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate(`/admin/properties/${property.id}`)}>
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -151,18 +170,13 @@ const AdminProperties = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 ml-4">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => navigate(`/admin/properties/${property.id}`)}
-                    >
+                    <Button variant="ghost" size="sm" title="Edit" onClick={(e) => { e.stopPropagation(); navigate(`/admin/properties/${property.id}`); }}>
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setDeleteId(property.id)}
-                    >
+                    <Button variant="ghost" size="sm" title="Duplicate" onClick={(e) => { e.stopPropagation(); handleDuplicate(property.id); }}>
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" title="Delete" onClick={(e) => { e.stopPropagation(); setDeleteId(property.id); }}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
