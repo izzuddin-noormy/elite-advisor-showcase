@@ -82,6 +82,12 @@ const AdminSettings = () => {
         <div className="space-y-2"><Label>Default Meta Description</Label><Textarea rows={2} value={form.default_meta_description || ''} onChange={(e) => set({ default_meta_description: e.target.value })} /></div>
         <ImageUploader label="Default Social Image" value={form.default_og_image || ''} onChange={(url) => set({ default_og_image: url })} folder="seo" />
       </CardContent></Card>
+
+      <Card><CardHeader><CardTitle>Analytics (PostHog)</CardTitle></CardHeader><CardContent className="space-y-4">
+        <p className="text-sm text-muted-foreground">Paste links from your PostHog project so the Dashboard can embed a summary and deep-dive links. Tracking itself is enabled via the <code>VITE_POSTHOG_KEY</code> environment variable.</p>
+        {field('Shared Dashboard URL (embed)', 'posthog_dashboard_url', 'https://us.posthog.com/shared/xxxxxxxx')}
+        {field('Project URL (for deep-dive links)', 'posthog_project_url', 'https://us.posthog.com/project/12345')}
+      </CardContent></Card>
     </div>
   );
 };

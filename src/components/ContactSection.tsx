@@ -7,6 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useSettings } from '@/lib/useSettings';
 import { supabase } from '@/integrations/supabase/client';
 import { pick } from '@/integrations/supabase/cms-types';
+import { track } from '@/lib/analytics';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
@@ -43,6 +44,7 @@ const ContactSection = () => {
         message: formData.message.trim(),
       }]);
       if (error) throw error;
+      track('contact_submit', { location: 'home_contact' });
       toast({ title: t('contact.toast.title'), description: t('contact.toast.description') });
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch {
@@ -126,11 +128,11 @@ const ContactSection = () => {
                 <h4 className="font-body text-sm font-medium text-foreground mb-4">{t('contact.info.scheduleConsultation')}</h4>
                 <div className="flex flex-col sm:flex-row gap-3">
                   {calendarUrl && (
-                    <Button variant="outline" onClick={() => setIsModalOpen(true)} className="border-gold text-gold hover:bg-gold hover:text-primary font-body font-light tracking-wide">
+                    <Button variant="outline" onClick={() => { track('cta_click', { cta: 'book_appointment', location: 'contact' }); setIsModalOpen(true); }} className="border-gold text-gold hover:bg-gold hover:text-primary font-body font-light tracking-wide">
                       {t('contact.info.bookAppointment')}
                     </Button>
                   )}
-                  <Button variant="outline" onClick={() => window.open(`https://wa.me/${whatsapp}`, '_blank')} className="border-gold text-gold hover:bg-gold hover:text-primary font-body font-light tracking-wide">
+                  <Button variant="outline" onClick={() => { track('cta_click', { cta: 'whatsapp', location: 'contact' }); window.open(`https://wa.me/${whatsapp}`, '_blank'); }} className="border-gold text-gold hover:bg-gold hover:text-primary font-body font-light tracking-wide">
                     {t('contact.info.whatsappMe')}
                   </Button>
                 </div>

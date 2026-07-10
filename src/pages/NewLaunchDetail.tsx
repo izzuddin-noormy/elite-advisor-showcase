@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { pick } from '@/integrations/supabase/cms-types';
 import type { DevelopmentRow } from '@/integrations/supabase/cms-types';
 import { breadcrumbJsonLd, faqJsonLd } from '@/lib/jsonld';
+import { track } from '@/lib/analytics';
 import { Loader2, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 const stripHtml = (html?: string | null) => (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -154,6 +155,7 @@ const NewLaunchDetail = () => {
         if (en.isIntersecting && en.intersectionRatio > 0.55) {
           (en.target as HTMLElement).classList.add('inview');
           setActive(idx);
+          track('panel_view', { index: idx + 1, dev: slug });
           if (vid) vid.play().catch(() => {});
         } else if (en.intersectionRatio < 0.15) {
           if (vid) vid.pause();
@@ -267,7 +269,7 @@ const NewLaunchDetail = () => {
         </div>
         <div className="cine-header-right">
           <LanguageSwitch />
-          <a className="cine-menu" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer">{t('newLaunch.register')}</a>
+          <a className="cine-menu" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer" onClick={() => track('cta_click', { cta: 'register', location: 'header', dev: d.slug })}>{t('newLaunch.register')}</a>
         </div>
       </header>
 
@@ -290,7 +292,7 @@ const NewLaunchDetail = () => {
                 </div>
                 <div className="cine-grid">
                   {p.images.map((url, gi) => (
-                    <button key={gi} className="cine-grid-item" onClick={() => setLightbox(gi)}>
+                    <button key={gi} className="cine-grid-item" onClick={() => { track('gallery_open', { dev: d.slug, index: gi + 1 }); setLightbox(gi); }}>
                       <img src={url} alt={`${name} ${gi + 1}`} loading="lazy" />
                     </button>
                   ))}
@@ -370,7 +372,7 @@ const NewLaunchDetail = () => {
                 )}
                 {p.type === 'contact' && (
                   <div className="cta-row rv">
-                    <a className="btn gold" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer">{t('newLaunch.register')}</a>
+                    <a className="btn gold" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noreferrer" onClick={() => track('cta_click', { cta: 'register', location: 'cta_panel', dev: d.slug })}>{t('newLaunch.register')}</a>
                     <button className="btn ghost" onClick={() => mainRef.current?.querySelector('.cine-panel')?.scrollIntoView({ behavior: 'smooth' })}>↑</button>
                   </div>
                 )}

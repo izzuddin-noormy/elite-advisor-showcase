@@ -2,7 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { trackPageview } from "@/lib/analytics";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Index from "./pages/Index";
@@ -30,6 +32,15 @@ import AdminDevelopmentEditor from "./pages/AdminDevelopmentEditor";
 
 const queryClient = new QueryClient();
 
+// Sends a PostHog pageview on every client-side route change
+const PageviewTracker = () => {
+  const location = useLocation();
+  useEffect(() => {
+    trackPageview(location.pathname + location.search);
+  }, [location.pathname, location.search]);
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
@@ -38,6 +49,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <PageviewTracker />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/properties" element={<Properties />} />

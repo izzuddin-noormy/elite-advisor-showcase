@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { getVideoEmbed } from '@/lib/video';
+import { track } from '@/lib/analytics';
 
 interface PropertyGalleryProps {
   images: string[];
@@ -23,6 +24,7 @@ const PropertyGallery = ({ images, title, videoUrl }: PropertyGalleryProps) => {
   const thumbs = video ? images.slice(0, 4) : images.slice(1, 5);
 
   const openModal = (index: number) => {
+    track('gallery_open', { context: 'property', index: index + 1 });
     setModalImageIndex(index);
     setIsModalOpen(true);
   };

@@ -195,6 +195,8 @@ export interface GlobalSettings {
   default_meta_title?: string;
   default_meta_description?: string;
   default_og_image?: string;
+  posthog_dashboard_url?: string;
+  posthog_project_url?: string;
 }
 
 export interface ContactSubmission {
