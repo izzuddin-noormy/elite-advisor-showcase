@@ -54,6 +54,8 @@
   "properties": {
     "title": "Featured Properties",
     "subtitle": "Discover exceptional properties in the most prestigious neighborhoods throughout the Kuala Lumpur metropolitan area.",
+    "searchTitle": "Search Homes",
+    "searchSubtitle": "The greatest gift you can give your family isn't a house — it's a place they can always call home and comfort within you. Let us help you find it.",
     "searchPlaceholder": "Luxury isn't a price — it's a feeling. Describe yours and we will find your perfect space.",
     "viewDetails": "View Details",
     "scheduleViewing": "Schedule Viewing",

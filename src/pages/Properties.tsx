@@ -59,15 +59,15 @@ const Properties = () => {
 
   return (
     <div className="min-h-screen">
-      <Seo title={`${t('properties.title')} | Mu SiChen`} description={t('properties.subtitle')} lang={language} />
+      <Seo title={`${t('properties.searchTitle')} | Mu SiChen`} description={t('properties.searchSubtitle')} lang={language} />
       <Navigation />
 
       <section className="pt-24 pb-16 bg-background">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
-              <h1 className="section-heading text-primary mb-4">{t('properties.title')}</h1>
-              <p className="font-body text-lg font-light text-muted-foreground max-w-2xl">{t('properties.subtitle')}</p>
+              <h1 className="section-heading text-primary mb-4">{t('properties.searchTitle')}</h1>
+              <p className="font-body text-lg font-light text-muted-foreground max-w-2xl">{t('properties.searchSubtitle')}</p>
             </div>
             <div className="mt-6 md:mt-0">
               <CurrencySwitch currency={currency} onCurrencyChange={setCurrency} className="justify-end" />

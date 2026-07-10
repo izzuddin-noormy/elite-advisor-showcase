@@ -54,6 +54,8 @@
   "properties": {
     "title": "精选房产",
     "subtitle": "探索吉隆坡大都市区最负盛名社区中的卓越房产",
+    "searchTitle": "寻找理想家园",
+    "searchSubtitle": "您能给家人最好的礼物，不是一栋房子，而是一个他们永远可以称之为家、并在您身边感到安心的地方。让我们帮您找到它。",
     "searchPlaceholder": "奢华不是价格——而是一种感觉。描述您的需求，我们将为您找到完美的空间。",
     "viewDetails": "查看详情",
     "scheduleViewing": "预约观看",
