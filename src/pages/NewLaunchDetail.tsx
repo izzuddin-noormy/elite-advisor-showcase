@@ -53,6 +53,20 @@ const NewLaunchDetail = () => {
     return () => { on = false; };
   }, [slug]);
 
+  // Keyboard navigation for the gallery lightbox (← / → / Esc)
+  useEffect(() => {
+    if (lightbox === null) return;
+    const len = d?.gallery?.length || 0;
+    if (!len) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') setLightbox((v) => (v === null ? v : (v + 1) % len));
+      else if (e.key === 'ArrowLeft') setLightbox((v) => (v === null ? v : (v - 1 + len) % len));
+      else if (e.key === 'Escape') setLightbox(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightbox, d]);
+
   // Build panels from CMS data
   const buildPanels = (): Panel[] => {
     if (!d) return [];

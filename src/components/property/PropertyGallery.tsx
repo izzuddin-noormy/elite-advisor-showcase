@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
@@ -38,6 +38,19 @@ const PropertyGallery = ({ images, title, videoUrl }: PropertyGalleryProps) => {
   const prevImage = () => {
     setModalImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
+
+  // Keyboard navigation (← / →) and Escape while the modal is open
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') nextImage();
+      else if (e.key === 'ArrowLeft') prevImage();
+      else if (e.key === 'Escape') closeModal();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModalOpen, images.length]);
 
   return (
     <section className="bg-secondary/20 py-4 sm:py-6 lg:py-8">
