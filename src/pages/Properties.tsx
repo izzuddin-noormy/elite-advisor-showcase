@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
@@ -19,6 +19,14 @@ const Properties = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [properties, setProperties] = useState<PropertyRow[]>([]);
   const itemsPerPage = 12;
+  const resultsRef = useRef<HTMLElement>(null);
+
+  // When a search term is entered, bring the results up just below the search bar
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [searchQuery]);
 
   useEffect(() => {
     (async () => {
@@ -77,26 +85,26 @@ const Properties = () => {
       </section>
 
       {/* Sticky search bar — locks below the menu when scrolling */}
-      <div className="sticky top-16 z-40 bg-background/95 backdrop-blur-md border-y border-border/50 py-3">
+      <div className="sticky top-16 z-40 bg-background/95 backdrop-blur-md border-y border-border/50 py-6">
         <div className="container mx-auto px-6">
           <div className="max-w-2xl mx-auto">
             <div className="relative">
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-muted-foreground" />
+                <Search className="h-4 w-4 text-muted-foreground" />
               </div>
               <Input
                 type="text"
                 placeholder={t('properties.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                className="w-full pl-12 pr-16 py-4 text-base md:text-lg font-body font-light bg-card border-border/50 rounded-xl focus:shadow-lg focus:border-primary/20 transition-all duration-300 placeholder:text-muted-foreground/60"
+                className="w-full pl-11 pr-6 py-4 text-sm font-body font-light bg-card border-border/50 rounded-xl focus:shadow-lg focus:border-primary/20 transition-all duration-300 placeholder:text-xs placeholder:text-muted-foreground/60"
               />
             </div>
           </div>
         </div>
       </div>
 
-      <section className="pb-20 bg-background">
+      <section ref={resultsRef} className="pb-20 pt-8 bg-background scroll-mt-40">
         <div className="container mx-auto px-6">
           {paginatedProperties.length === 0 ? (
             <p className="text-center text-muted-foreground py-12">No properties found.</p>
