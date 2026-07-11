@@ -1,8 +1,13 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import Seo from '@/components/Seo';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { supabase } from '@/integrations/supabase/client';
+import { pick } from '@/integrations/supabase/cms-types';
+import type { PropertyRow } from '@/integrations/supabase/cms-types';
+import { propertyJsonLd, breadcrumbJsonLd, faqJsonLd } from '@/lib/jsonld';
 import PropertyGallery from '@/components/property/PropertyGallery';
 import PropertyOverview from '@/components/property/PropertyOverview';
 import PropertyDetails from '@/components/property/PropertyDetails';
@@ -10,208 +15,159 @@ import PropertyMap from '@/components/property/PropertyMap';
 import MortgageCalculator from '@/components/property/MortgageCalculator';
 import SchoolInformation from '@/components/property/SchoolInformation';
 import OtherDetails from '@/components/property/OtherDetails';
-
-interface Property {
-  id: string;
-  title: string;
-  address: string;
-  price: number;
-  beds: number;
-  baths: number;
-  sqft: number;
-  propertyType: string;
-  images: string[];
-  description: string;
-  overview: string;
-  features: {
-    interior: string[];
-    exterior: string[];
-    style: string;
-    lotSize: string;
-  };
-  location: {
-    lat: number;
-    lng: number;
-  };
-  schools: {
-    elementary: { name: string; rating: number; distance: string }[];
-    highSchool: { name: string; rating: number; distance: string }[];
-  };
-  otherDetails: {
-    daysOnMarket: number;
-    yearBuilt: number;
-    garage: string;
-    accessibility: string[];
-    heating: string;
-    cooling: string;
-  };
-}
+import { Loader2 } from 'lucide-react';
 
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [row, setRow] = useState<PropertyRow | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Dummy property data - would be fetched by ID in real app
-  const properties: Record<string, Property> = {
-    'imperial-suite': {
-      id: 'imperial-suite',
-      title: 'The Imperial Suite',
-      address: '2847 P Street NW, Washington, DC 20007',
-      price: 8880000,
-      beds: 5,
-      baths: 4.5,
-      sqft: 4200,
-      propertyType: 'Penthouse',
-      images: [
-        '/images/imperial-0.jpg',
-        '/images/imperial-1.jpg',
-        '/images/imperial-2.jpg',
-        '/images/imperial-5.jpg',
-        '/images/imperial-4.jpg'
-      ],
-      description: 'A luxury condominium set in a quiet alcove that comprises stately royal houses, embassies and official residences in the vicinity. Situated in the heart of Kuala Lumpur, it is well connected via excellent transport infrastructure and lies close to the Petronas Twin Tower and world-class amenities.',
-      overview: 'This exceptional penthouse offers unparalleled luxury living in one of the most prestigious locations in the city. The spacious layout features floor-to-ceiling windows, premium finishes, and breathtaking city views. The gourmet kitchen is equipped with top-of-the-line appliances, while the master suite boasts a private terrace and spa-like bathroom. Additional amenities include a private elevator, smart home technology, and access to exclusive building facilities including a rooftop pool, fitness center, and concierge services.',
-      features: {
-        interior: ['Hardwood Floors', 'Granite Countertops', 'Stainless Steel Appliances', 'Walk-in Closets', 'Fireplace', 'Central Air', 'High Ceilings'],
-        exterior: ['Private Terrace', 'City Views', 'Balcony', 'Rooftop Access'],
-        style: 'Contemporary',
-        lotSize: '0.25 acres'
-      },
-      location: {
-        lat: 40.7831,
-        lng: -73.9712
-      },
-      schools: {
-        elementary: [
-          { name: 'Georgetown Elementary', rating: 9, distance: '0.3 miles' },
-          { name: 'Potomac Primary School', rating: 8, distance: '0.5 miles' }
-        ],
-        highSchool: [
-          { name: 'Georgetown Preparatory', rating: 9, distance: '0.8 miles' },
-          { name: 'Washington International School', rating: 8, distance: '1.2 miles' }
-        ]
-      },
-      otherDetails: {
-        daysOnMarket: 45,
-        yearBuilt: 2019,
-        garage: '2-car attached',
-        accessibility: ['Elevator Access', 'Wide Doorways', 'Accessible Bathroom'],
-        heating: 'Central Heating',
-        cooling: 'Central Air Conditioning'
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      setLoading(true);
+      const { data } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('slug', id)
+        .eq('published', true)
+        .maybeSingle();
+      if (active) {
+        setRow(data as unknown as PropertyRow);
+        setLoading(false);
       }
+    })();
+    return () => { active = false; };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="flex items-center justify-center py-40"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!row) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <div className="container mx-auto px-6 py-40 text-center">
+          <h1 className="text-2xl font-serif text-primary mb-4">{t('notFound.message')}</h1>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  const f = row.features || {};
+  const od = row.other_details || {};
+  const sc = row.schools || {};
+
+  const property = {
+    title: pick(language, row.title_en, row.title_zh),
+    address: row.address || row.location,
+    price: row.price,
+    beds: row.beds || 0,
+    baths: row.baths || 0,
+    sqft: row.sqft || 0,
+    propertyType: row.property_type || '',
+    description: pick(language, row.description_en, row.description_zh),
+    overview: pick(language, row.overview_en, row.overview_zh) || pick(language, row.description_en, row.description_zh),
+    images: (row.gallery && row.gallery.length ? row.gallery : [row.image_url].filter(Boolean)) as string[],
+    features: {
+      interior: (language === 'zh' ? f.interior_zh : f.interior_en) || f.interior_en || [],
+      exterior: (language === 'zh' ? f.exterior_zh : f.exterior_en) || f.exterior_en || [],
+      style: pick(language, f.style_en, f.style_zh),
+      lotSize: f.lot_size || '',
     },
-    'georgetown-estate': {
-      id: 'georgetown-estate',
-      title: 'Georgetown Estate',
-      address: '2847 P Street NW, Washington, DC',
-      price: 4850000,
-      beds: 5,
-      baths: 4.5,
-      sqft: 4200,
-      propertyType: 'Estate',
-      images: ['/images/imperial-1.jpg', '/images/imperial-2.jpg', '/images/imperial-3.jpg'],
-      description: 'Exquisite Georgetown estate featuring original hardwood floors, chef\'s kitchen, and private garden.',
-      overview: 'This magnificent Georgetown estate combines historic charm with modern luxury. The property features original architectural details, premium finishes, and a beautifully landscaped private garden. The chef\'s kitchen is equipped with professional-grade appliances, while the spacious living areas offer elegant entertaining spaces.',
-      features: {
-        interior: ['Original Hardwood Floors', 'Chef\'s Kitchen', 'Crown Molding', 'Marble Bathrooms', 'Wine Cellar'],
-        exterior: ['Private Garden', 'Covered Patio', 'Historic Facade'],
-        style: 'Historic Georgian',
-        lotSize: '0.18 acres'
-      },
-      location: { lat: 38.9072, lng: -77.0369 },
-      schools: {
-        elementary: [{ name: 'Georgetown Elementary', rating: 9, distance: '0.2 miles' }],
-        highSchool: [{ name: 'Georgetown Preparatory', rating: 9, distance: '0.5 miles' }]
-      },
-      otherDetails: {
-        daysOnMarket: 30,
-        yearBuilt: 1925,
-        garage: '2-car detached',
-        accessibility: ['Wide Doorways'],
-        heating: 'Radiant Heating',
-        cooling: 'Central Air'
-      }
+    schools: {
+      elementary: sc.elementary || [],
+      highSchool: sc.high_school || [],
     },
-    'bethesda-contemporary': {
-      id: 'bethesda-contemporary',
-      title: 'Bethesda Contemporary',
-      address: '7821 Woodmont Avenue, Bethesda, MD',
-      price: 3200000,
-      beds: 4,
-      baths: 3.5,
-      sqft: 3800,
-      propertyType: 'Contemporary',
-      images: ['/images/imperial-0.jpg', '/images/imperial-4.jpg', '/images/imperial-5.jpg'],
-      description: 'Modern luxury home with floor-to-ceiling windows, open concept design, and premium finishes.',
-      overview: 'This stunning contemporary home showcases modern design at its finest. Floor-to-ceiling windows flood the space with natural light, while the open concept layout creates seamless flow between living areas. Premium finishes and smart home technology throughout.',
-      features: {
-        interior: ['Floor-to-Ceiling Windows', 'Open Concept', 'Smart Home Technology', 'Italian Kitchen'],
-        exterior: ['Modern Architecture', 'Landscaped Yard', 'Three-Car Garage'],
-        style: 'Contemporary',
-        lotSize: '0.22 acres'
-      },
-      location: { lat: 38.9847, lng: -77.0953 },
-      schools: {
-        elementary: [{ name: 'Bethesda Elementary', rating: 8, distance: '0.4 miles' }],
-        highSchool: [{ name: 'Bethesda-Chevy Chase High', rating: 9, distance: '0.8 miles' }]
-      },
-      otherDetails: {
-        daysOnMarket: 25,
-        yearBuilt: 2020,
-        garage: '3-car attached',
-        accessibility: ['Elevator', 'Accessible Entrance'],
-        heating: 'Geothermal',
-        cooling: 'Zoned HVAC'
-      }
-    }
+    otherDetails: {
+      daysOnMarket: od.days_on_market ?? 0,
+      yearBuilt: od.year_built ?? 0,
+      garage: pick(language, od.garage_en, od.garage_zh),
+      accessibility: (language === 'zh' ? od.accessibility_zh : od.accessibility_en) || od.accessibility_en || [],
+      heating: pick(language, od.heating_en, od.heating_zh),
+      cooling: pick(language, od.cooling_en, od.cooling_zh),
+    },
+    location: { lat: row.location_lat || 0, lng: row.location_lng || 0 },
   };
 
-  const property = properties[id || 'imperial-suite'] || properties['imperial-suite'];
+  const seo = row.seo || {};
+  const hasSchools = property.schools.elementary.length > 0 || property.schools.highSchool.length > 0;
+  const hasFeatures = property.features.interior.length > 0 || property.features.exterior.length > 0;
+  const hasOther = !!(property.otherDetails.yearBuilt || property.otherDetails.garage || property.otherDetails.heating);
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={pick(language, seo.meta_title_en, seo.meta_title_zh) || property.title}
+        description={pick(language, seo.meta_description_en, seo.meta_description_zh) || property.description}
+        keywords={seo.keywords}
+        ogImage={seo.og_image || row.image_url || undefined}
+        ogType="article"
+        noindex={seo.noindex}
+        lang={language}
+        jsonLd={[
+          propertyJsonLd(row, language),
+          breadcrumbJsonLd([
+            { name: 'Home', url: '/' },
+            { name: t('nav.properties'), url: '/properties' },
+            { name: property.title, url: `/projects/${row.slug}` },
+          ]),
+          faqJsonLd(row.faqs || [], language),
+        ]}
+      />
       <Navigation />
-      
+
       <main className="pt-20">
-        {/* Property Gallery */}
-        <PropertyGallery images={property.images} title={property.title} />
-        
+        {(property.images.length > 0 || row.video_url) && (
+          <PropertyGallery images={property.images} title={property.title} videoUrl={row.video_url} />
+        )}
+
         <div className="container mx-auto px-6 py-12">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Main Content */}
             <div className="lg:col-span-2 space-y-12">
-              {/* Property Overview */}
               <PropertyOverview property={property} />
-              
-              {/* Property Details */}
-              <PropertyDetails features={property.features} />
-              
-              {/* School Information */}
-              <SchoolInformation schools={property.schools} />
+              {hasFeatures && <PropertyDetails features={property.features} />}
+              {hasSchools && <SchoolInformation schools={property.schools} />}
+              {hasOther && <OtherDetails details={property.otherDetails} />}
+              {property.location.lat !== 0 && (
+                <PropertyMap location={property.location} address={property.address} title={property.title} />
+              )}
 
-              {/* Additional Information */}
-              <OtherDetails details={property.otherDetails} />
-
-              {/* Map */}
-              <PropertyMap 
-                location={property.location} 
-                address={property.address}
-                title={property.title}
-              />
-
+              {(row.faqs || []).filter((q) => (language === 'zh' ? q.q_zh : q.q_en)).length > 0 && (
+                <div className="space-y-4">
+                  <h2 className="font-serif text-2xl font-light text-primary">FAQ</h2>
+                  <div className="space-y-4">
+                    {(row.faqs || []).map((q, i) => {
+                      const question = pick(language, q.q_en, q.q_zh);
+                      if (!question) return null;
+                      return (
+                        <div key={i} className="border-b border-border pb-4">
+                          <h3 className="font-body font-medium text-primary mb-1">{question}</h3>
+                          <p className="font-body text-muted-foreground">{pick(language, q.a_en, q.a_zh)}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
-            
-            {/* Sidebar */}
-            <div className="space-y-8">
-              
-              {/* Mortgage Calculator */}
-              <MortgageCalculator homePrice={property.price} />
 
+            <div className="space-y-8">
+              <MortgageCalculator homePrice={property.price} />
             </div>
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );

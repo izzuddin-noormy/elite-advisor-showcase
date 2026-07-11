@@ -1,35 +1,33 @@
 export type Currency = 'USD' | 'MYR' | 'CNY';
 
-// Exchange rates (these would typically come from an API)
-const exchangeRates: Record<Currency, number> = {
-  USD: 1,
-  MYR: 4.75, // 1 USD = 4.75 MYR
-  CNY: 7.25  // 1 USD = 7.25 CNY
+// Prices are stored in MYR. Rates express how many target-currency units per 1 MYR.
+const ratesFromMYR: Record<Currency, number> = {
+  MYR: 1,
+  USD: 1 / 4.75, // 4.75 MYR = 1 USD
+  CNY: 7.25 / 4.75, // via USD
 };
 
 const currencySymbols: Record<Currency, string> = {
   USD: '$',
   MYR: 'RM',
-  CNY: '¥'
+  CNY: '¥',
 };
 
-export const convertPrice = (usdPrice: string, targetCurrency: Currency): string => {
-  // Remove $ and commas, convert to number
-  const numericPrice = parseFloat(usdPrice.replace(/[$,]/g, ''));
-  
-  if (isNaN(numericPrice)) return usdPrice;
-  
-  const convertedPrice = numericPrice * exchangeRates[targetCurrency];
+/** Convert a price stored in MYR (number or string) to the target currency string. */
+export const convertPrice = (myrPrice: string | number, targetCurrency: Currency): string => {
+  const numericPrice = typeof myrPrice === 'number' ? myrPrice : parseFloat(String(myrPrice).replace(/[^0-9.]/g, ''));
+  if (isNaN(numericPrice)) return String(myrPrice);
+
+  const converted = numericPrice * ratesFromMYR[targetCurrency];
   const symbol = currencySymbols[targetCurrency];
-  
-  // Format with appropriate decimals and commas
-  if (targetCurrency === 'USD') {
-    return `${symbol}${convertedPrice.toLocaleString('en-US')}`;
-  } else {
-    return `${symbol}${Math.round(convertedPrice).toLocaleString('en-US')}`;
-  }
+  return `${symbol}${Math.round(converted).toLocaleString('en-US')}`;
 };
 
 export const getCurrencySymbol = (currency: Currency): string => {
   return currencySymbols[currency];
+};
+
+/** Format a MYR amount as RM with thousands separators. */
+export const formatMYR = (amount: number): string => {
+  return `RM${Math.round(amount).toLocaleString('en-US')}`;
 };

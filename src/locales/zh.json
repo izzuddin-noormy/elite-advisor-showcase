@@ -2,10 +2,33 @@
   "nav": {
     "home": "首页",
     "about": "关于",
+    "newLaunch": "全新发布",
     "properties": "房产",
     "insights": "洞察",
     "contact": "联系",
     "scheduleConsultation": "预约咨询"
+  },
+  "newLaunch": {
+    "badge": "全新发布",
+    "title": "全新发展项目",
+    "subtitle": "探索吉隆坡最受追捧地段最新推出的豪华发展项目。",
+    "empty": "暂无发展项目。",
+    "explore": "了解详情",
+    "overview": "项目概览",
+    "factSheet": "项目资料",
+    "developer": "发展商",
+    "highlights": "项目亮点",
+    "location": "黄金地段",
+    "floorplans": "户型图",
+    "floorplansTitle": "浏览并探索您的理想居所",
+    "returnHome": "返回主页",
+    "gallery": "项目图库",
+    "life": "生活方式",
+    "lifeTitle": "层层精心规划的生活",
+    "lifeText": "空中泳池、私人宴会、康养工作室与酒店级礼宾服务——设施贯穿整座大楼，满足一天中的每一刻。",
+    "register": "登记兴趣",
+    "registerTitle": "登记您的兴趣",
+    "registerSubtitle": "抢先获取户型图、价格及专属发布优惠。"
   },
   "hero": {
     "welcomeTo": "欢迎来到",
@@ -31,6 +54,8 @@
   "properties": {
     "title": "精选房产",
     "subtitle": "探索吉隆坡大都市区最负盛名社区中的卓越房产",
+    "searchTitle": "寻找理想家园",
+    "searchSubtitle": "您能给家人最好的礼物，不是一栋房子，而是一个他们永远可以称之为家、并在您身边感到安心的地方。让我们帮您找到它。",
     "searchPlaceholder": "奢华不是价格——而是一种感觉。描述您的需求，我们将为您找到完美的空间。",
     "viewDetails": "查看详情",
     "scheduleViewing": "预约观看",

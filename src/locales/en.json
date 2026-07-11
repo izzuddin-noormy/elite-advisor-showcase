@@ -2,10 +2,33 @@
   "nav": {
     "home": "Home",
     "about": "About",
+    "newLaunch": "New Launch",
     "properties": "Properties",
     "insights": "Insights",
     "contact": "Contact",
     "scheduleConsultation": "Schedule Consultation"
+  },
+  "newLaunch": {
+    "badge": "NEW LAUNCH",
+    "title": "New Launch Developments",
+    "subtitle": "Discover the latest luxury developments launching across Kuala Lumpur's most sought-after addresses.",
+    "empty": "No developments available yet.",
+    "explore": "Explore",
+    "overview": "Overview",
+    "factSheet": "Fact Sheet",
+    "developer": "Developer",
+    "highlights": "Highlights",
+    "location": "Prime Location",
+    "floorplans": "Layout Plans",
+    "floorplansTitle": "Browse & explore your residence",
+    "returnHome": "Return Home",
+    "gallery": "Gallery",
+    "life": "The Lifestyle",
+    "lifeTitle": "A life curated, floor by floor",
+    "lifeText": "Sky pools, private dining, wellness studios and hotel-grade concierge — amenities woven through the tower for every hour of the day.",
+    "register": "Register Interest",
+    "registerTitle": "Register Your Interest",
+    "registerSubtitle": "Be among the first to preview floor plans, pricing and exclusive launch privileges."
   },
   "hero": {
     "welcomeTo": "Welcome to",
@@ -31,6 +54,8 @@
   "properties": {
     "title": "Featured Properties",
     "subtitle": "Discover exceptional properties in the most prestigious neighborhoods throughout the Kuala Lumpur metropolitan area.",
+    "searchTitle": "Search Homes",
+    "searchSubtitle": "The greatest gift you can give your family isn't a house — it's a place they can always call home and comfort within you. Let us help you find it.",
     "searchPlaceholder": "Luxury isn't a price — it's a feeling. Describe yours and we will find your perfect space.",
     "viewDetails": "View Details",
     "scheduleViewing": "Schedule Viewing",

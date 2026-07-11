@@ -22,12 +22,7 @@ const PropertyOverview = ({ property }: PropertyOverviewProps) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(price);
+    return `RM${Math.round(price).toLocaleString('en-US')}`;
   };
 
   const formatNumber = (num: number) => {

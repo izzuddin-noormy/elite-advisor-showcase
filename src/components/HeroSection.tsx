@@ -27,10 +27,14 @@ const HeroSection = () => {
             {t('hero.welcomeTo')}
           </p>
           
-          <h1 className="hero-text text-white mb-8 leading-none">
-            {t('hero.name')}
+          <h1 className="hero-text mb-4 leading-none">
+            <span className="text-white">Mu</span> <span className="text-gold">SiChen</span>
           </h1>
-          
+
+          <p className="font-serif text-gold uppercase tracking-[0.4em] pl-[0.4em] text-sm md:text-xl mb-8">
+            Estates &amp; Co.
+          </p>
+
           <p className="tagline text-white/90 max-w-2xl mx-auto mb-12">
             {t('hero.tagline')}
           </p>

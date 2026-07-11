@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Plus, Pencil, Trash2, Star } from 'lucide-react';
+import { Plus, Pencil, Trash2, Star, Copy } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
@@ -83,6 +83,25 @@ const AdminInsights = () => {
     }
   };
 
+  const handleDuplicate = async (id: string) => {
+    try {
+      const { data, error } = await supabase.from('insights').select('*').eq('id', id).single();
+      if (error || !data) throw error || new Error('Not found');
+      const copy: any = { ...data };
+      delete copy.id; delete copy.created_at; delete copy.updated_at;
+      copy.slug = `${data.slug}-copy-${Math.random().toString(36).slice(2, 6)}`;
+      copy.title_en = `${data.title_en} (Copy)`;
+      copy.title_zh = data.title_zh ? `${data.title_zh}（副本）` : data.title_zh;
+      copy.featured = false;
+      const { error: insErr } = await supabase.from('insights').insert([copy]);
+      if (insErr) throw insErr;
+      toast({ title: 'Duplicated', description: 'A copy was created' });
+      fetchInsights();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -119,7 +138,7 @@ const AdminInsights = () => {
           </Card>
         ) : (
           insights.map((insight) => (
-            <Card key={insight.id} className="hover:shadow-md transition-shadow">
+            <Card key={insight.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate(`/admin/insights/${insight.id}`)}>
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -140,18 +159,13 @@ const AdminInsights = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 ml-4">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => navigate(`/admin/insights/${insight.id}`)}
-                    >
+                    <Button variant="ghost" size="sm" title="Edit" onClick={(e) => { e.stopPropagation(); navigate(`/admin/insights/${insight.id}`); }}>
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setDeleteId(insight.id)}
-                    >
+                    <Button variant="ghost" size="sm" title="Duplicate" onClick={(e) => { e.stopPropagation(); handleDuplicate(insight.id); }}>
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" title="Delete" onClick={(e) => { e.stopPropagation(); setDeleteId(insight.id); }}>
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </div>
