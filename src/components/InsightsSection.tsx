@@ -1,13 +1,16 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useNavigate, Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/integrations/supabase/client';
 import { pick } from '@/integrations/supabase/cms-types';
 import type { InsightRow } from '@/integrations/supabase/cms-types';
 
 const InsightsSection = () => {
   const { t, language } = useLanguage();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [insights, setInsights] = useState<InsightRow[]>([]);
 
   useEffect(() => {
@@ -41,7 +44,7 @@ const InsightsSection = () => {
               ? new Date(insight.published_at).toLocaleDateString(language === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })
               : '';
             return (
-              <article key={insight.id} className="group cursor-pointer hover-lift" onClick={() => navigate(`/insights/${insight.slug}`)}>
+              <article key={insight.id} className="group cursor-pointer hover-lift" onClick={() => router.push(`/insights/${insight.slug}`)}>
                 <div className="mb-6">
                   <div className="flex items-center space-x-4 mb-4">
                     <span className="px-3 py-1 bg-gold-light text-primary text-xs font-body font-light tracking-wide">{catLabel(insight.category)}</span>
@@ -57,7 +60,7 @@ const InsightsSection = () => {
                     <span className="text-sm text-muted-foreground font-body font-light">{insight.read_time ? `${insight.read_time} min read` : ''}</span>
                     <button
                       className="font-body text-sm font-light text-primary elegant-underline"
-                      onClick={(e) => { e.stopPropagation(); navigate(`/insights/${insight.slug}`); }}
+                      onClick={(e) => { e.stopPropagation(); router.push(`/insights/${insight.slug}`); }}
                     >
                       {t('insights.readMore')}
                     </button>
@@ -69,7 +72,7 @@ const InsightsSection = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Link to="/insights" className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
+          <Link href="/insights" className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
             {t('insights.viewAll')}
           </Link>
         </div>

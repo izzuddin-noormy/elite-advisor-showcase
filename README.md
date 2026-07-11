@@ -1,73 +1,67 @@
-# Welcome to your Lovable project
+# Mu SiChen — Estates & Co.
 
-## Project info
+A bilingual (English / 中文) luxury real-estate website and CMS for **Mu SiChen Estates & Co.**, Kuala Lumpur.
 
-**URL**: https://lovable.dev/projects/f511dfac-ae07-441d-8799-81da4ac2ac72
+Built with **Next.js (App Router)**, server-rendered, hosted on **Vercel**, and fully runnable on **localhost**. Content is managed through a built-in admin CMS backed by **Supabase**.
 
-## How can I edit this code?
+## Tech stack
 
-There are several ways of editing your application.
+- **Next.js 14** (App Router, server components + `generateMetadata` for SEO)
+- **TypeScript**, **React 18**
+- **Tailwind CSS** + **shadcn/ui** (Radix)
+- **Supabase** (Postgres, Auth, Storage) — CMS data, media, admin auth
+- **PostHog** — privacy-friendly product analytics
+- **Tiptap** — rich-text editing in the admin
+- **framer-motion**, **recharts**
 
-**Use Lovable**
+## Getting started (localhost)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f511dfac-ae07-441d-8799-81da4ac2ac72) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Requires Node.js 18+ and npm ([install via nvm](https://github.com/nvm-sh/nvm)).
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# 1. Install dependencies
+npm install
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 2. Create your local env file
+cp .env.example .env.local   # then fill in the values below
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 3. Run the dev server (http://localhost:8080)
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Environment variables
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Set these in `.env.local` for local dev, and in your Vercel project settings for production:
 
-**Use GitHub Codespaces**
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase anon/publishable key |
+| `NEXT_PUBLIC_POSTHOG_KEY` | PostHog project key (optional — analytics off if unset) |
+| `NEXT_PUBLIC_POSTHOG_HOST` | PostHog host (default `https://us.i.posthog.com`) |
+| `SITE_URL` | Canonical site URL, used for `sitemap.xml` / `robots.txt` / `llms.txt` |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Scripts
 
-## What technologies are used for this project?
+| Command | Description |
+|---|---|
+| `npm run dev` | Start Next.js dev server on port 8080 |
+| `npm run build` | Generate SEO files, then build for production |
+| `npm run start` | Run the production build locally |
+| `npm run seed` | Seed Supabase with demo content (`PGURL=... npm run seed`) |
+| `npm run seo:gen` | Regenerate `sitemap.xml`, `robots.txt`, `llms.txt` |
 
-This project is built with:
+## Routing
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+File-based routing lives in `app/`. Reusable page/screen components are in `src/screens`, shared UI in `src/components`.
 
-## How can I deploy this project?
+- Public: `/`, `/properties`, `/projects/[id]`, `/insights`, `/insights/[id]`, `/new-launch`, `/new-launch/[slug]`
+- Admin CMS: `/admin` (login at `/admin/login`) — properties, new-launch developments, insights, pages, site content, media, messages, settings
 
-Simply open [Lovable](https://lovable.dev/projects/f511dfac-ae07-441d-8799-81da4ac2ac72) and click on Share -> Publish.
+## Deployment (Vercel)
 
-## Can I connect a custom domain to my Lovable project?
+Push to the connected branch; Vercel auto-detects Next.js and deploys. Set the environment variables above in **Project → Settings → Environment Variables**. No `vercel.json` rewrite is needed — Next.js handles routing natively.
 
-Yes, you can!
+## Database
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Schema migrations are in `supabase/migrations/`. Apply them via the Supabase SQL Editor or the Supabase CLI (`supabase db push`).

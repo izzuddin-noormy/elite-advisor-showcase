@@ -29,8 +29,8 @@ function readEnv(name) {
 }
 
 const SITE_URL = (readEnv('SITE_URL') || DEFAULT_SITE_URL).replace(/\/$/, '');
-const SUPABASE_URL = readEnv('VITE_SUPABASE_URL');
-const SUPABASE_KEY = readEnv('VITE_SUPABASE_PUBLISHABLE_KEY');
+const SUPABASE_URL = readEnv('NEXT_PUBLIC_SUPABASE_URL') || readEnv('VITE_SUPABASE_URL');
+const SUPABASE_KEY = readEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY') || readEnv('VITE_SUPABASE_PUBLISHABLE_KEY');
 
 const staticRoutes = ['/', '/properties', '/new-launch'];
 

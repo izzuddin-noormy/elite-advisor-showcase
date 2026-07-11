@@ -1,0 +1,7 @@
+{
+  "/page": "app/page.js",
+  "/admin/(protected)/content/page": "app/admin/(protected)/content/page.js",
+  "/admin/(protected)/page": "app/admin/(protected)/page.js",
+  "/admin/(protected)/settings/page": "app/admin/(protected)/settings/page.js",
+  "/admin/(protected)/properties/page": "app/admin/(protected)/properties/page.js"
+}

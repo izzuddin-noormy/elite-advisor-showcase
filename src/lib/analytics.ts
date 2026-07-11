@@ -5,8 +5,8 @@ let inited = false;
 /** Initialise PostHog if a project key is configured (VITE_POSTHOG_KEY). No-op otherwise. */
 export function initAnalytics() {
   if (inited) return;
-  const key = import.meta.env.VITE_POSTHOG_KEY as string | undefined;
-  const host = (import.meta.env.VITE_POSTHOG_HOST as string | undefined) || 'https://us.i.posthog.com';
+  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY as string | undefined;
+  const host = (process.env.NEXT_PUBLIC_POSTHOG_HOST as string | undefined) || 'https://us.i.posthog.com';
   if (!key) return;
   posthog.init(key, {
     api_host: host,

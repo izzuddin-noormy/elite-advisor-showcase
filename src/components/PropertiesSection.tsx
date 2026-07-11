@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import CurrencySwitch, { Currency } from '@/components/CurrencySwitch';
 import { convertPrice } from '@/utils/currency';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -50,7 +52,7 @@ const PropertiesSection = () => {
           {properties.map((property) => {
             const isAvailable = property.status === 'available';
             return (
-              <Link key={property.id} to={`/projects/${property.slug}`} className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer block">
+              <Link key={property.id} href={`/projects/${property.slug}`} className="group bg-card rounded-none overflow-hidden hover-lift cursor-pointer block">
                 <div className="relative overflow-hidden">
                   <img
                     src={property.image_url || '/placeholder.svg'}
@@ -89,7 +91,7 @@ const PropertiesSection = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Link to="/properties" className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
+          <Link href="/properties" className="inline-flex items-center px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 font-body text-sm font-light tracking-wide">
             {t('properties.viewAll')}
           </Link>
         </div>

@@ -1,5 +1,8 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitch from '@/components/LanguageSwitch';
@@ -9,7 +12,7 @@ import Brand from '@/components/Brand';
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { t } = useLanguage();
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,7 +25,7 @@ const Navigation = () => {
 
   const getNavHref = (href: string) => {
     // If it's a hash link and we're not on the home page, go to home with hash
-    if (href.startsWith('#') && location.pathname !== '/') {
+    if (href.startsWith('#') && pathname !== '/') {
       return `/${href}`;
     }
     return href;
@@ -50,7 +53,7 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" aria-label="Mu SiChen Estates & Co. — Home">
+          <Link href="/" aria-label="Mu SiChen Estates & Co. — Home">
             <Brand size="sm" />
           </Link>
 
