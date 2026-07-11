@@ -1,3 +1,5 @@
+'use client';
+
 interface BrandProps {
   size?: 'sm' | 'md' | 'lg';
   align?: 'start' | 'center';

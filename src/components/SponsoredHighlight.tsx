@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 
@@ -18,8 +20,7 @@ interface SponsoredProject {
 
 const SponsoredHighlight = () => {
   const { t } = useLanguage();
-  const location = useLocation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const projects: SponsoredProject[] = [
     {
@@ -51,13 +52,13 @@ const SponsoredHighlight = () => {
   const [activeKey, setActiveKey] = useState(projects[0]?.key);
 
   useEffect(() => {
-    const highlight = new URLSearchParams(location.search).get('highlight');
+    const highlight = new URLSearchParams(window.location.search).get('highlight');
     if (highlight && projects.some((p) => p.key === highlight)) {
       setActiveKey(highlight);
       setTimeout(() => document.getElementById('sponsored-highlight')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search]);
+  }, []);
 
   const active = projects.find((p) => p.key === activeKey) || projects[0];
   if (!active) return null;
@@ -75,7 +76,7 @@ const SponsoredHighlight = () => {
         {/* Active (enlarged) project */}
         <div
           className="group relative overflow-hidden rounded-lg shadow-luxury bg-card max-w-5xl mx-auto cursor-pointer transition-all duration-500"
-          onClick={() => navigate(`/projects/${active.id}`)}
+          onClick={() => router.push(`/projects/${active.id}`)}
         >
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="relative overflow-hidden aspect-[4/3] lg:aspect-auto lg:min-h-[420px]">
