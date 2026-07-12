@@ -169,6 +169,32 @@ export interface DevelopmentRow {
   updated_at?: string | null;
 }
 
+export interface SponsorRow {
+  id: string;
+  slug: string;
+  title_en: string;
+  title_zh: string | null;
+  subtitle_en: string | null;
+  subtitle_zh: string | null;
+  description_en: string | null;
+  description_zh: string | null;
+  badge_en: string | null;
+  badge_zh: string | null;
+  location_en: string | null;
+  location_zh: string | null;
+  type_en: string | null;
+  type_zh: string | null;
+  price_en: string | null;
+  price_zh: string | null;
+  image_url: string | null;
+  video_url: string | null;
+  link: string | null;
+  sort_order: number | null;
+  published: boolean | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
 export interface SiteContentRow {
   id: string;
   key: string;
