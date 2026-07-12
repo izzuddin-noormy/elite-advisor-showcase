@@ -36,7 +36,7 @@ const Properties = () => {
         .from('properties')
         .select('*')
         .eq('published', true)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: false });
       setProperties((data as unknown as PropertyRow[]) || []);
     })();
   }, []);

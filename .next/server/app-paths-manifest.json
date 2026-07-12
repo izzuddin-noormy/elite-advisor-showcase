@@ -1,1 +1,10 @@
-{}
+{
+  "/page": "app/page.js",
+  "/properties/page": "app/properties/page.js",
+  "/admin/(protected)/properties/page": "app/admin/(protected)/properties/page.js",
+  "/admin/(protected)/page": "app/admin/(protected)/page.js",
+  "/admin/(protected)/properties/[id]/page": "app/admin/(protected)/properties/[id]/page.js",
+  "/admin/(protected)/developments/page": "app/admin/(protected)/developments/page.js",
+  "/admin/(protected)/insights/page": "app/admin/(protected)/insights/page.js",
+  "/admin/(protected)/sponsors/page": "app/admin/(protected)/sponsors/page.js"
+}

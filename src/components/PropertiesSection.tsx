@@ -31,7 +31,7 @@ const PropertiesSection = () => {
         .select('*')
         .eq('published', true)
         .eq('featured', true)
-        .order('created_at', { ascending: true })
+        .order('created_at', { ascending: false })
         .limit(6);
       setProperties((data as unknown as PropertyRow[]) || []);
     })();
