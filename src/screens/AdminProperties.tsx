@@ -42,6 +42,7 @@ const AdminProperties = () => {
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [publishedFilter, setPublishedFilter] = useState('all');
+  const [featuredFilter, setFeaturedFilter] = useState('all');
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -49,10 +50,12 @@ const AdminProperties = () => {
       if (statusFilter !== 'all' && p.status !== statusFilter) return false;
       if (publishedFilter === 'published' && !p.published) return false;
       if (publishedFilter === 'draft' && p.published) return false;
+      if (featuredFilter === 'featured' && !p.featured) return false;
+      if (featuredFilter === 'not' && p.featured) return false;
       if (!q) return true;
       return [p.title_en, p.title_zh, p.slug, p.location].some((f) => (f || '').toLowerCase().includes(q));
     });
-  }, [properties, query, statusFilter, publishedFilter]);
+  }, [properties, query, statusFilter, publishedFilter, featuredFilter]);
 
   useEffect(() => {
     fetchProperties();
@@ -100,6 +103,13 @@ const AdminProperties = () => {
     } finally {
       setDeleteId(null);
     }
+  };
+
+  const toggleFeatured = async (id: string, current: boolean) => {
+    const { error } = await supabase.from('properties').update({ featured: !current }).eq('id', id);
+    if (error) { toast({ title: 'Error', description: error.message, variant: 'destructive' }); return; }
+    setProperties((ps) => ps.map((p) => (p.id === id ? { ...p, featured: !current } : p)));
+    toast({ title: !current ? 'Added to featured' : 'Removed from featured' });
   };
 
   const handleDuplicate = async (id: string) => {
@@ -164,6 +174,14 @@ const AdminProperties = () => {
             <SelectItem value="draft">Draft</SelectItem>
           </SelectContent>
         </Select>
+        <Select value={featuredFilter} onValueChange={setFeaturedFilter}>
+          <SelectTrigger className="w-full sm:w-40"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All listings</SelectItem>
+            <SelectItem value="featured">Featured</SelectItem>
+            <SelectItem value="not">Not featured</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="grid gap-4">
@@ -215,6 +233,9 @@ const AdminProperties = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 ml-4">
+                    <Button variant="ghost" size="sm" title={property.featured ? 'Remove from featured' : 'Add to featured'} onClick={(e) => { e.stopPropagation(); toggleFeatured(property.id, !!property.featured); }}>
+                      <Star className={`h-4 w-4 ${property.featured ? 'text-yellow-500 fill-yellow-500' : 'text-muted-foreground'}`} />
+                    </Button>
                     <Button variant="ghost" size="sm" title="Edit" onClick={(e) => { e.stopPropagation(); router.push(`/admin/properties/${property.id}`); }}>
                       <Pencil className="h-4 w-4" />
                     </Button>
