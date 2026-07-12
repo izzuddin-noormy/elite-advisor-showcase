@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   },
   description:
     'Luxury real estate advisory in Kuala Lumpur. Exclusive properties, new-launch developments, market insights and white-glove service.',
-  icons: { icon: '/favicon.ico' },
+  manifest: '/site.webmanifest',
   openGraph: { type: 'website', siteName: 'Mu SiChen', images: ['/images/imperial-0.jpg'] },
   twitter: { card: 'summary_large_image' },
 };

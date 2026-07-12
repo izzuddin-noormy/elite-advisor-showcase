@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://www.musichen.com/sitemap.xml
+Sitemap: https://www.themusichen.com/sitemap.xml
