@@ -66,9 +66,21 @@ const MortgageCalculator = ({ homePrice }: MortgageCalculatorProps) => {
             <label className="font-body text-sm font-medium text-primary">
               Down Payment
             </label>
-            <span className="font-body text-sm text-muted-foreground">
-              {downPaymentPercentage.toFixed(1)}%
-            </span>
+            <div className="flex items-center gap-1">
+              <Input
+                type="number"
+                min={0}
+                max={100}
+                step={0.5}
+                value={Number.isFinite(downPaymentPercentage) ? Number(downPaymentPercentage.toFixed(1)) : 0}
+                onChange={(e) => {
+                  const v = Math.min(100, Math.max(0, parseFloat(e.target.value) || 0));
+                  setDownPayment((homePrice * v) / 100);
+                }}
+                className="h-8 w-20 text-right text-sm"
+              />
+              <span className="text-sm text-muted-foreground">%</span>
+            </div>
           </div>
           <Slider
             value={[downPayment]}
@@ -122,9 +134,21 @@ const MortgageCalculator = ({ homePrice }: MortgageCalculatorProps) => {
                 step={0.1}
                 className="flex-1"
               />
-              <span className="font-body text-sm text-muted-foreground w-12 text-right">
-                {interestRate.toFixed(1)}%
-              </span>
+              <div className="flex items-center gap-1">
+                <Input
+                  type="number"
+                  min={0}
+                  max={15}
+                  step={0.1}
+                  value={Number.isFinite(interestRate) ? interestRate : 0}
+                  onChange={(e) => {
+                    const v = Math.min(15, Math.max(0, parseFloat(e.target.value) || 0));
+                    setInterestRate(v);
+                  }}
+                  className="h-8 w-20 text-right text-sm"
+                />
+                <span className="text-sm text-muted-foreground">%</span>
+              </div>
             </div>
           </div>
         </div>
