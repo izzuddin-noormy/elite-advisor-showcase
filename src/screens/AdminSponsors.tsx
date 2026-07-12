@@ -1,20 +1,34 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
-import { Loader2, Plus, Pencil, Trash2, Copy } from 'lucide-react';
+import { Loader2, Plus, Pencil, Trash2, Copy, Search } from 'lucide-react';
 import type { SponsorRow } from '@/integrations/supabase/cms-types';
 
 const AdminSponsors = () => {
   const router = useRouter();
   const [rows, setRows] = useState<SponsorRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
+  const [publishedFilter, setPublishedFilter] = useState('all');
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return rows.filter((r: any) => {
+      if (publishedFilter === 'published' && !r.published) return false;
+      if (publishedFilter === 'draft' && r.published) return false;
+      if (!q) return true;
+      return [r.title_en, r.title_zh, r.subtitle_en, r.slug, r.location_en].some((f) => (f || '').toLowerCase().includes(q));
+    });
+  }, [rows, query, publishedFilter]);
 
   const load = async () => {
     const { data } = await supabase.from('sponsors').select('*').order('sort_order', { ascending: true });
@@ -61,11 +75,28 @@ const AdminSponsors = () => {
         <Button asChild><Link href="/admin/sponsors/new"><Plus className="h-4 w-4 mr-2" />New Sponsor</Link></Button>
       </div>
 
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input className="pl-9" placeholder="Search title, subtitle, location..." value={query} onChange={(e) => setQuery(e.target.value)} />
+        </div>
+        <Select value={publishedFilter} onValueChange={setPublishedFilter}>
+          <SelectTrigger className="w-full sm:w-44"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All</SelectItem>
+            <SelectItem value="published">Published</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       {rows.length === 0 ? (
         <p className="text-muted-foreground py-12 text-center">No sponsors yet.</p>
+      ) : filtered.length === 0 ? (
+        <p className="text-muted-foreground py-12 text-center">No sponsors match your search.</p>
       ) : (
         <div className="space-y-3">
-          {rows.map((r) => (
+          {filtered.map((r) => (
             <Card key={r.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => router.push(`/admin/sponsors/${r.id}`)}>
               <CardContent className="pt-6 flex items-center gap-4">
                 <img src={r.image_url || '/placeholder.svg'} alt="" className="w-24 h-16 object-cover rounded" />

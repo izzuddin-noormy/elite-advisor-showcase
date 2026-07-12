@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Plus, Pencil, Trash2, Star, Copy } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Plus, Pencil, Trash2, Star, Copy, Search } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
@@ -37,6 +39,20 @@ const AdminProperties = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [publishedFilter, setPublishedFilter] = useState('all');
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return properties.filter((p: any) => {
+      if (statusFilter !== 'all' && p.status !== statusFilter) return false;
+      if (publishedFilter === 'published' && !p.published) return false;
+      if (publishedFilter === 'draft' && p.published) return false;
+      if (!q) return true;
+      return [p.title_en, p.title_zh, p.slug, p.location].some((f) => (f || '').toLowerCase().includes(q));
+    });
+  }, [properties, query, statusFilter, publishedFilter]);
 
   useEffect(() => {
     fetchProperties();
@@ -125,6 +141,31 @@ const AdminProperties = () => {
         </Button>
       </div>
 
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input className="pl-9" placeholder="Search title, slug or location..." value={query} onChange={(e) => setQuery(e.target.value)} />
+        </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-full sm:w-44"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All statuses</SelectItem>
+            <SelectItem value="available">Available</SelectItem>
+            <SelectItem value="under_contract">Under Contract</SelectItem>
+            <SelectItem value="sold">Sold</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={publishedFilter} onValueChange={setPublishedFilter}>
+          <SelectTrigger className="w-full sm:w-40"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All visibility</SelectItem>
+            <SelectItem value="published">Published</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="grid gap-4">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
@@ -146,8 +187,10 @@ const AdminProperties = () => {
               </Button>
             </CardContent>
           </Card>
+        ) : filtered.length === 0 ? (
+          <Card><CardContent className="p-10 text-center"><p className="text-muted-foreground">No properties match your search.</p></CardContent></Card>
         ) : (
-          properties.map((property) => (
+          filtered.map((property) => (
             <Card key={property.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => router.push(`/admin/properties/${property.id}`)}>
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
