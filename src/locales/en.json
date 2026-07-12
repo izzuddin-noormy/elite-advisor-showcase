@@ -6,7 +6,7 @@
     "properties": "Properties",
     "insights": "Insights",
     "contact": "Contact",
-    "scheduleConsultation": "Schedule Consultation"
+    "scheduleConsultation": "Contact"
   },
   "newLaunch": {
     "badge": "NEW LAUNCH",
@@ -35,7 +35,7 @@
     "name": "Mu SiChen",
     "tagline": "Real Estate Negotiator & Advisor | Kuala Lumpur, Malaysia",
     "viewProperties": "View Properties",
-    "scheduleConsultation": "Schedule Consultation",
+    "scheduleConsultation": "Contact",
     "videoNotSupported": "Your browser does not support the video tag."
   },
   "intro": {

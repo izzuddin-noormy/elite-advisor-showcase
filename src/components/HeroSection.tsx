@@ -44,13 +44,13 @@ const HeroSection = () => {
           <div className="space-y-4 md:space-y-0 md:space-x-6 md:flex md:justify-center">
             <a
               href="/properties"
-              className="inline-block px-8 py-3 bg-transparent border border-white/50 text-white hover:bg-white hover:text-primary transition-all duration-300 font-body text-sm font-light tracking-wide"
+              className="inline-block px-8 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/40 text-white shadow-lg hover:bg-white/20 hover:border-white/60 transition-all duration-300 font-body text-sm font-light tracking-wide"
             >
               {t('hero.viewProperties')}
             </a>
             <a
               href="#contact"
-              className="inline-block px-8 py-3 bg-gold text-primary hover:bg-gold-dark transition-all duration-300 font-body text-sm font-light tracking-wide"
+              className="inline-block px-8 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/40 text-white shadow-lg hover:bg-white/20 hover:border-white/60 transition-all duration-300 font-body text-sm font-light tracking-wide"
             >
               {t('hero.scheduleConsultation')}
             </a>

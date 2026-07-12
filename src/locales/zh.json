@@ -6,7 +6,7 @@
     "properties": "房产",
     "insights": "洞察",
     "contact": "联系",
-    "scheduleConsultation": "预约咨询"
+    "scheduleConsultation": "联系"
   },
   "newLaunch": {
     "badge": "全新发布",
@@ -35,7 +35,7 @@
     "name": "Mu SiChen",
     "tagline": "房地产谈判专家及顾问 | 马来西亚吉隆坡",
     "viewProperties": "查看房产",
-    "scheduleConsultation": "预约咨询",
+    "scheduleConsultation": "联系",
     "videoNotSupported": "您的浏览器不支持视频标签。"
   },
   "intro": {

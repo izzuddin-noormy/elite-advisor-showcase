@@ -76,7 +76,7 @@ const Navigation = () => {
             <LanguageSwitch />
             <a
               href={getNavHref('#contact')}
-              className="inline-flex items-center px-6 py-2 border border-gold text-gold hover:bg-gold hover:text-primary transition-all duration-300 font-body text-sm font-light tracking-wide"
+              className="inline-flex items-center px-6 py-2 rounded-xl bg-foreground/5 backdrop-blur-md border border-foreground/25 text-foreground shadow-sm hover:bg-foreground/10 hover:border-foreground/40 transition-all duration-300 font-body text-sm font-light tracking-wide"
             >
               {t('nav.scheduleConsultation')}
             </a>
