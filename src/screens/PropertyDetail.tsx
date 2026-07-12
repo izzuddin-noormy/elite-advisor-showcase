@@ -15,6 +15,7 @@ import PropertyOverview from '@/components/property/PropertyOverview';
 import PropertyDetails from '@/components/property/PropertyDetails';
 import PropertyMap from '@/components/property/PropertyMap';
 import MortgageCalculator from '@/components/property/MortgageCalculator';
+import PropertyFinancials from '@/components/property/PropertyFinancials';
 import SchoolInformation from '@/components/property/SchoolInformation';
 import OtherDetails from '@/components/property/OtherDetails';
 import { Loader2 } from 'lucide-react';
@@ -164,6 +165,7 @@ const PropertyDetail = () => {
             </div>
 
             <div className="space-y-8">
+              <PropertyFinancials price={property.price} sqft={property.sqft} location={`${row.location || ''} ${row.address || ''}`} />
               <MortgageCalculator homePrice={property.price} />
             </div>
           </div>
