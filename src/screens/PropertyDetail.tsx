@@ -18,13 +18,14 @@ import MortgageCalculator from '@/components/property/MortgageCalculator';
 import PropertyFinancials from '@/components/property/PropertyFinancials';
 import SchoolInformation from '@/components/property/SchoolInformation';
 import OtherDetails from '@/components/property/OtherDetails';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Calculator, ChevronDown } from 'lucide-react';
 
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { t, language } = useLanguage();
   const [row, setRow] = useState<PropertyRow | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showMortgage, setShowMortgage] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -166,7 +167,25 @@ const PropertyDetail = () => {
 
             <div className="space-y-8">
               <PropertyFinancials price={property.price} sqft={property.sqft} location={`${row.location || ''} ${row.address || ''}`} />
-              <MortgageCalculator homePrice={property.price} />
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setShowMortgage((v) => !v)}
+                  aria-expanded={showMortgage}
+                  className="flex w-full items-center justify-between rounded-lg border border-border bg-card px-6 py-4 text-left shadow-sm transition-colors hover:bg-accent"
+                >
+                  <span className="flex items-center gap-2 font-serif text-lg font-light text-primary">
+                    <Calculator className="h-4 w-4" />
+                    {language === 'zh' ? '房贷计算器' : 'Mortgage Calculator'}
+                  </span>
+                  <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-300 ${showMortgage ? 'rotate-180' : ''}`} />
+                </button>
+                {showMortgage && (
+                  <div className="mt-4">
+                    <MortgageCalculator homePrice={property.price} />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
