@@ -1,7 +1,7 @@
 'use client';
 
 import { useLanguage } from '@/contexts/LanguageContext';
-import { TrendingUp, TrendingDown, Minus, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 interface PropertyFinancialsProps {
   price: number;
@@ -47,15 +47,12 @@ const PropertyFinancials = ({ price, sqft, location }: PropertyFinancialsProps) 
   const grossYield = hasArea ? (monthlyRent * 12) / price : 0; // fraction
   const vsBench = hasArea ? (psf - bench.medianPsf) / bench.medianPsf : 0; // fraction
 
-  const benchState = vsBench <= -0.03 ? 'value' : vsBench >= 0.03 ? 'premium' : 'inline';
-  const benchColor =
-    benchState === 'value' ? 'text-emerald-600' : benchState === 'premium' ? 'text-amber-600' : 'text-muted-foreground';
-  const BenchIcon = benchState === 'value' ? TrendingDown : benchState === 'premium' ? TrendingUp : Minus;
+  const benchState = vsBench <= -0.03 ? 'below' : vsBench >= 0.03 ? 'above' : 'inline';
   const benchLabel =
-    benchState === 'value'
-      ? L('Below area median — value buy', '低于区域中位数 — 价值之选')
-      : benchState === 'premium'
-      ? L('Above area median — premium', '高于区域中位数 — 溢价')
+    benchState === 'below'
+      ? L('Below area median', '低于区域中位数')
+      : benchState === 'above'
+      ? L('Above area median', '高于区域中位数')
       : L('In line with area median', '与区域中位数持平');
 
   return (
@@ -93,16 +90,23 @@ const PropertyFinancials = ({ price, sqft, location }: PropertyFinancialsProps) 
           </div>
 
           {/* Value vs area benchmark */}
-          <div className="flex items-start justify-between">
-            <span className="text-sm text-muted-foreground">
-              {L('Value vs Area Benchmark', '相对区域基准')}
-              <span className="mt-0.5 block text-xs text-muted-foreground/70">{benchLabel}</span>
-            </span>
-            <span className={`flex items-center gap-1 font-body text-base font-medium ${benchColor}`}>
-              <BenchIcon className="h-4 w-4" />
-              {vsBench > 0 ? '+' : ''}
-              {(vsBench * 100).toFixed(0)}%
-            </span>
+          <div>
+            <div className="flex items-start justify-between">
+              <span className="text-sm text-muted-foreground">
+                {L('Value vs Area Benchmark', '相对区域基准')}
+                <span className="mt-0.5 block text-xs text-muted-foreground/70">{benchLabel}</span>
+              </span>
+              <span className="font-body text-base font-medium text-foreground">
+                {vsBench > 0 ? '+' : ''}
+                {(vsBench * 100).toFixed(0)}%
+              </span>
+            </div>
+            <p className="mt-2 text-xs leading-snug text-muted-foreground/70">
+              {L(
+                'How this home’s price per sq ft compares with the typical price per sq ft for its district. A positive figure is above the local median; negative is below.',
+                '本房产的每平方英尺价格与其所在区域典型每平方英尺价格的比较。正数表示高于区域中位数，负数表示低于。'
+              )}
+            </p>
           </div>
         </div>
       ) : (
