@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 
 interface MortgageCalculatorProps {
   homePrice: number;
@@ -19,8 +19,10 @@ const MortgageCalculator = ({ homePrice }: MortgageCalculatorProps) => {
     const principal = homePrice - downPayment;
     const monthlyRate = interestRate / 100 / 12;
     const numPayments = loanTerm * 12;
-    
-    if (monthlyRate === 0) {
+
+    if (numPayments <= 0) {
+      setMonthlyPayment(0);
+    } else if (monthlyRate === 0) {
       setMonthlyPayment(principal / numPayments);
     } else {
       const monthlyPaymentCalc = principal * 
@@ -71,8 +73,8 @@ const MortgageCalculator = ({ homePrice }: MortgageCalculatorProps) => {
           <Slider
             value={[downPayment]}
             onValueChange={(value) => setDownPayment(value[0])}
-            max={homePrice * 0.5}
-            min={homePrice * 0.05}
+            max={homePrice}
+            min={0}
             step={1000}
             className="mb-2"
           />
@@ -88,19 +90,22 @@ const MortgageCalculator = ({ homePrice }: MortgageCalculatorProps) => {
           {/* Loan Term */}
           <div>
             <label className="font-body text-sm font-medium text-primary block mb-2">
-              Loan Type
+              Loan Term (Years)
             </label>
-            <Select value={loanTerm.toString()} onValueChange={(value) => setLoanTerm(parseInt(value))}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">10 Year Fixed</SelectItem>
-                <SelectItem value="15">15 Year Fixed</SelectItem>
-                <SelectItem value="20">20 Year Fixed</SelectItem>
-                <SelectItem value="30">30 Year Fixed</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="relative">
+              <Input
+                type="number"
+                min={1}
+                max={40}
+                value={Number.isFinite(loanTerm) && loanTerm > 0 ? loanTerm : ''}
+                onChange={(e) => setLoanTerm(parseInt(e.target.value) || 0)}
+                placeholder="e.g. 30"
+                className="pr-14"
+              />
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                years
+              </span>
+            </div>
           </div>
 
           {/* Interest Rate */}
@@ -112,8 +117,8 @@ const MortgageCalculator = ({ homePrice }: MortgageCalculatorProps) => {
               <Slider
                 value={[interestRate]}
                 onValueChange={(value) => setInterestRate(value[0])}
-                max={10}
-                min={3}
+                max={15}
+                min={0}
                 step={0.1}
                 className="flex-1"
               />
