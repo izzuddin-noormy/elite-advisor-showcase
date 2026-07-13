@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-import { LogOut, FileText, Home, Building2, Lightbulb, LayoutDashboard, Languages, Image, Mail, Settings, Sparkles, Megaphone } from 'lucide-react';
+import { LogOut, FileText, Home, Building2, Lightbulb, LayoutDashboard, Languages, Image, Mail, Settings, Sparkles, Megaphone, LineChart } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
@@ -61,6 +61,7 @@ const Admin = ({ children }: { children: ReactNode }) => {
     { path: '/admin/developments', label: 'New Launch', icon: Sparkles },
     { path: '/admin/insights', label: 'Insights', icon: Lightbulb },
     { path: '/admin/sponsors', label: 'Sponsors', icon: Megaphone },
+    { path: '/admin/benchmarks', label: 'Benchmarks', icon: LineChart },
     { path: '/admin/pages', label: 'Pages', icon: FileText },
     { path: '/admin/content', label: 'Site Content', icon: Languages },
     { path: '/admin/media', label: 'Media', icon: Image },
