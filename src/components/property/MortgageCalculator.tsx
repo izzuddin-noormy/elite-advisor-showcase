@@ -43,7 +43,7 @@ const MortgageCalculator = ({ homePrice }: MortgageCalculatorProps) => {
   const downPaymentPercentage = (downPayment / homePrice) * 100;
 
   return (
-    <Card className="border-0 shadow-lg sticky top-24">
+    <Card className="border-0 shadow-lg">
       <CardHeader>
         <CardTitle className="font-serif text-xl font-light text-primary">
           Mortgage Calculator
